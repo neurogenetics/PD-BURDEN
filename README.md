@@ -3,6 +3,21 @@
 
 ### UK biobank work
 
+##### Variant selection
+
+```
+all_missense.txt => 5, 1, 0.5 and 0.1%
+ALL_LOF.txt => (splicing, frameshift, stopgain, stoploss) => 5, 1, 0.5 and 0.1%
+ALL_CADD_20.txt => 5, 1, 0.5 and 0.1%
+ALL_CADD_10.txt => 5, 1, 0.5 and 0.1%
+ALL_MISSENSE_and_LOF.txt => All missense + splicing, frameshift, stopgain, stoploss => 5, 1, 0.5 and 0.1%
+```
+
+
+
+
+
+
 previously done:
 
 - annotated
@@ -150,16 +165,168 @@ plink --bfile FILENAME_2 --extract pruned_data.prune.in --make-bed --out FILENAM
 flashpca --bfile FILENAME_3 --suffix _UKB_EXOM_PD_CASE_CONTROL.txt --numthreads 19
 # for all 4 subsets...
 
+# merge with phenotype file
 
+cd /data/CARD/UKBIOBANK/PHENOTYPE_DATA/disease_groups/
+
+module load R
+R
+AD_case <- read.table("/data/CARD/UKBIOBANK/EXOME_DATA_200K/genotype_data_of_exome_people/pcs_UKB_EXOM_AD_CASE_CONTROL.txt",header=T)
+AD_parent <- read.table("/data/CARD/UKBIOBANK/EXOME_DATA_200K/genotype_data_of_exome_people/pcs_UKB_EXOM_AD_PARENT_CONTROL.txt",header=T)
+PD_case <- read.table("/data/CARD/UKBIOBANK/EXOME_DATA_200K/genotype_data_of_exome_people/pcs_UKB_EXOM_PD_CASE_CONTROL.txt",header=T)
+PD_parent <- read.table("/data/CARD/UKBIOBANK/EXOME_DATA_200K/genotype_data_of_exome_people/pcs_UKB_EXOM_PD_PARENT_CONTROL.txt",header=T)
+AD_case$IID <- NULL
+AD_parent$IID <- NULL
+PD_case$IID <- NULL
+PD_parent$IID <- NULL
+covAD <- read.table("UKB_EXOM_AD_CASE_CONTROL.txt",header=T)
+covADpat <- read.table("UKB_EXOM_AD_PARENT_CONTROL.txt",header=T)
+covPD <- read.table("UKB_EXOM_PD_CASE_CONTROL.txt",header=T)
+covPDpat <- read.table("UKB_EXOM_PD_PARENT_CONTROL.txt",header=T)
+MM1 <- merge(covAD,AD_case,by="FID")
+MM2 <- merge(covADpat,AD_parent,by="FID")
+MM3 <- merge(covPD,PD_case,by="FID")
+MM4 <- merge(covPDpat,PD_parent,by="FID")
+# make sure no duplicates are present...
+MM11 <- MM1[!duplicated(MM1), ]
+MM22 <- MM2[!duplicated(MM2), ]
+MM33 <- MM3[!duplicated(MM3), ]
+MM44 <- MM4[!duplicated(MM4), ]
+# add in additional pheno column
+MM11$PHENO <- MM11$AD+1
+MM22$PHENO <- MM22$AD_parent+1
+MM33$PHENO <- MM33$PD+1
+MM44$PHENO <- MM44$PD_parent+1
+# save
+write.table(MM11, file="UKB_EXOM_AD_CASE_CONTROL_with_PC.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(MM22, file="UKB_EXOM_AD_PARENT_CONTROL_with_PC.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(MM33, file="UKB_EXOM_PD_CASE_CONTROL_with_PC.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(MM44, file="UKB_EXOM_PD_PARENT_CONTROL_with_PC.txt", quote=FALSE,row.names=F,sep="\t")
+q()
+n
 
 ```
 
+### prep for burden
 
+```
+module load plink/2.0-dev-20191128
+module load samtools #1.11
+cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/PLINK_files/
 
+# update X to 23...
 
+scp ukb23155_cX_b0_v1.bed ukb23155_c23_b0_v1.bed
+scp UKBexomeOQFE_chrX.bim UKBexomeOQFE_chr23.bim
 
+# make vcf files for input for rvtests....
+# need to make the following combinations:
+all_missense.txt
+ALL_LOF.txt
+ALL_CADD_20.txt
+ALL_CADD_10.txt
+ALL_MISSENSE_and_LOF.txt
 
+# make subfolders
+mkdir PD_CASE_CONTROL
+mkdir PD_PARENT_CONTROL
+mkdir AD_CASE_CONTROL
+mkdir AD_PARENT_CONTROL
 
-- run burden
+### big loop
+
+module load plink/2.0-dev-20191128
+module load samtools #1.11
+cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/PLINK_files/
+
+for CHNUM in {1..23};
+do
+plink2 --bed ukb23155_c"$CHNUM"_b0_v1.bed --bim UKBexomeOQFE_chr$CHNUM.bim --fam ukb23155_c1_b0_v1_s200632.fam \
+--extract ../annotation_of_plink_files/all_missense.txt --keep ../BURDEN/UKB_EXOM_PD_CASE_CONTROL_with_PC.txt \
+--export vcf bgz id-paste=iid --out PD_CASE_CONTROL/UKB_EXOM_PD_CASE_CONTROL_chr$CHNUM --mac 1
+tabix -p vcf PD_CASE_CONTROL/UKB_EXOM_PD_CASE_CONTROL_chr$CHNUM.vcf.gz
+done
+
+and do for all 4 groups:
+PD_CASE_CONTROL
+PD_PARENT_CONTROL
+AD_CASE_CONTROL
+AD_PARENT_CONTROL
+
+### examples below for just 1 chromosome....
+# PD - control
+plink2 --bed ukb23155_c1_b0_v1.bed --bim UKBexomeOQFE_chr1.bim --fam ukb23155_c1_b0_v1_s200632.fam \
+--extract ../annotation_of_plink_files/all_missense.txt --keep ../BURDEN/UKB_EXOM_PD_CASE_CONTROL_with_PC.txt \
+--export vcf bgz id-paste=iid --out UKB_EXOM_PD_CASE_CONTROL_chr1 --mac 1 
+tabix -p vcf UKB_EXOM_PD_CASE_CONTROL_chr1.vcf.gz
+
+# PD parent - control
+plink2 --bed ukb23155_c1_b0_v1.bed --bim UKBexomeOQFE_chr1.bim --fam ukb23155_c1_b0_v1_s200632.fam \
+--extract ../annotation_of_plink_files/all_missense.txt --keep ../BURDEN/UKB_EXOM_PD_PARENT_CONTROL_with_PC.txt \
+--export vcf bgz id-paste=iid --out UKB_EXOM_PD_PARENT_CONTROL_chr1 --mac 1
+tabix -p vcf UKB_EXOM_PD_PARENT_CONTROL_chr1.vcf.gz
+
+# AD - control
+plink2 --bed ukb23155_c1_b0_v1.bed --bim UKBexomeOQFE_chr1.bim --fam ukb23155_c1_b0_v1_s200632.fam \
+--extract ../annotation_of_plink_files/all_missense.txt --keep ../BURDEN/UKB_EXOM_AD_CASE_CONTROL_with_PC.txt \
+--export vcf bgz id-paste=iid --out UKB_EXOM_AD_CASE_CONTROL_chr1 --mac 1 
+tabix -p vcf UKB_EXOM_AD_CASE_CONTROL_chr1.vcf.gz
+
+# AD parent - control
+plink2 --bed ukb23155_c1_b0_v1.bed --bim UKBexomeOQFE_chr1.bim --fam ukb23155_c1_b0_v1_s200632.fam \
+--extract ../annotation_of_plink_files/all_missense.txt --keep ../BURDEN/UKB_EXOM_AD_PARENT_CONTROL_with_PC.txt \
+--export vcf bgz id-paste=iid --out UKB_EXOM_AD_PARENT_CONTROL_chr1 --mac 1
+tabix -p vcf UKB_EXOM_AD_PARENT_CONTROL_chr1.vcf.gz
+
+```
+
+### run burden
+
+Using RVTEST (http://zhanxw.github.io/rvtests/) publication => https://pubmed.ncbi.nlm.nih.gov/27153000/
+=> with algorithms:
 SKATO, CMC, MB
+More info here => http://zhanxw.github.io/rvtests/#burden-tests
+SKATO => --kernel skato
+CMC => --burden cmc
+MB => --burden mb
+
+Output folder:
+cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/BURDEN
+
+Download rvtests latest version (version: 20190205):
+wget https://github.com/zhanxw/rvtests/releases/download/v2.1.0/rvtests_linux64.tar.gz
+tar -xf rvtests_linux64.tar.gz
+
+rvtest --noweb --hide-covar --out UKB_EXOM_PD_CASE_CONTROL_chr1 --burden cmc  \
+--inVcf ../PLINK_files/UKB_EXOM_PD_CASE_CONTROL_chr1.vcf.gz --pheno UKB_EXOM_PD_CASE_CONTROL_with_PC.txt --pheno-name PHENO \
+--covar UKB_EXOM_PD_CASE_CONTROL_with_PC.txt --freqUpper 0.05 \
+--covar-name GENETIC_SEX,AGE_OF_RECRUIT,TOWNSEND,PC1,PC2,PC3,PC4,PC5 --geneFile ../refFlat_HG38.txt --gene GBA
+
+rvtest --noweb --hide-covar --out UKB_EXOM_PD_PARENT_CONTROL_chr1 --burden cmc  \
+--inVcf ../PLINK_files/UKB_EXOM_PD_PARENT_CONTROL_chr1.vcf.gz --pheno UKB_EXOM_PD_PARENT_CONTROL_with_PC.txt --pheno-name PHENO \
+--covar UKB_EXOM_PD_PARENT_CONTROL_with_PC.txt --freqUpper 0.05 \
+--covar-name GENETIC_SEX,AGE_OF_RECRUIT,TOWNSEND,PC1,PC2,PC3,PC4,PC5 --geneFile ../refFlat_HG38.txt --gene GBA
+
+INPUT FORMATS:
+UKB_EXOM_AD_CASE_CONTROL_ALL_MISSENSE_and_LOF_chr
+UKB_EXOM_AD_CASE_CONTROL_ALL_CADD_20_chr
+UKB_EXOM_AD_CASE_CONTROL_ALL_CADD_10_chr
+UKB_EXOM_AD_CASE_CONTROL_ALL_LOF_chr
+UKB_EXOM_AD_CASE_CONTROL_ALL_MISSENSE_chr
+
+```
+## script format:
+
+#!/bin/bash
+# sbatch --cpus-per-task=20 --mem=40g --mail-type=END --time=48:00:00 BURDEN_PD_MISSENSE.sh
+# MISSENSE
+for CHNUM in {1..22};
+do
+rvtest --noweb --hide-covar --out UKB_EXOM_PD_PARENT_CONTROL_chr$CHNUM --burden cmc  \
+--inVcf ../PLINK_files/UKB_EXOM_PD_PARENT_CONTROL_chr$CHNUM.vcf.gz --pheno UKB_EXOM_PD_PARENT_CONTROL_with_PC.txt --pheno-name PHENO \
+--covar UKB_EXOM_PD_PARENT_CONTROL_with_PC.txt --freqUpper 0.05 \
+--covar-name GENETIC_SEX,AGE_OF_RECRUIT,TOWNSEND,PC1,PC2,PC3,PC4,PC5 --geneFile ../refFlat_HG38.txt
+done
+
+```
 
