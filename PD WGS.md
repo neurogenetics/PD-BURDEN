@@ -82,14 +82,20 @@ done
 
 # move data to annotation folder
 
-mv UKB_exomes_200K_chr* ../annotation_of_plink_files/
-mv FREQchr*afreq ../annotation_of_plink_files/
+mv UKB_exomes_200K_chr* annotation/
+mv FREQchr*afreq annotation/
 
 # clean up folder
-cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/annotation_of_plink_files/
+cd annotation/
 mkdir inputfiles
 mv *.avinput inputfiles/
-rm *.vcf 
+rm *.vcf
+# merge data with frequency file...
+
+for chnum in {1..23};
+  do
+	paste UKB_exomes_200K_chr"$chnum".hg38_multianno.txt FREQchr"$chnum".afreq > PD_WGS_chr"$chnum".hg38_multianno.withafreq.txt
+done
 
 
 ```
@@ -98,35 +104,35 @@ rm *.vcf
 ### subset "groups" of variants...
 
 # missense
-grep exonic UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt | grep nonsynonymous | cut -f 92 > all_missense.txt
-# n=4672378
+grep exonic PD_WGS_chr*.hg38_multianno.withafreq.txt | grep nonsynonymous | cut -f 92 > all_missense.txt
+# n=933810
 
 # LOF (stop, frame)
-grep stopgain UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt > all_stopgain.txt
-# n=159685
-grep stoploss UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt > all_stoploss.txt
-# n=7085
-grep nonframeshift UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt > all_nonframeshift.txt
-# n=107106
-grep frame UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt | grep -v nonframeshift | grep -v nonsynonymous > all_frameshift.txt
-# n=203994
+grep stopgain PD_WGS_chr*.hg38_multianno.withafreq.txt | cut -f 92 > all_stopgain.txt
+# n=24960
+grep stoploss PD_WGS_chr*.hg38_multianno.withafreq.txt | cut -f 92 > all_stoploss.txt
+# n=1193
+grep nonframeshift PD_WGS_chr*.hg38_multianno.withafreq.txt | cut -f 92 > all_nonframeshift.txt
+# n=16597
+grep frame PD_WGS_chr*.hg38_multianno.withafreq.txt | grep -v nonframeshift | grep -v nonsynonymous | cut -f 92 > all_frameshift.txt
+# n=26633
 
 # splicing 
-grep splicing UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt | \
-grep -v ncRNA | cut -f 6,92 | grep splicing | cut -f 2 > all_splice_15bp.txt
-# 24852 exonic;splicing
-# 1134001 splicing
-
+grep splicing PD_WGS_chr*.hg38_multianno.withafreq.txt | \
+grep -v ncRNA | cut -f 6,92 | grep splicing | cut -f 2 > all_splice_bp.txt
+# 13474 splicing
 
 # CADD <10
-awk '{ if($58 > 10) { print }}' UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt | cut -f 92 > ALL_CADD_10.txt
-# n=265920
+awk '{ if($58 > 10) { print }}' PD_WGS_chr*.hg38_multianno.withafreq.txt | cut -f 92 > ALL_CADD_10.txt
+# n=45081
 
 # CADD <20
-awk '{ if($58 > 20) { print }}' UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt | cut -f 92 > ALL_CADD_20.txt
-# n=228934
+awk '{ if($58 > 20) { print }}' PD_WGS_chr*.hg38_multianno.withafreq.txt | cut -f 92 > ALL_CADD_20.txt
+# n=35907
 
-
+```
+# continune here
+```
 #### Prepping final files:
 
 cat all_frameshift.txt all_stopgain.txt all_stoploss.txt all_splice_normal.txt > ALL_LOF.txt
