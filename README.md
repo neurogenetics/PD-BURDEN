@@ -13,7 +13,8 @@ ALL_CADD_10.txt => 5, 1, 0.5 and 0.1%
 ALL_MISSENSE_and_LOF.txt => All missense + splicing, frameshift, stopgain, stoploss => 5, 1, 0.5 and 0.1%
 ```
 
-
+PDF file for more information
+https://www.ukbiobank.ac.uk/wp-content/uploads/2020/11/UK-Biobank-Exome-Release-FAQ_v8-October-2020.pdf
 
 
 
