@@ -130,14 +130,11 @@ awk '{ if($58 > 10) { print }}' PD_WGS_chr*.hg38_multianno.withafreq.txt | cut -
 awk '{ if($58 > 20) { print }}' PD_WGS_chr*.hg38_multianno.withafreq.txt | cut -f 92 > ALL_CADD_20.txt
 # n=35907
 
-```
-# continune here
-```
 #### Prepping final files:
 
-cat all_frameshift.txt all_stopgain.txt all_stoploss.txt all_splice_normal.txt > ALL_LOF.txt
+cat all_frameshift.txt all_stopgain.txt all_stoploss.txt all_splice_bp.txt > ALL_LOF.txt
 
-cat all_missense.txt all_frameshift.txt all_stopgain.txt all_stoploss.txt all_splice_normal.txt > ALL_MISSENSE_and_LOF.txt
+cat all_missense.txt all_frameshift.txt all_stopgain.txt all_stoploss.txt all_splice_bp.txt > ALL_MISSENSE_and_LOF.txt
 
 ### FINAL GROUPS:
 
@@ -169,7 +166,7 @@ done
 
 ls | grep fam | sed 's/.fam//g' > mergelist.txt
 module load plink
-plink --merge-list mergelist.txt --make-bed --out genotype_data_of_exome_people_N200469
+plink --merge-list mergelist.txt --make-bed --out PD_WGS
 # Performing single-pass merge (200469 people, 784256 variants).
 
 
