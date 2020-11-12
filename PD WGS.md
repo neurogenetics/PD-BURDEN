@@ -489,8 +489,61 @@ Steps:
 - merge per chromosome
 - sort based on P-value
 
+cd BURDEN
+ALL_MISSENSE
+ALL_LOF
+ALL_CADD_20
+ALL_CADD_10
+ALL_MISSENSE_and_LOF
+
+rm *_FREQUENCY_*
+264 files per folder 
+
+## big loop....
+
+cd /data/CARD/PD/WGS/june2019/BURDEN/
+
+cat variant_types.txt | while read line
+do 
+	cd $line
+	head -1 PD_WGS_0.05_chr8.CMC.assoc > CMC_header.txt
+	head -1 PD_WGS_0.05_chr8.SkatO.assoc > SkatO_header.txt
+	# SKATO
+	cat *_0.05_*.SkatO.assoc | sort -gk 8 | grep -v "Pvalue" > temp.txt
+	cat SkatO_header.txt temp.txt > ../"$line"_0.05.SkatO.assoc
+	cat *_0.01_*.SkatO.assoc | sort -gk 8 | grep -v "Pvalue" > temp.txt
+	cat SkatO_header.txt temp.txt > ../"$line"_0.01.SkatO.assoc
+	cat *_0.005_*.SkatO.assoc | sort -gk 8 | grep -v "Pvalue" > temp.txt
+	cat SkatO_header.txt temp.txt > ../"$line"_0.005.SkatO.assoc
+	cat *_0.001_*.SkatO.assoc | sort -gk 8 | grep -v "Pvalue" > temp.txt
+	cat SkatO_header.txt temp.txt > ../"$line"_0.001.SkatO.assoc
+	# CMC
+	cat *_0.05_*.CMC.assoc | sort -gk 7 | grep -v "Pvalue" > temp.txt
+	cat CMC_header.txt temp.txt > ../"$line"_0.05.CMC.assoc
+	cat *_0.01_*.CMC.assoc | sort -gk 7 | grep -v "Pvalue" > temp.txt
+	cat CMC_header.txt temp.txt > ../"$line"_0.01.CMC.assoc
+	cat *_0.005_*.CMC.assoc | sort -gk 7 | grep -v "Pvalue" > temp.txt
+	cat CMC_header.txt temp.txt > ../"$line"_0.005.CMC.assoc
+	cat *_0.001_*.CMC.assoc | sort -gk 7 | grep -v "Pvalue" > temp.txt
+	cat CMC_header.txt temp.txt > ../"$line"_0.001.CMC.assoc
+	cd ..
+done
+
+# move files to results file
+mkdir RESULTS
+mv *.assoc RESULTS/
+
+40 files => 2 tests, 4 variant thresholds, 5 variant groups => 40
+
+
+
 
 ```
+
+
+
+
+
 
 ```
 ## create cumulative frequency list for each group...
