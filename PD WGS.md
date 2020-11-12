@@ -535,8 +535,30 @@ mv *.assoc RESULTS/
 
 40 files => 2 tests, 4 variant thresholds, 5 variant groups => 40
 
+### quick check of hits...
 
+cat *.SkatO.assoc | sort -gk 8 > all_skat.txt
+cat *.CMC.assoc | sort -gk 7 > all_cmc.txt
 
+# inspect using excel
+filter => at least 5 variants "NumVar"
+
+# CMC all genes with E-5:
+GBA => good
+ATP9B => no link with PD
+CDC20 => PARKIN partner
+LARS2 => some far fetch role for methylation maybe? and Perrault syndrome?
+GALNT18 => no link with PD
+BCKDHA => no link with PD
+
+# SKAT-O all genes with E-5:
+GBA => good
+LRRK2 => good
+RPUSD1 => no link with PD
+ATP9B => no link with PD
+CCDC73 => no strong link wtih PD
+CDC20 => PARKIN partner
+DCDC2C => restless leg GWAS hit
 
 ```
 
