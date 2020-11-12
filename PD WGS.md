@@ -366,7 +366,7 @@ done
 for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
   do
  	plink2 --pfile pd.june2019.chr"$chnum".freeze9.sqc \
-	--extract annotation/ALL_MISSENSE.txt \
+	--extract annotation/all_missense.txt \
 	--keep PHENO_FOR_GWAS_v1_november11_with_PC.txt \
 	--out ALL_MISSENSE/PD_WGS_ALL_MISSENSE_"$chnum" \
 	--mac 1 --export vcf bgz id-paste=iid
@@ -430,6 +430,95 @@ rvtest --noweb --hide-covar --out BURDEN/ALL_MISSENSE/PD_WGS_burden_chr1 --burde
 --covar-name SEX,AGE_ANALYSIS,PC1,PC2,PC3,PC4,PC5 --geneFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/refFlat_HG38_chr1.txt --gene GBA
 # Loaded 2788 cases, 4105 controls, and 0 missing phenotypes => 6893 samples
 P = 4.00621e-13
+# LRRK2
+rvtest --noweb --hide-covar --out BURDEN/ALL_MISSENSE/PD_WGS_burden_chr12 --burden cmc  \
+--inVcf ALL_MISSENSE/PD_WGS_ALL_MISSENSE_12.vcf.gz \
+--pheno PHENO_FOR_GWAS_v1_november11_with_PC.txt --pheno-name PHENO_RV \
+--covar PHENO_FOR_GWAS_v1_november11_with_PC.txt --freqUpper 0.05 --imputeCov \
+--covar-name SEX,AGE_ANALYSIS,PC1,PC2,PC3,PC4,PC5 --geneFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/refFlat_HG38_chr12.txt --gene LRRK2
+# Loaded 2788 cases, 4105 controls, and 0 missing phenotypes => 6893 samples
+P = 0.101713 ALL_MISSENSE
+
+```
+
+```
+# now running all
+#!/bin/bash
+# sbatch --cpus-per-task=10 --mem=5g --mail-type=END --time=24:00:00 WGS_BURDEN_TESTING_CMC_SKAT_2020.sh variant frequency
+# sbatch --cpus-per-task=10 --mem=5g --time=24:00:00 WGS_BURDEN_TESTING_CMC_SKAT_2020.sh ALL_MISSENSE_and_LOF 0.05
+# sbatch --cpus-per-task=10 --mem=5g --time=24:00:00 WGS_BURDEN_TESTING_CMC_SKAT_2020.sh ALL_LOF 0.05
+VARIANT=$1
+FREQUENCY=$2
+###
+echo "this is"
+echo "PD case control" 
+echo "whit variant type"
+echo $VARIANT
+echo "using frequency cut off of"
+echo $FREQUENCY
+###
+# input examples variant level:
+# ALL_MISSENSE_and_LOF
+# ALL_CADD_20
+# ALL_CADD_10
+# ALL_LOF
+# ALL_MISSENSE
+###
+# input examples frequency level:
+# 0.05
+# 0.01
+# 0.005
+# 0.001
+module load rvtests
+for CHNUM in {1..22};
+do
+rvtest --noweb --hide-covar --out BURDEN/"$VARIANT"/PD_WGS_"$FREQUENCY"_chr$CHNUM --burden cmc --kernel skato \
+--inVcf "$VARIANT"/PD_WGS_"$VARIANT"_"$CHNUM".vcf.gz \
+--pheno PHENO_FOR_GWAS_v1_november11_with_PC.txt --pheno-name PHENO_RV --imputeCov \
+--covar PHENO_FOR_GWAS_v1_november11_with_PC.txt --freqUpper $FREQUENCY \
+--covar-name SEX,AGE_ANALYSIS,PC1,PC2,PC3,PC4,PC5 --geneFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/refFlat_HG38_chr$CHNUM.txt
+done
+
+```
+
+####  post burden testing file prepping for meta-analyses...
 
 
 ```
+Steps:
+- merge per chromosome
+- sort based on P-value
+
+
+```
+
+```
+## create cumulative frequency list for each group...
+
+Go back to annotation and make list
+variant_name	gene
+
+merge with overall frequency
+
+plink --keep cases --freq --mac 1 --extract LOF
+
+then sum frequency per gene?
+
+### sandbox:
+
+module load bcftools
+module load jvarkit/20200713
+# https://hpc.nih.gov/apps/jvarkit.html
+plink2 --pfile pd.june2019.chr22.freeze9.sqc --make-bed --out FAM_file
+cd /data/CARD/PD/WGS/june2019/ALL_LOF/
+bcftools annotate -x 'INFO' PD_WGS_ALL_LOF_22.vcf.gz | java -jar $JVARKIT_JARPATH/vcfburdenmaf.jar --pedigree ../FAM_file.fam > TESTING_123.txt
+
+java -jar $JVARKIT_JARPATH/backlocate.jar --help
+
+
+```
+
+
+
+
+
