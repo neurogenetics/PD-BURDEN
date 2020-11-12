@@ -398,6 +398,28 @@ done
 
 ```
 
+```
+## checking results files:
+# PD_CASE_CONTROL
+ls | grep ALL_CADD_10 | wc -l #264
+ls | grep ALL_CADD_20 | wc -l #264
+ls | grep ALL_MISSENSE_and_LOF | wc -l  #264
+ls | grep ALL_LOF | wc -l  #12 
+ls | grep ALL_MISSENSE_0 | wc -l #264
+---> redo ALL_LOF!!!!
+# 264 => 3 files, 4 frequency, 22 chromosomes => 264
 
+# PD_PARENT_CONTROL
+ls | grep ALL_CADD_10 | wc -l #264
+ls | grep ALL_CADD_20 | wc -l #264
+ls | grep ALL_MISSENSE_and_LOF | wc -l #264
+ls | grep ALL_LOF | wc -l #264 
+ls | grep ALL_MISSENSE_0 | wc -l #264
+# 264 => 3 files, 4 frequency, 22 chromosomes => 264
+
+
+
+
+```
 
 
