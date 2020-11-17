@@ -1,38 +1,71 @@
-# PD-BURDEN
-
-
-### UK biobank work
-
-##### Variant selection
+### PD UK Biobank exome data burden testing
 
 ```
-all_missense.txt => 5, 1, 0.5 and 0.1%
-ALL_LOF.txt => (splicing, frameshift, stopgain, stoploss) => 5, 1, 0.5 and 0.1%
-ALL_CADD_20.txt => 5, 1, 0.5 and 0.1%
-ALL_CADD_10.txt => 5, 1, 0.5 and 0.1%
-ALL_MISSENSE_and_LOF.txt => All missense + splicing, frameshift, stopgain, stoploss => 5, 1, 0.5 and 0.1%
-```
+November 2020
+Cornelis
 
-PDF file for more information
+For more information on UK Biobank exome data please visit: 
 https://www.ukbiobank.ac.uk/wp-content/uploads/2020/11/UK-Biobank-Exome-Release-FAQ_v8-October-2020.pdf
 
 
+Steps:
+- sort out phenotype file including QC (relatedness, ancestry, PC's)
+- annotation 
+- subset data
+- burden testing
+- post burden testing file prepping for meta-analyses
+- create cumulative frequency list for each group
 
-
-previously done:
-
-- annotated
-- filtered for European
-- filtered for relatedness
-
-
-to do now:
-- Make final phenotype sheet
-all cases
-all proxy => no cases
-
-use controls => no PD parent, no AD parent, no PD-ism, no dementia and over >60
 ```
+
+#### Phenotype file
+
+- filtering for Europeans and relatedness
+
+```
+cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/genotype_data_of_exome_people
+module load plink/2.0-dev-20191128
+
+# subset samples
+for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22};
+  do
+ 	plink2 --bed /data/CARD/UKBIOBANK/GENOTYPE_DATA/ukb_cal_chr"$chnum"_v2.bed \
+	--bim /data/CARD/UKBIOBANK/GENOTYPE_DATA/ukb_snp_chr"$chnum"_v2.bim \
+	--fam /data/CARD/UKBIOBANK/GENOTYPE_DATA/ukb33601_cal_chr1_v2_s488363.fam \
+	--keep /data/CARD/UKBIOBANK/EXOME_DATA_200K/PLINK_files/ukb23155_c1_b0_v1_s200632.fam \
+	--make-bed --out rawgeno"$chnum"
+done
+
+# merge all
+ls | grep fam | sed 's/.fam//g' > mergelist.txt
+module load plink
+plink --merge-list mergelist.txt --make-bed --out genotype_data_of_exome_people_N200469
+# Performing single-pass merge (200469 people, 784256 variants).
+
+#!/bin/bash
+# sbatch --cpus-per-task=20 --mem=150g --mail-type=END --time=4:00:00 GCTA_genotypes.sh
+
+module load plink/2.0-dev-20191128
+module load GCTA
+
+plink --bfile genotype_data_of_exome_people_N200469 --geno 0.01 --maf 0.05 \
+--keep /data/CARD/UKBIOBANK/PHENOTYPE_DATA/EUROPEANS.txt --out input_for_prune --make-bed
+
+plink --bfile input_for_prune --indep-pairwise 1000 10 0.02 --out TEMP_pruning
+plink --bfile input_for_prune --extract TEMP_pruning.prune.in --make-bed --out TEMP_pruned_data
+
+gcta64 --bfile TEMP_pruned_data --make-grm --out GRM_matrix --autosome --maf 0.05 --threads 20
+gcta64 --grm-cutoff 0.125 --grm GRM_matrix --out GRM_matrix_0.125 --make-grm --threads 20
+plink --bfile genotype_data_of_exome_people_N200469 --keep GRM_matrix_0.125.grm.id --make-bed --out genotype_data_of_exome_people_N200469_no_cousins
+# 158,317 people remaining....
+```
+
+- Make final phenotype sheet
+```
+all cases
+all proxies => no cases
+using controls => no PD parent, no AD parent, no PD-ism, no dementia and over >60
+
 cd /data/CARD/UKBIOBANK/PHENOTYPE_DATA/disease_groups/
 
 module load R
@@ -142,7 +175,7 @@ write.table(AD_PARENT_CONTROL, file="UKB_EXOM_AD_PARENT_CONTROL.txt", quote=FALS
 
 ```
 
-Now create PC's from genotypes....
+- Make PC's from genotypes....
 
 ```
 /data/CARD/UKBIOBANK/PHENOTYPE_DATA/disease_groups
@@ -208,7 +241,146 @@ n
 
 ```
 
-### prep for burden
+#### annotation
+
+```
+# create frequency files
+module load plink/2.0-dev-20191128
+for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,};
+  do
+  	plink --bim UKBexomeOQFE_chr"$chnum".bim --fam ukb23155_c1_b0_v1_s200632.fam \
+	--bed ukb23155_c"$chnum"_b0_v1.bed --freq --out FREQchr"$chnum"
+done
+
+# selecting one test sample to make annotation faster...
+echo 4250267 4250267 > textsample.txt
+
+# subset 1 one sample
+module load plink/2.0-dev-20191128
+for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22};
+  do
+  	plink --bim UKBexomeOQFE_chr"$chnum".bim --fam ukb23155_c1_b0_v1_s200632.fam \
+	--bed ukb23155_c"$chnum"_b0_v1.bed --export vcf id-paste=iid --out anno"$chnum" --keep textsample.txt
+done
+
+# annotate all
+module load annovar
+for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22};
+  do
+  	table_annovar.pl anno"$chnum".vcf $ANNOVAR_DATA/hg38 --thread 16 -buildver hg38 \
+	-out UKB_exomes_200K_chr"$chnum" -arg '-splicing 15',,, -remove -protocol refGene,avsnp150,clinvar_20200316,dbnsfp35a \
+	-operation g,f,f,f -nastring . -vcfinput
+done
+
+# separately for chr X and Y...
+plink --bim UKBexomeOQFE_chrX.bim --fam ukb23155_c1_b0_v1_s200632.fam \
+--bed ukb23155_cX_b0_v1.bed --freq --out FREQchr23
+
+plink --bim UKBexomeOQFE_chrY.bim --fam ukb23155_c1_b0_v1_s200632.fam \
+--bed ukb23155_cY_b0_v1.bed --freq --out FREQchr24
+
+plink --bim UKBexomeOQFE_chrX.bim --fam ukb23155_c1_b0_v1_s200632.fam \
+--bed ukb23155_cX_b0_v1.bed --export vcf id-paste=iid --out anno23 --keep textsample.txt
+
+plink --bim UKBexomeOQFE_chrY.bim --fam ukb23155_c1_b0_v1_s200632.fam \
+--bed ukb23155_cY_b0_v1.bed --export vcf id-paste=iid --out anno24 --keep textsample.txt
+
+table_annovar.pl anno23.vcf $ANNOVAR_DATA/hg38 --thread 16 -buildver hg38 \
+-out UKB_exomes_200K_chr23 -arg '-splicing 15',,, -remove -protocol refGene,avsnp150,clinvar_20200316,dbnsfp35a \
+-operation g,f,f,f -nastring . -vcfinput
+
+table_annovar.pl anno24.vcf $ANNOVAR_DATA/hg38 --thread 16 -buildver hg38 \
+-out UKB_exomes_200K_chr24 -arg '-splicing 15',,, -remove -protocol refGene,avsnp150,clinvar_20200316,dbnsfp35a \
+-operation g,f,f,f -nastring . -vcfinput
+
+
+# move data to annotation folder
+
+mv UKB_exomes_200K_chr* ../annotation_of_plink_files/
+mv FREQchr*afreq ../annotation_of_plink_files/
+
+# clean up folder
+cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/annotation_of_plink_files/
+mkdir inputfiles
+mv *.avinput inputfiles/
+rm *.vcf 
+
+# merge data with frequency file...
+
+for chnum in {1..24};
+  do
+	paste UKB_exomes_200K_chr"$chnum".hg38_multianno.txt FREQchr"$chnum".afreq > UKB_exomes_200K_chr"$chnum".hg38_multianno.withafreq.txt
+done
+
+# clean up folder
+mkdir freq_files
+mv *.afreq freq_files/
+mkdir anno_no_freq
+mv *.hg38_multianno.txt anno_no_freq/
+
+### subset "groups" of variants...
+
+# missense
+grep exonic UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt | grep nonsynonymous | cut -f 92 > all_missense.txt
+# n=4672378
+
+# LOF (stop, frame)
+grep stopgain UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt > all_stopgain.txt
+# n=159685
+grep stoploss UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt > all_stoploss.txt
+# n=7085
+grep nonframeshift UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt > all_nonframeshift.txt
+# n=107106
+grep frame UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt | grep -v nonframeshift | grep -v nonsynonymous > all_frameshift.txt
+# n=203994
+
+# splicing 
+grep splicing UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt | \
+grep -v ncRNA | cut -f 6,92 | grep splicing | cut -f 2 > all_splice_15bp.txt
+# 24852 exonic;splicing
+# 1134001 splicing
+
+# make a separate splicing one...
+cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/annotation_of_plink_files/SPLICING/
+
+for chnum in {1..24};
+  do
+	paste SPLICING_UKB_exomes_200K_chr"$chnum".hg38_multianno.txt ../freq_files/FREQchr"$chnum".afreq > SPLICING_UKB_exomes_200K_chr"$chnum".hg38_multianno.withafreq.txt
+done
+
+grep splicing SPLICING_UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt | \
+grep -v ncRNA | cut -f 6,22 | grep splicing | cut -f 2 > all_splice_normal.txt
+#   3146 exonic;splicing
+#  89913 splicing
+
+
+
+# CADD <10
+awk '{ if($58 > 10) { print }}' UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt | cut -f 92 > ALL_CADD_10.txt
+# n=265920
+
+# CADD <20
+awk '{ if($58 > 20) { print }}' UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt | cut -f 92 > ALL_CADD_20.txt
+# n=228934
+
+
+#### Prepping final files:
+
+cat all_frameshift.txt all_stopgain.txt all_stoploss.txt all_splice_normal.txt > ALL_LOF.txt
+
+cat all_missense.txt all_frameshift.txt all_stopgain.txt all_stoploss.txt all_splice_normal.txt > ALL_MISSENSE_and_LOF.txt
+
+
+ALL_CADD_10.txt
+ALL_CADD_20.txt
+all_frameshift.txt
+all_missense.txt
+all_nonframeshift.txt
+
+```
+
+
+#### subset data
 
 ```
 module load plink/2.0-dev-20191128
@@ -285,11 +457,10 @@ tabix -p vcf UKB_EXOM_AD_PARENT_CONTROL_chr1.vcf.gz
 
 Using RVTEST (http://zhanxw.github.io/rvtests/) publication => https://pubmed.ncbi.nlm.nih.gov/27153000/
 => with algorithms:
-SKATO, CMC, MB
+SKATO and CMC
 More info here => http://zhanxw.github.io/rvtests/#burden-tests
 SKATO => --kernel skato
 CMC => --burden cmc
-MB => --burden mb
 
 ```
 Output folder:
@@ -398,6 +569,7 @@ done
 
 ```
 
+# DOUBLE CHECK HERE
 ```
 ## checking results files:
 # PD_CASE_CONTROL
@@ -464,8 +636,12 @@ sbatch --cpus-per-task=15 --mem=50g --time=24:00:00 BURDEN_TESTING_CMC_SKAT_2020
 
 ```
 
+####  post burden testing file prepping for meta-analyses...
+
 ```
-### Merging results files:
+Steps:
+- merge per chromosome
+- sort based on P-value
 
 ## PD_CASE_CONTROL
 cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/BURDEN/RESULTS/PD_CASE_CONTROL
@@ -493,8 +669,6 @@ do
 	cat "$line"_0.001_*.CMC.assoc | sort -gk 7 | grep -v "Pvalue" > temp.txt
 	cat CMC_header.txt temp.txt > ../PD_CASE_CONTROL_"$line"_0.001.CMC.assoc
 done
-
-cat ALL_MISSENSE*_0.05_*.CMC.assoc | sort -gk 7 | grep -v "Pvalue" | grep GBA
 
 ## PD_PARENT_CONTROL
 
@@ -525,5 +699,92 @@ do
 done
 
 ```
+# DOUBLE CHECK HERE
+
+```
+# move files to results file
+mkdir RESULTS
+mv *.assoc RESULTS/
+
+40 files => 2 tests, 4 variant thresholds, 5 variant groups => 40
+```
+
+
+## create cumulative frequency list for each group...
+
+```
+Input files needed:
+/data/CARD/PD/WGS/june2019/annotation/PD_WGS_chr*.hg38_multianno.withafreq.txt
+
+Variant classes:
+all_missense.txt
+ALL_LOF.txt
+ALL_CADD_20.txt
+ALL_CADD_10.txt
+ALL_MISSENSE_and_LOF.txt
+
+Case-control files to generate:
+module load plink/2.0-dev-20191128
+
+mkdir freq_case_control_per_variant_class
+# make plink1 files
+for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
+  do
+ 	plink2 --pfile pd.june2019.chr"$chnum".freeze9.sqc \
+	--extract annotation/ALL_LOF.txt \
+	--keep PHENO_FOR_GWAS_v1_november11_with_PC.txt \
+	--pheno PHENO_FOR_GWAS_v1_november11_with_PC.txt \
+	--pheno-name PHENO_RV --make-bed \
+	--out freq_case_control_per_variant_class/PD_WGS_ALL_LOF_"$chnum"
+done
+# creating assoc files...
+module load plink
+cd freq_case_control_per_variant_class
+for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
+  do
+plink --bfile PD_WGS_ALL_LOF_"$chnum" \
+--assoc --out PD_WGS_ALL_LOF_freq_"$chnum"
+done
+
+# prep annotation...
+cut -f 1-11,92 UKB_exomes_200K_chr9.hg38_multianno.txt > SHORT.txt
+
+# then merge in R and filter....
+module load R
+R
+require("data.table")
+assoc <- read.table("PD_WGS_ALL_LOF_freq_9.assoc",header=T)
+assoc = assoc[c("CHR","SNP","F_A","F_U")]
+#annotation <- read.table("../annotation/SHORT.txt",header=T)
+annotation <- fread("../annotation/SHORT.txt",header=T)
+dim(assoc)
+dim(annotation)
+MM <- merge(assoc,annotation,by.x="SNP",by.y="Otherinfo6")
+dim(MM)
+# now calculate cumulative case-control frequency
+case_feq <- aggregate(x = MM$F_A, by = list(MM$Gene.refGene),FUN = sum)   
+control_feq <- aggregate(x = MM$F_U, by = list(MM$Gene.refGene),FUN = sum)   
+names(case_feq)[1] <- "GENE"
+names(case_feq)[2] <- "case_freq"
+names(control_feq)[1] <- "GENE"
+names(control_feq)[2] <- "control_freq"
+MM2 <- merge(case_feq,control_feq,by="GENE")
+write.table(MM2, file="Case_control_cumulative_MAF.txt", quote=FALSE,row.names=F,sep="\t")
+## output format:
+#    GENE case_freq control_freq
+#   ABCA1 0.0005379    0.0006090
+#   ABCA2 0.0005379    0.0001218
+q()
+n
+
+## merge files with result files...
+
+work in progress....
+
+
+
+
+
+
 
 
