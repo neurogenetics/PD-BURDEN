@@ -1,4 +1,4 @@
-### PD UK Biobank exome data burden testing
+## PD UK Biobank exome data burden testing
 
 ```
 November 2020
@@ -18,7 +18,7 @@ Steps:
 
 ```
 
-#### Phenotype file
+### Phenotype file
 
 - filtering for Europeans and relatedness
 
@@ -241,7 +241,7 @@ n
 
 ```
 
-#### annotation
+### Annotation
 
 ```
 # create frequency files
@@ -380,7 +380,7 @@ all_nonframeshift.txt
 ```
 
 
-#### subset data
+### Subset data
 
 ```
 module load plink/2.0-dev-20191128
@@ -453,7 +453,7 @@ tabix -p vcf UKB_EXOM_AD_PARENT_CONTROL_chr1.vcf.gz
 
 ```
 
-### run burden
+### Run burden
 
 Using RVTEST (http://zhanxw.github.io/rvtests/) publication => https://pubmed.ncbi.nlm.nih.gov/27153000/
 => with algorithms:
@@ -636,7 +636,7 @@ sbatch --cpus-per-task=15 --mem=50g --time=24:00:00 BURDEN_TESTING_CMC_SKAT_2020
 
 ```
 
-####  post burden testing file prepping for meta-analyses...
+###  Post burden testing file prepping for meta-analyses...
 
 ```
 Steps:
@@ -710,7 +710,7 @@ mv *.assoc RESULTS/
 ```
 
 
-## create cumulative frequency list for each group...
+### Create cumulative frequency list for each group...
 
 ```
 Input files needed:
