@@ -8,7 +8,7 @@ Steps:
 - sort out phenotype file
 - rename variants
 - annotation
-- QC (relatedness, ancestry)
+- QC (relatedness, ancestry, PC's)
 - subset data
 - burden testing
 - post burden testing file prepping for meta-analyses
@@ -314,7 +314,7 @@ PHENO_FOR_GWAS_v1_november11_with_PC.txt
 Subset WGS data using only samples of interest from:
 PHENO_FOR_GWAS_v1_november11_with_PC.txt
 and including only variants of interest from:
-all_missense.txt
+ALL_MISSENSE.txt
 ALL_LOF.txt
 ALL_CADD_20.txt
 ALL_CADD_10.txt
