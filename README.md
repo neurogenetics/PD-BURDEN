@@ -27,6 +27,7 @@ UK Biobank => Combination of PD cases, PD proxies (parent with PD) and controls
 ```
 UK Biobank Burden.md => describes workflow of UK Biobank data
 PD WGS Burden.md => describes workflow of PD WGS data
+Meta analyses of Burden.md => describes the meta-analyses of burden results
 ```
 
 ##### Individual level filtering:
