@@ -70,6 +70,11 @@ for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
 	wc -l variant_names.txt
 done
 
+```
+# attention needed...
+--update-name
+```
+
 # OK done... its possible to use these moving forward using:
 plink2 --pgen <filename> --pvar <filename> --psam <filename>
 
