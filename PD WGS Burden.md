@@ -1,13 +1,19 @@
-### PD WGS data
+### PD WGS data burden testing
 
+```
 November 2020
 Cornelis
 
 Steps:
+- sort out phenotype file
+- rename variants
 - annotation
 - QC (relatedness, ancestry)
 - subset data
 - burden testing
+- post burden testing file prepping for meta-analyses
+- create cumulative frequency list for each group
+```
 
 #### Phenotype file
 
@@ -68,8 +74,6 @@ done
 plink2 --pgen <filename> --pvar <filename> --psam <filename>
 
 ```
-
-
 
 #### annotation
 
@@ -202,10 +206,9 @@ cat all_missense.txt all_frameshift.txt all_stopgain.txt all_stoploss.txt all_sp
 
 ALL_CADD_10.txt
 ALL_CADD_20.txt
-all_frameshift.txt
+ALL_MISSENSE_and_LOF.txt
+ALL_LOF.txt
 all_missense.txt
-all_nonframeshift.txt
-
 
 ```
 
@@ -627,10 +630,13 @@ write.table(MM2, file="Case_control_cumulative_MAF.txt", quote=FALSE,row.names=F
 #    GENE case_freq control_freq
 #   ABCA1 0.0005379    0.0006090
 #   ABCA2 0.0005379    0.0001218
+q()
+n
+
+## merge files with result files...
+
+work in progress....
+
 
 ```
-
-
-
-
 
