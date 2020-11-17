@@ -12,6 +12,22 @@ UK Biobank => Combination of PD cases, PD proxies (parent with PD) and controls
 ~600 cases, ~6K proxies and ~50K controls
 ```
 
+##### General workflow:
+- Individual level data filtering
+- Annotation of variants
+- Subset variant classes
+- Subset genetic data
+- Run Burden
+- Filter burden for number of variants (min 3 in each gene)
+- Meta-analyze burden tests
+- Create cumulative case-control frequency files
+- Create final results file for interpretation
+
+##### Files in repo
+UK Biobank Burden.md => describes workflow of UK Biobank data
+PD WGS Burden.md => describes workflow of PD WGS data
+
+
 ##### Individual level filtering:
 ```
 - European ancestry
@@ -28,17 +44,5 @@ ALL_CADD_10.txt => 5, 1, 0.5 and 0.1%
 ALL_MISSENSE_and_LOF.txt => All missense + splicing, frameshift, stopgain, stoploss => 5, 1, 0.5 and 0.1%
 ```
 
-##### General workflow:
-- Individual level data filtering
-- Annotation of variants
-- Subset variant classes
-- Subset genetic data
-- Run Burden
-- Filter burden for number of variants (min 3 in each gene)
-- Meta-analyze burden tests
-- Create cumulative case-control frequency files
-- Create final results file for interpretation
 
-
-##### 
 
