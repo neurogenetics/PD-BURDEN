@@ -1,4 +1,4 @@
-### PD WGS data burden testing
+## PD WGS data burden testing
 
 ```
 November 2020
@@ -15,7 +15,7 @@ Steps:
 - create cumulative frequency list for each group
 ```
 
-#### Phenotype file
+### Phenotype file
 
 ```
 /data/CARD/PD/GENOMES/august19/genotypes/PHENO_SEPT.txt
@@ -34,7 +34,7 @@ Short sample list saved as:
 PHENO_FOR_GWAS_v1_november11.txt
 ```
 
-#### Update variant names in WGS data 
+### Update variant names in WGS data 
 
 some variants are rs1378555846 instead of 22:10637358:G:A format
 
@@ -75,7 +75,7 @@ plink2 --pgen <filename> --pvar <filename> --psam <filename>
 
 ```
 
-#### annotation
+### annotation
 
 scp hg38.exome_calling_regions.interval_list /data/CARD/PD/WGS/
 
@@ -212,7 +212,7 @@ all_missense.txt
 
 ```
 
-#### QC (relatedness, ancestry)
+### QC (relatedness, ancestry)
 
 ```
 cd /data/CARD/PD/WGS/june2019
@@ -310,7 +310,7 @@ PHENO_FOR_GWAS_v1_november11_with_PC.txt
 6893 samples (3095 females, 3798 males; 6893 founders) remaining after main filters.
 ```
 
-####  subset data
+###  subset data
 Subset WGS data using only samples of interest from:
 PHENO_FOR_GWAS_v1_november11_with_PC.txt
 and including only variants of interest from:
@@ -391,7 +391,7 @@ done
 ```
 
 
-####  burden testing
+###  burden testing
 
 ```
 working dir:
@@ -484,7 +484,7 @@ done
 
 ```
 
-####  post burden testing file prepping for meta-analyses...
+###  post burden testing file prepping for meta-analyses...
 
 
 ```
@@ -566,7 +566,7 @@ DCDC2C => restless leg GWAS hit
 ```
 
 
-## create cumulative frequency list for each group...
+### create cumulative frequency list for each group...
 
 ```
 Input files needed:
