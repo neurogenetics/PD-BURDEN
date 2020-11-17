@@ -563,33 +563,70 @@ DCDC2C => restless leg GWAS hit
 ```
 
 
-
-
-
-
-```
 ## create cumulative frequency list for each group...
 
-Go back to annotation and make list
-variant_name	gene
+```
+Input files needed:
+/data/CARD/PD/WGS/june2019/annotation/PD_WGS_chr*.hg38_multianno.withafreq.txt
 
-merge with overall frequency
+Variant classes:
+all_missense.txt
+ALL_LOF.txt
+ALL_CADD_20.txt
+ALL_CADD_10.txt
+ALL_MISSENSE_and_LOF.txt
 
-plink --keep cases --freq --mac 1 --extract LOF
+Case-control files to generate:
+module load plink/2.0-dev-20191128
 
-then sum frequency per gene?
+mkdir freq_case_control_per_variant_class
+# make plink1 files
+for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
+  do
+ 	plink2 --pfile pd.june2019.chr"$chnum".freeze9.sqc \
+	--extract annotation/ALL_LOF.txt \
+	--keep PHENO_FOR_GWAS_v1_november11_with_PC.txt \
+	--pheno PHENO_FOR_GWAS_v1_november11_with_PC.txt \
+	--pheno-name PHENO_RV --make-bed \
+	--out freq_case_control_per_variant_class/PD_WGS_ALL_LOF_"$chnum"
+done
+# creating assoc files...
+module load plink
+cd freq_case_control_per_variant_class
+for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
+  do
+plink --bfile PD_WGS_ALL_LOF_"$chnum" \
+--assoc --out PD_WGS_ALL_LOF_freq_"$chnum"
+done
 
-### sandbox:
+# prep annotation...
+cut -f 1-11,92 UKB_exomes_200K_chr9.hg38_multianno.txt > SHORT.txt
 
-module load bcftools
-module load jvarkit/20200713
-# https://hpc.nih.gov/apps/jvarkit.html
-plink2 --pfile pd.june2019.chr22.freeze9.sqc --make-bed --out FAM_file
-cd /data/CARD/PD/WGS/june2019/ALL_LOF/
-bcftools annotate -x 'INFO' PD_WGS_ALL_LOF_22.vcf.gz | java -jar $JVARKIT_JARPATH/vcfburdenmaf.jar --pedigree ../FAM_file.fam > TESTING_123.txt
-
-java -jar $JVARKIT_JARPATH/backlocate.jar --help
-
+# then merge in R and filter....
+module load R
+R
+require("data.table")
+assoc <- read.table("PD_WGS_ALL_LOF_freq_9.assoc",header=T)
+assoc = assoc[c("CHR","SNP","F_A","F_U")]
+#annotation <- read.table("../annotation/SHORT.txt",header=T)
+annotation <- fread("../annotation/SHORT.txt",header=T)
+dim(assoc)
+dim(annotation)
+MM <- merge(assoc,annotation,by.x="SNP",by.y="Otherinfo6")
+dim(MM)
+# now calculate cumulative case-control frequency
+case_feq <- aggregate(x = MM$F_A, by = list(MM$Gene.refGene),FUN = sum)   
+control_feq <- aggregate(x = MM$F_U, by = list(MM$Gene.refGene),FUN = sum)   
+names(case_feq)[1] <- "GENE"
+names(case_feq)[2] <- "case_freq"
+names(control_feq)[1] <- "GENE"
+names(control_feq)[2] <- "control_freq"
+MM2 <- merge(case_feq,control_feq,by="GENE")
+write.table(MM2, file="Case_control_cumulative_MAF.txt", quote=FALSE,row.names=F,sep="\t")
+## output format:
+#    GENE case_freq control_freq
+#   ABCA1 0.0005379    0.0006090
+#   ABCA2 0.0005379    0.0001218
 
 ```
 
