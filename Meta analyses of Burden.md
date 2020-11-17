@@ -35,3 +35,12 @@ Working dir => TBD
 
 
 ```
+
+
+### Figure making
+```
+Manhattan plot
+
+```
+
+
