@@ -1,4 +1,4 @@
-# PD Genetic Burden testing...
+# PD Genetic Burden testing 
 
 ```
 November 2020
@@ -59,7 +59,6 @@ for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22};
 done
 # separate one for chromosome X
 zless refFlat.txt.gz | awk '$3 == "chrX"' | sort -nk5 > refFlat_HG38_chr23.txt
-
 ```
 
 
