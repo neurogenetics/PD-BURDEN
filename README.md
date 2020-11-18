@@ -2,7 +2,7 @@
 
 ```
 November 2020
-LNG: Cornelis, Andy and Mike
+LNG: Cornelis, Sara, Andy and Mike
 QMUL: Alastair and Ben
 
 Data sources:
