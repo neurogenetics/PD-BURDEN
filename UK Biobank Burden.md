@@ -713,65 +713,104 @@ mv *.assoc RESULTS/
 ### Create cumulative frequency list for each group...
 
 ```
-Input files needed:
-/data/CARD/UKBIOBANK/EXOME_DATA_200K/annotation_of_plink_files/UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt
-
-# Variant classes:
-path => /data/CARD/UKBIOBANK/EXOME_DATA_200K/annotation_of_plink_files/
-all_missense.txt
-ALL_LOF.txt
-ALL_CADD_20.txt
-ALL_CADD_10.txt
-ALL_MISSENSE_and_LOF.txt
-
-# Input examples disease level
-path => /data/CARD/UKBIOBANK/EXOME_DATA_200K/BURDEN/
-UKB_EXOM_AD_CASE_CONTROL_with_PC.txt
-UKB_EXOM_AD_PARENT_CONTROL_with_PC.txt
-UKB_EXOM_PD_CASE_CONTROL_with_PC.txt
-UKB_EXOM_PD_PARENT_CONTROL_with_PC.txt
-
-# Frequency level
-0.05
-0.01
-0.005
-0.001
-
-Case-control files to generate => 5 x 4 x 4 = 80 in total
-
+----------------------------------
 #!/bin/bash
-# sbatch --cpus-per-task=20 --mem=150g --mail-type=BEGIN,END --time=24:00:00 PD_CASE_CONTROL_prep.sh
-
+# sbatch --cpus-per-task=10 --mem=20g --time=24:00:00 Cumulative_MAF_prep.sh PD_CASE_CONTROL ALL_LOF 0.05
 module load plink
 # mkdir freq_case_control_per_variant_class
 # run quick assoc to create F_A and F_U formats.
-cd freq_case_control_per_variant_class
+DISEASE=$1
+VARIANT=$2
+FREQUENCY=$3
+###
+echo "this is"
+echo $DISEASE 
+echo "whit variant type"
+echo $VARIANT
+echo "using frequency cut off of"
+echo $FREQUENCY
+###
+# input examples disease level:
+# AD_CASE_CONTROL
+# AD_PARENT_CONTROL
+# PD_CASE_CONTROL
+# PD_PARENT_CONTROL
+###
+# input examples variant level:
+# ALL_MISSENSE_and_LOF
+# ALL_CADD_20
+# ALL_CADD_10
+# ALL_LOF
+# ALL_MISSENSE
+###
+# input examples frequency level:
+# 0.05
+# 0.01
+# 0.005
+# 0.001
+cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/PLINK_files/
+# lets start
 for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
   do
 plink --bed ukb23155_c"$chnum"_b0_v1.bed \
 --fam ukb23155_c1_b0_v1_s200632.fam \
 --bim UKBexomeOQFE_chr"$chnum".bim \
---assoc --out freq_case_control_per_variant_class/UKB_EXOM_PD_CASE_CONTROL_"$chnum" \
---pheno ../BURDEN/UKB_EXOM_PD_CASE_CONTROL_with_PC.txt \
---keep ../BURDEN/UKB_EXOM_PD_CASE_CONTROL_with_PC.txt \
---extract ../annotation_of_plink_files/ALL_LOF.txt \
---pheno-name PHENO --mac 1 --max-maf 0.05
+--assoc --out freq_case_control_per_variant_class/UKB_EXOM_"$DISEASE"_"$VARIANT"_"$FREQUENCY"_"$chnum" \
+--pheno ../BURDEN/UKB_EXOM_"$DISEASE"_with_PC.txt \
+--keep ../BURDEN/UKB_EXOM_"$DISEASE"_with_PC.txt \
+--extract ../annotation_of_plink_files/"$VARIANT".txt \
+--pheno-name PHENO --mac 1 --max-maf "$FREQUENCY"
 done
 
 # prep .assoc files
 cd freq_case_control_per_variant_class
-cat UKB_EXOM_PD_CASE_CONTROL_*.assoc > UKB_EXOM_PD_CASE_CONTROL_ALL.txt
+cat UKB_EXOM_"$DISEASE"_"$VARIANT"_"$FREQUENCY"_*.assoc > UKB_EXOM_"$DISEASE"_"$VARIANT"_"$FREQUENCY"_ALL.assoc
 
+# R session...
+module load R
+Rscript --vanilla Cumulative_MAF_step2.R "$DISEASE" "$VARIANT" "$FREQUENCY"
+# Rscript --vanilla Cumulative_MAF_step2.R PD_CASE_CONTROL ALL_LOF 0.05
+
+# done
+echo "bye bye"
+----------------------------------
+```
+
+```
 # prep annotation...
 # cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/annotation_of_plink_files/
 # cut -f 1-11,92 UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt > SHORT_annotation.txt
 
 # then merge in R and filter....
-module load R
-R
+```
+
+```
+----------------------------------
+#!/usr/bin/env Rscript
+args = commandArgs(trailingOnly=TRUE)
+
+# start like this
+# Rscript --vanilla Cumulative_MAF_step2.R DISEASE VARIANT FREQUENCY
+# Rscript --vanilla Cumulative_MAF_step2.R PD_CASE_CONTROL ALL_LOF 0.05
+DISEASE = args[1]
+print(args[1])
+print(DISEASE)
+VARIANT = args[2]
+print(args[2])
+print(VARIANT)
+FREQUENCY = args[3]
+print(args[3])
+print(FREQUENCY)
+# R session...
+# module load R
+# Rscript --vanilla Cumulative_MAF_step2.R DISEASE VARIANT FREQUENCY
+
+# module load R
+# R
 require("data.table")
-assoc <- fread("UKB_EXOM_PD_CASE_CONTROL_ALL.txt",header=T)
-assoc = assoc[c("CHR","SNP","F_A","F_U")]
+assoc <- fread(paste("UKB_EXOM_",DISEASE,"_",VARIANT,"_",FREQUENCY,"_ALL.assoc",sep=""),header=T)
+# assoc <- fread("UKB_EXOM_PD_CASE_CONTROL_ALL_LOF_0.05_ALL.assoc",header=T)
+# assoc <- assoc[c("CHR","SNP","F_A","F_U")]
 annotation <- fread("../../annotation_of_plink_files/SHORT_annotation.txt",header=T)
 dim(assoc)
 dim(annotation)
@@ -789,21 +828,24 @@ names(case_feq)[2] <- "case_freq"
 names(control_feq)[1] <- "GENE"
 names(control_feq)[2] <- "control_freq"
 MM2 <- merge(case_feq,control_feq,by="GENE")
-write.table(MM2, file="UKB_EXOM_PD_CASE_CONTROL_cumulative_MAF.txt", quote=FALSE,row.names=F,sep="\t")
-## output format:
+write.table(MM2, file=paste("UKB_EXOM_",DISEASE,"_",VARIANT,"_",FREQUENCY,"_cumulative_MAF.txt",sep=""), quote=FALSE,row.names=F,sep="\t")## output format:
 #    GENE case_freq control_freq
 #   ABCA1 0.0005379    0.0006090
 #   ABCA2 0.0005379    0.0001218
 q()
 n
-## note major downside here is that if annovar annotates the variants with this format: AMY1A;AMY1B;AMY1C then these variants do net get counted towards any of these three genes... Probably genome-wide not a real problem, but something worth double checking for genes of interest.
+----------------------------------
 
+## note major downside here is that if annovar annotates the variants with this format: AMY1A;AMY1B;AMY1C then these variants do net get counted towards any of these three genes... Probably genome-wide not a real problem, but something worth double checking for genes of interest.
+```
+
+```
 ## merge files with result files...
 
 work in progress....
 
 
-
+```
 
 
 
