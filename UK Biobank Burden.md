@@ -264,13 +264,16 @@ for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22};
 done
 
 # annotate all
+# note optional.... => -arg '-splicing 15',,,
+
 module load annovar
 for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22};
   do
   	table_annovar.pl anno"$chnum".vcf $ANNOVAR_DATA/hg38 --thread 16 -buildver hg38 \
-	-out UKB_exomes_200K_chr"$chnum" -arg '-splicing 15',,, -remove -protocol refGene,avsnp150,clinvar_20200316,dbnsfp35a \
+	-out UKB_exomes_200K_chr"$chnum" -arg '-splicing 15',,, -remove -protocol refGene,avsnp150,clinvar_20200316,dbnsfp41a \
 	-operation g,f,f,f -nastring . -vcfinput
 done
+
 
 # separately for chr X and Y...
 plink --bim UKBexomeOQFE_chrX.bim --fam ukb23155_c1_b0_v1_s200632.fam \
@@ -286,11 +289,11 @@ plink --bim UKBexomeOQFE_chrY.bim --fam ukb23155_c1_b0_v1_s200632.fam \
 --bed ukb23155_cY_b0_v1.bed --export vcf id-paste=iid --out anno24 --keep textsample.txt
 
 table_annovar.pl anno23.vcf $ANNOVAR_DATA/hg38 --thread 16 -buildver hg38 \
--out UKB_exomes_200K_chr23 -arg '-splicing 15',,, -remove -protocol refGene,avsnp150,clinvar_20200316,dbnsfp35a \
+-out UKB_exomes_200K_chr23 -arg '-splicing 15',,, -remove -protocol refGene,avsnp150,clinvar_20200316,dbnsfp41a \
 -operation g,f,f,f -nastring . -vcfinput
 
 table_annovar.pl anno24.vcf $ANNOVAR_DATA/hg38 --thread 16 -buildver hg38 \
--out UKB_exomes_200K_chr24 -arg '-splicing 15',,, -remove -protocol refGene,avsnp150,clinvar_20200316,dbnsfp35a \
+-out UKB_exomes_200K_chr24 -arg '-splicing 15',,, -remove -protocol refGene,avsnp150,clinvar_20200316,dbnsfp41a \
 -operation g,f,f,f -nastring . -vcfinput
 
 
@@ -321,7 +324,7 @@ mv *.hg38_multianno.txt anno_no_freq/
 ### subset "groups" of variants...
 
 # missense
-grep exonic UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt | grep nonsynonymous | cut -f 92 > all_missense.txt
+grep exonic UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt | grep nonsynonymous | cut -f 92 > ALL_MISSENSE.txt
 # n=4672378
 
 # LOF (stop, frame)
@@ -376,6 +379,8 @@ ALL_CADD_20.txt
 ALL_MISSENSE_and_LOF.txt
 ALL_LOF.txt
 ALL_MISSENSE.txt
+
+add ALL_CADD_20_and_LOF.txt ???
 
 ```
 
