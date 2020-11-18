@@ -373,9 +373,9 @@ cat all_missense.txt all_frameshift.txt all_stopgain.txt all_stoploss.txt all_sp
 
 ALL_CADD_10.txt
 ALL_CADD_20.txt
-all_frameshift.txt
-all_missense.txt
-all_nonframeshift.txt
+ALL_MISSENSE_and_LOF.txt
+ALL_LOF.txt
+ALL_MISSENSE.txt
 
 ```
 
@@ -714,68 +714,89 @@ mv *.assoc RESULTS/
 
 ```
 Input files needed:
-/data/CARD/PD/WGS/june2019/annotation/PD_WGS_chr*.hg38_multianno.withafreq.txt
+/data/CARD/UKBIOBANK/EXOME_DATA_200K/annotation_of_plink_files/UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt
 
-Variant classes:
+# Variant classes:
+path => /data/CARD/UKBIOBANK/EXOME_DATA_200K/annotation_of_plink_files/
 all_missense.txt
 ALL_LOF.txt
 ALL_CADD_20.txt
 ALL_CADD_10.txt
 ALL_MISSENSE_and_LOF.txt
 
-Case-control files to generate:
-module load plink/2.0-dev-20191128
+# Input examples disease level
+path => /data/CARD/UKBIOBANK/EXOME_DATA_200K/BURDEN/
+UKB_EXOM_AD_CASE_CONTROL_with_PC.txt
+UKB_EXOM_AD_PARENT_CONTROL_with_PC.txt
+UKB_EXOM_PD_CASE_CONTROL_with_PC.txt
+UKB_EXOM_PD_PARENT_CONTROL_with_PC.txt
 
-mkdir freq_case_control_per_variant_class
-# make plink1 files
-for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
-  do
- 	plink2 --pfile pd.june2019.chr"$chnum".freeze9.sqc \
-	--extract annotation/ALL_LOF.txt \
-	--keep PHENO_FOR_GWAS_v1_november11_with_PC.txt \
-	--pheno PHENO_FOR_GWAS_v1_november11_with_PC.txt \
-	--pheno-name PHENO_RV --make-bed \
-	--out freq_case_control_per_variant_class/PD_WGS_ALL_LOF_"$chnum"
-done
-# creating assoc files...
+# Frequency level
+0.05
+0.01
+0.005
+0.001
+
+Case-control files to generate => 5 x 4 x 4 = 80 in total
+
+#!/bin/bash
+# sbatch --cpus-per-task=20 --mem=150g --mail-type=BEGIN,END --time=24:00:00 PD_CASE_CONTROL_prep.sh
+
 module load plink
+# mkdir freq_case_control_per_variant_class
+# run quick assoc to create F_A and F_U formats.
 cd freq_case_control_per_variant_class
 for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
   do
-plink --bfile PD_WGS_ALL_LOF_"$chnum" \
---assoc --out PD_WGS_ALL_LOF_freq_"$chnum"
+plink --bed ukb23155_c"$chnum"_b0_v1.bed \
+--fam ukb23155_c1_b0_v1_s200632.fam \
+--bim UKBexomeOQFE_chr"$chnum".bim \
+--assoc --out freq_case_control_per_variant_class/UKB_EXOM_PD_CASE_CONTROL_"$chnum" \
+--pheno ../BURDEN/UKB_EXOM_PD_CASE_CONTROL_with_PC.txt \
+--keep ../BURDEN/UKB_EXOM_PD_CASE_CONTROL_with_PC.txt \
+--extract ../annotation_of_plink_files/ALL_LOF.txt \
+--pheno-name PHENO --mac 1 --max-maf 0.05
 done
 
+# prep .assoc files
+cd freq_case_control_per_variant_class
+cat UKB_EXOM_PD_CASE_CONTROL_*.assoc > UKB_EXOM_PD_CASE_CONTROL_ALL.txt
+
 # prep annotation...
-cut -f 1-11,92 UKB_exomes_200K_chr9.hg38_multianno.txt > SHORT.txt
+# cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/annotation_of_plink_files/
+# cut -f 1-11,92 UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt > SHORT_annotation.txt
 
 # then merge in R and filter....
 module load R
 R
 require("data.table")
-assoc <- read.table("PD_WGS_ALL_LOF_freq_9.assoc",header=T)
+assoc <- fread("UKB_EXOM_PD_CASE_CONTROL_ALL.txt",header=T)
 assoc = assoc[c("CHR","SNP","F_A","F_U")]
-#annotation <- read.table("../annotation/SHORT.txt",header=T)
-annotation <- fread("../annotation/SHORT.txt",header=T)
+annotation <- fread("../../annotation_of_plink_files/SHORT_annotation.txt",header=T)
 dim(assoc)
 dim(annotation)
 MM <- merge(assoc,annotation,by.x="SNP",by.y="Otherinfo6")
 dim(MM)
+# storing frequencies as numbers? kinda nonsense but lets continue
+MM$F_A <- as.numeric(MM$F_A)
+MM$F_U <- as.numeric(MM$F_U)
 # now calculate cumulative case-control frequency
 case_feq <- aggregate(x = MM$F_A, by = list(MM$Gene.refGene),FUN = sum)   
-control_feq <- aggregate(x = MM$F_U, by = list(MM$Gene.refGene),FUN = sum)   
+control_feq <- aggregate(x = MM$F_U, by = list(MM$Gene.refGene),FUN = sum)
+# update header
 names(case_feq)[1] <- "GENE"
 names(case_feq)[2] <- "case_freq"
 names(control_feq)[1] <- "GENE"
 names(control_feq)[2] <- "control_freq"
 MM2 <- merge(case_feq,control_feq,by="GENE")
-write.table(MM2, file="Case_control_cumulative_MAF.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(MM2, file="UKB_EXOM_PD_CASE_CONTROL_cumulative_MAF.txt", quote=FALSE,row.names=F,sep="\t")
 ## output format:
 #    GENE case_freq control_freq
 #   ABCA1 0.0005379    0.0006090
 #   ABCA2 0.0005379    0.0001218
 q()
 n
+## note major downside here is that if annovar annotates the variants with this format: AMY1A;AMY1B;AMY1C then these variants do net get counted towards any of these three genes... Probably genome-wide not a real problem, but something worth double checking for genes of interest.
 
 ## merge files with result files...
 
