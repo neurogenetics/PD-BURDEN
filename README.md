@@ -29,6 +29,7 @@ UK Biobank Burden.md => describes workflow of UK Biobank data
 PD WGS Burden.md => describes workflow of PD WGS data
 Meta analyses of Burden.md => describes the meta-analyses of burden results
 PD WGS Age at onset Burden.md => describes workflow of PD WGS age at onset burden testing
+Pathways testing.md => sandbox now for ideas on pathways
 ```
 
 ##### Individual level filtering
