@@ -30,6 +30,8 @@ PD WGS Burden.md => describes workflow of PD WGS data
 Meta analyses of Burden.md => describes the meta-analyses of burden results
 PD WGS Age at onset Burden.md => describes workflow of PD WGS age at onset burden testing
 Pathways testing.md => sandbox now for ideas on pathways
+Variant class enrichments.md => sandbox now variant class enrichments per disease group
+
 ```
 
 ##### Individual level filtering
