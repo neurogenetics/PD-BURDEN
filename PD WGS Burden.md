@@ -69,11 +69,16 @@ for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
 	wc -l NEW_no_header.txt
 	wc -l variant_names.txt
 done
+---------
+# The above option is OK-ish... cleaner option would be --update-name  in plink... but this doesnt work because multi-allelics in plink mess this up...
+similar as above...
+# down side here though is that indels have not the same format as UKB.. 22:10687003:C:CTATA vs 22:10687003:C:D4
 
-```
-# attention needed...
---update-name
-```
+for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
+  do
+	plink2 --pgen pd.june2019.chr"$chnum".freeze9.sqc.pgen --pvar PVAR_files/NEW"$chnum".pvar --psam pd.june2019.chr"$chnum".freeze9.sqc.psam --freq
+	wc -l plink2.afreq >> length.txt
+done
 
 # OK done... its possible to use these moving forward using:
 plink2 --pgen <filename> --pvar <filename> --psam <filename>
@@ -122,9 +127,11 @@ scp pd.june2019.chrX.freeze9.sqc.pvar pd.june2019.chr23.freeze9.sqc.pvar
 module load plink/2.0-dev-20191128
 for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
   do
-  	plink2 --pfile pd.june2019.chr$chnum.freeze9.sqc --freq --out FREQchr"$chnum" \
-    --extract range ../hg38.exome_calling_regions.interval_list
+  	plink2 --pgen pd.june2019.chr"$chnum".freeze9.sqc.pgen --pvar PVAR_files/NEW"$chnum".pvar \
+	--psam pd.june2019.chr"$chnum".freeze9.sqc.psam --freq --out FREQchr"$chnum" \
+    	--extract range ../hg38.exome_calling_regions.interval_list
 done
+
 
 # selecting one test sample to make annotation faster...
 echo BF-1101 BF-1101 > textsample.txt
@@ -133,7 +140,8 @@ echo BF-1101 BF-1101 > textsample.txt
 module load plink/2.0-dev-20191128
 for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
   do
-  	plink2 --pfile pd.june2019.chr$chnum.freeze9.sqc --export vcf id-paste=iid \
+  	plink2 --pgen pd.june2019.chr"$chnum".freeze9.sqc.pgen --pvar PVAR_files/NEW"$chnum".pvar \
+	--psam pd.june2019.chr"$chnum".freeze9.sqc.psam --export vcf id-paste=iid \
     --out anno"$chnum" --keep textsample.txt \
     --extract range ../hg38.exome_calling_regions.interval_list
 done
@@ -147,9 +155,15 @@ module load annovar
 for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
   do
   	table_annovar.pl anno"$chnum".vcf $ANNOVAR_DATA/hg38 --thread 16 -buildver hg38 \
-	-out UKB_exomes_200K_chr"$chnum" -remove -protocol refGene,avsnp150,clinvar_20200316,dbnsfp35a \
+	-out PD_WGS_anno_chr"$chnum" -remove -protocol refGene,avsnp150,clinvar_20200316,dbnsfp41a \
 	-operation g,f,f,f -nastring . -vcfinput
 done
+
+```
+
+#CONTINUE HERE
+
+```
 
 # move data to annotation folder
 
@@ -175,7 +189,7 @@ done
 ### subset "groups" of variants...
 
 # missense
-grep exonic PD_WGS_chr*.hg38_multianno.withafreq.txt | grep nonsynonymous | cut -f 92 > all_missense.txt
+grep exonic PD_WGS_chr*.hg38_multianno.withafreq.txt | grep nonsynonymous | cut -f 92 > ALL_MISSENSE.txt
 # n=933810
 
 # LOF (stop, frame)
@@ -213,7 +227,7 @@ ALL_CADD_10.txt
 ALL_CADD_20.txt
 ALL_MISSENSE_and_LOF.txt
 ALL_LOF.txt
-all_missense.txt
+ALL_MISSENSE.txt
 
 ```
 
