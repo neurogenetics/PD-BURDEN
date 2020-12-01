@@ -87,9 +87,11 @@ plink2 --pgen <filename> --pvar <filename> --psam <filename>
 
 ### annotation
 
+```
 scp hg38.exome_calling_regions.interval_list /data/CARD/PD/WGS/
 
 working folder => /data/CARD/PD/WGS/june2019
+```
 
 ```
 Subset data keeping only coding regions using hg38.exome_calling_regions.interval_list
@@ -161,13 +163,11 @@ done
 
 ```
 
-#CONTINUE HERE
-
 ```
 
 # move data to annotation folder
 
-mv UKB_exomes_200K_chr* annotation/
+mv PD_WGS_anno_chr* annotation/
 mv FREQchr*afreq annotation/
 
 # clean up folder
@@ -179,47 +179,45 @@ rm *.vcf
 
 for chnum in {1..23};
   do
-	paste UKB_exomes_200K_chr"$chnum".hg38_multianno.txt FREQchr"$chnum".afreq > PD_WGS_chr"$chnum".hg38_multianno.withafreq.txt
+	paste PD_WGS_anno_chr"$chnum".hg38_multianno.txt FREQchr"$chnum".afreq > PD_WGS_anno_chr"$chnum".hg38_multianno.withafreq.txt
 done
-
-
 ```
 
 ```
 ### subset "groups" of variants...
 
 # missense
-grep exonic PD_WGS_chr*.hg38_multianno.withafreq.txt | grep nonsynonymous | cut -f 92 > ALL_MISSENSE.txt
+grep exonic PD_WGS_anno_chr*.hg38_multianno.withafreq.txt | grep nonsynonymous | cut -f 73 > ALL_MISSENSE.txt
 # n=933810
 
 # LOF (stop, frame)
-grep stopgain PD_WGS_chr*.hg38_multianno.withafreq.txt | cut -f 92 > all_stopgain.txt
+grep stopgain PD_WGS_anno_chr*.hg38_multianno.withafreq.txt | cut -f 73 > all_stopgain.txt
 # n=24960
-grep stoploss PD_WGS_chr*.hg38_multianno.withafreq.txt | cut -f 92 > all_stoploss.txt
+grep stoploss PD_WGS_anno_chr*.hg38_multianno.withafreq.txt | cut -f 73 > all_stoploss.txt
 # n=1193
-grep nonframeshift PD_WGS_chr*.hg38_multianno.withafreq.txt | cut -f 92 > all_nonframeshift.txt
+grep nonframeshift PD_WGS_anno_chr*.hg38_multianno.withafreq.txt | cut -f 73 > all_nonframeshift.txt
 # n=16597
-grep frame PD_WGS_chr*.hg38_multianno.withafreq.txt | grep -v nonframeshift | grep -v nonsynonymous | cut -f 92 > all_frameshift.txt
+grep frame PD_WGS_anno_chr*.hg38_multianno.withafreq.txt | grep -v nonframeshift | grep -v nonsynonymous | cut -f 73 > all_frameshift.txt
 # n=26633
 
 # splicing 
-grep splicing PD_WGS_chr*.hg38_multianno.withafreq.txt | \
-grep -v ncRNA | cut -f 6,92 | grep splicing | cut -f 2 > all_splice_bp.txt
+grep splicing PD_WGS_anno_chr*.hg38_multianno.withafreq.txt | \
+grep -v ncRNA | cut -f 6,73 | grep splicing | cut -f 2 > all_splice_bp.txt
 # 13474 splicing
 
 # CADD <10
-awk '{ if($58 > 10) { print }}' PD_WGS_chr*.hg38_multianno.withafreq.txt | cut -f 92 > ALL_CADD_10.txt
-# n=45081
+awk '{ if($42 > 10) { print }}' PD_WGS_anno_chr*.hg38_multianno.withafreq.txt | cut -f 73 > ALL_CADD_10.txt
+# n=46372
 
 # CADD <20
-awk '{ if($58 > 20) { print }}' PD_WGS_chr*.hg38_multianno.withafreq.txt | cut -f 92 > ALL_CADD_20.txt
-# n=35907
+awk '{ if($42 > 20) { print }}' PD_WGS_anno_chr*.hg38_multianno.withafreq.txt | cut -f 73 > ALL_CADD_20.txt
+# n=38390
 
 #### Prepping final files:
 
 cat all_frameshift.txt all_stopgain.txt all_stoploss.txt all_splice_bp.txt > ALL_LOF.txt
 
-cat all_missense.txt all_frameshift.txt all_stopgain.txt all_stoploss.txt all_splice_bp.txt > ALL_MISSENSE_and_LOF.txt
+cat ALL_MISSENSE.txt all_frameshift.txt all_stopgain.txt all_stoploss.txt all_splice_bp.txt > ALL_MISSENSE_and_LOF.txt
 
 ### FINAL GROUPS:
 
@@ -338,6 +336,9 @@ ALL_LOF.txt
 ALL_CADD_20.txt
 ALL_CADD_10.txt
 ALL_MISSENSE_and_LOF.txt
+
+
+# CONTINUE HERE
 
 ```
 # make folders for new vcf files
