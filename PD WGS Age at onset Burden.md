@@ -13,7 +13,6 @@ New steps:
 - QC (relatedness, ancestry, PC's)
 - subset data
 - burden testing
-- post burden testing file prepping for meta-analyses
 
 ```
 
@@ -28,33 +27,21 @@ Using cases only => PD_cases_only_with_AGE.txt
 subset from PHENO_FOR_GWAS_v1_november11_with_PC.txt using cases only and with AGE available...
 
 mkdir PCA_AAO
-for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22};
+
+module load plink/2.0-dev-20191128
+for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
   do
- 	plink2 --pgen pd.june2019.chr$chnum.freeze9.sqc.pgen --psam pd.june2019.chr$chnum.freeze9.sqc.pgen \
-  --pvar PVAR_files/NEW$chnum.pvar \
-	--keep PD_cases_only_with_AGE.txt --maf 0.01 \
+  	plink2 --pgen pd.june2019.chr"$chnum".freeze9.sqc.pgen --pvar PVAR_files/NEW"$chnum".pvar \
+	--psam pd.june2019.chr"$chnum".freeze9.sqc.psam --keep PD_cases_only_with_AGE.txt --maf 0.01 \
 	--make-bed --out PCA_AAO/geno"$chnum"
 done
 
-```
-# Continue here
-```
-
-# failes due to multi-allelic's
-cd PCA
-for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22};
-  do
- 	plink2 --bfile geno"$chnum" \
-	--exclude PD_WGS-merge.missnp --maf 0.01 \
-	--make-bed --out merge"$chnum"
-done
-
 # now merge....
-
-ls | grep fam | grep "merge" | grep -v PD_WGS | sed 's/.fam//g' > mergelist.txt
+cd PCA_AAO
+ls | grep fam | sed 's/.fam//g' > mergelist.txt
 module load plink
 plink --merge-list mergelist.txt --make-bed --out PD_WGS_PCA_input
-# Performing single-pass merge (8931 people, 8352699 variants).
+# Performing single-pass merge (2769 people, 8649848 variants).
 
 # now pruning and relatedness...
 
@@ -65,13 +52,13 @@ module load plink/2.0-dev-20191128
 module load GCTA
 module load flashpca
 
-plink --bfile PD_WGS_PCA_input --geno 0.01 --maf 0.05 --out input_for_prune --make-bed
-plink --bfile input_for_prune --indep-pairwise 500 10 0.02 --out TEMP_pruning
-plink --bfile input_for_prune --extract TEMP_pruning.prune.in --make-bed --out TEMP_pruned_data
+plink --bfile PD_WGS_PCA_input --geno 0.01 --maf 0.05 --out input_for_prune --make-bed --autosome
+plink --bfile input_for_prune --indep-pairwise 500 10 0.02 --out TEMP_pruning --autosome
+plink --bfile input_for_prune --extract TEMP_pruning.prune.in --make-bed --out TEMP_pruned_data --autosome
 gcta64 --bfile TEMP_pruned_data --make-grm --out GRM_matrix --autosome --maf 0.05 --threads 20
 gcta64 --grm-cutoff 0.125 --grm GRM_matrix --out GRM_matrix_0.125 --make-grm --threads 20
 plink --bfile PD_WGS_PCA_input --keep GRM_matrix_0.125.grm.id --make-bed --out PD_WGS_no_relatedness
-# 8441 samples (3959 females, 4482 males; 8441 founders) remaining after main filters.
+# 2769 samples (995 females, 1774 males; 2769 founders) remaining after main
 
 # make PC's of no relatedness data
 plink --bfile PD_WGS_no_relatedness --geno 0.01 --maf 0.05 --out input_for_prune --make-bed
@@ -81,27 +68,9 @@ flashpca --bfile TEMP_pruned_data --suffix _PD_WGS_PCs_no_relatedness.txt --numt
 
 ### plotting looks good no visible outliers....
 
-# make PC's and remove relatedness samples from only keeping GWAS viable samples...
-
-plink --bfile PD_WGS_PCA_input --geno 0.01 --maf 0.05 --out input_for_prune --make-bed \
---keep ../PHENO_FOR_GWAS_v1_november11.txt
-plink --bfile input_for_prune --indep-pairwise 500 10 0.02 --out TEMP_pruning
-plink --bfile input_for_prune --extract TEMP_pruning.prune.in --make-bed --out TEMP_pruned_data
-gcta64 --bfile TEMP_pruned_data --make-grm --out GRM_matrix --autosome --maf 0.05 --threads 20
-gcta64 --grm-cutoff 0.125 --grm GRM_matrix --out GRM_matrix_0.125 --make-grm --threads 20
-plink --bfile PD_WGS_PCA_input --keep GRM_matrix_0.125.grm.id --make-bed --out PD_WGS_no_relatedness_GWAS_viable
-# 6893 samples (3095 females, 3798 males; 6893 founders) remaining after main filters.
-
-# make PC's of no relatedness data + only to keep for GWAS....
-plink --bfile PD_WGS_no_relatedness_GWAS_viable --geno 0.01 --maf 0.05 --out input_for_prune --make-bed \
---keep ../PHENO_FOR_GWAS_v1_november11.txt
-plink --bfile input_for_prune --indep-pairwise 500 10 0.02 --out TEMP_pruning
-plink --bfile input_for_prune --extract TEMP_pruning.prune.in --make-bed --out TEMP_pruned_data
-flashpca --bfile TEMP_pruned_data --suffix _PD_WGS_PCs_no_relatedness_GWAS_viable.txt --numthreads 19
-
 ###
 File to move forward with:
-pcs_PD_WGS_PCs_no_relatedness_GWAS_viable.txt
+pcs_PD_WGS_PCs_no_relatedness.txt
 
 # merge with phenotype file...
 PHENO_FOR_GWAS_v1_november11.txt
@@ -109,23 +78,23 @@ PHENO_FOR_GWAS_v1_november11.txt
 module load R
 R
 pheno <- read.table("../PHENO_FOR_GWAS_v1_november11.txt",header=T)
-pc <- read.table("pcs_PD_WGS_PCs_no_relatedness_GWAS_viable.txt",header=T)
+pc <- read.table("pcs_PD_WGS_PCs_no_relatedness.txt",header=T)
 pc$IID <- NULL
 MM <- merge(pheno,pc,by="FID")
 # add in extra PHENO because PHENO to close to beginning and rvtest cant handle that
 MM$PHENO_RV <- MM$PHENO
-write.table(MM, file="../PHENO_FOR_GWAS_v1_november11_with_PC.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(MM, file="../PHENO_FOR_AAO_GWAS_v1_november11_with_PC.txt", quote=FALSE,row.names=F,sep="\t")
 
 ###
 File to move forward with:
-PHENO_FOR_GWAS_v1_november11_with_PC.txt
+PHENO_FOR_AAO_GWAS_v1_november11_with_PC.txt
 
-6893 samples (3095 females, 3798 males; 6893 founders) remaining after main filters.
+2769 samples (995 females, 1774 males) remaining after main filters.
 ```
 
 ###  subset data
 Subset WGS data using only samples of interest from:
-PHENO_FOR_GWAS_v1_november11_with_PC.txt
+PHENO_FOR_AAO_GWAS_v1_november11_with_PC.txt
 and including only variants of interest from:
 ALL_MISSENSE.txt
 ALL_LOF.txt
@@ -136,11 +105,11 @@ ALL_MISSENSE_and_LOF.txt
 ```
 # make folders for new vcf files
 
-mkdir ALL_MISSENSE
-mkdir ALL_LOF
-mkdir ALL_CADD_20
-mkdir ALL_CADD_10
-mkdir ALL_MISSENSE_and_LOF
+mkdir AAO_ALL_MISSENSE
+mkdir AAO_ALL_LOF
+mkdir AAO_ALL_CADD_20
+mkdir AAO_ALL_CADD_10
+mkdir AAO_ALL_MISSENSE_and_LOF
 
 module load plink/2.0-dev-20191128
 module load samtools
@@ -148,56 +117,61 @@ module load samtools
 # ALL_LOF
 for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
   do
- 	plink2 --pfile pd.june2019.chr"$chnum".freeze9.sqc \
+ 	plink2 --pgen pd.june2019.chr"$chnum".freeze9.sqc.pgen --pvar PVAR_files/NEW"$chnum".pvar \
+	--psam pd.june2019.chr"$chnum".freeze9.sqc.psam \
 	--extract annotation/ALL_LOF.txt \
-	--keep PHENO_FOR_GWAS_v1_november11_with_PC.txt \
-	--out ALL_LOF/PD_WGS_ALL_LOF_"$chnum" \
+	--keep PHENO_FOR_AAO_GWAS_v1_november11_with_PC.txt \
+	--out AAO_ALL_LOF/PD_WGS_ALL_LOF_"$chnum" \
 	--mac 1 --export vcf bgz id-paste=iid
-	tabix -p vcf ALL_LOF/PD_WGS_ALL_LOF_"$chnum".vcf.gz
+	tabix -p vcf AAO_ALL_LOF/PD_WGS_ALL_LOF_"$chnum".vcf.gz
 done
 
 # ALL_CADD_20
 for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
   do
- 	plink2 --pfile pd.june2019.chr"$chnum".freeze9.sqc \
+ 	plink2 --pgen pd.june2019.chr"$chnum".freeze9.sqc.pgen --pvar PVAR_files/NEW"$chnum".pvar \
+	--psam pd.june2019.chr"$chnum".freeze9.sqc.psam \
 	--extract annotation/ALL_CADD_20.txt \
-	--keep PHENO_FOR_GWAS_v1_november11_with_PC.txt \
-	--out ALL_CADD_20/PD_WGS_ALL_CADD_20_"$chnum" \
+	--keep PHENO_FOR_AAO_GWAS_v1_november11_with_PC.txt \
+	--out AAO_ALL_CADD_20/PD_WGS_ALL_CADD_20_"$chnum" \
 	--mac 1 --export vcf bgz id-paste=iid
-	tabix -p vcf ALL_CADD_20/PD_WGS_ALL_CADD_20_"$chnum".vcf.gz
+	tabix -p vcf AAO_ALL_CADD_20/PD_WGS_ALL_CADD_20_"$chnum".vcf.gz
 done
 
 # ALL_CADD_10
 for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
   do
- 	plink2 --pfile pd.june2019.chr"$chnum".freeze9.sqc \
+ 	plink2 --pgen pd.june2019.chr"$chnum".freeze9.sqc.pgen --pvar PVAR_files/NEW"$chnum".pvar \
+	--psam pd.june2019.chr"$chnum".freeze9.sqc.psam \
 	--extract annotation/ALL_CADD_10.txt \
-	--keep PHENO_FOR_GWAS_v1_november11_with_PC.txt \
-	--out ALL_CADD_10/PD_WGS_ALL_CADD_10_"$chnum" \
+	--keep PHENO_FOR_AAO_GWAS_v1_november11_with_PC.txt \
+	--out AAO_ALL_CADD_10/PD_WGS_ALL_CADD_10_"$chnum" \
 	--mac 1 --export vcf bgz id-paste=iid
-	tabix -p vcf ALL_CADD_10/PD_WGS_ALL_CADD_10_"$chnum".vcf.gz
+	tabix -p vcf AAO_ALL_CADD_10/PD_WGS_ALL_CADD_10_"$chnum".vcf.gz
 done
 
 # ALL_MISSENSE
 for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
   do
- 	plink2 --pfile pd.june2019.chr"$chnum".freeze9.sqc \
+ 	plink2 --pgen pd.june2019.chr"$chnum".freeze9.sqc.pgen --pvar PVAR_files/NEW"$chnum".pvar \
+	--psam pd.june2019.chr"$chnum".freeze9.sqc.psam \
 	--extract annotation/all_missense.txt \
-	--keep PHENO_FOR_GWAS_v1_november11_with_PC.txt \
-	--out ALL_MISSENSE/PD_WGS_ALL_MISSENSE_"$chnum" \
+	--keep PHENO_FOR_AAO_GWAS_v1_november11_with_PC.txt \
+	--out AAO_ALL_MISSENSE/PD_WGS_ALL_MISSENSE_"$chnum" \
 	--mac 1 --export vcf bgz id-paste=iid
-	tabix -p vcf ALL_MISSENSE/PD_WGS_ALL_MISSENSE_"$chnum".vcf.gz
+	tabix -p vcf AAO_ALL_MISSENSE/PD_WGS_ALL_MISSENSE_"$chnum".vcf.gz
 done
 
 # ALL_MISSENSE_and_LOF
 for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
   do
- 	plink2 --pfile pd.june2019.chr"$chnum".freeze9.sqc \
+ 	plink2 --pgen pd.june2019.chr"$chnum".freeze9.sqc.pgen --pvar PVAR_files/NEW"$chnum".pvar \
+	--psam pd.june2019.chr"$chnum".freeze9.sqc.psam \
 	--extract annotation/ALL_MISSENSE_and_LOF.txt \
-	--keep PHENO_FOR_GWAS_v1_november11_with_PC.txt \
-	--out ALL_MISSENSE_and_LOF/PD_WGS_ALL_MISSENSE_and_LOF_"$chnum" \
+	--keep PHENO_FOR_AAO_GWAS_v1_november11_with_PC.txt \
+	--out AAO_ALL_MISSENSE_and_LOF/PD_WGS_ALL_MISSENSE_and_LOF_"$chnum" \
 	--mac 1 --export vcf bgz id-paste=iid
-	tabix -p vcf ALL_MISSENSE_and_LOF/PD_WGS_ALL_MISSENSE_and_LOF_"$chnum".vcf.gz
+	tabix -p vcf AAO_ALL_MISSENSE_and_LOF/PD_WGS_ALL_MISSENSE_and_LOF_"$chnum".vcf.gz
 done
 
 
@@ -211,8 +185,8 @@ working dir:
 cd /data/CARD/PD/WGS/june2019
 
 # output dir:
-mkdir BURDEN
-cd BURDEN
+mkdir AAO_BURDEN
+cd AAO_BURDEN
 mkdir ALL_MISSENSE
 mkdir ALL_LOF
 mkdir ALL_CADD_20
@@ -220,14 +194,14 @@ mkdir ALL_CADD_10
 mkdir ALL_MISSENSE_and_LOF
 
 # input files:
-ALL_MISSENSE_and_LOF/PD_WGS_ALL_MISSENSE_and_LOF_"$chnum".vcf.gz
-ALL_MISSENSE/PD_WGS_ALL_MISSENSE_"$chnum".vcf.gz
-ALL_CADD_10/PD_WGS_ALL_CADD_10_"$chnum".vcf.gz
-ALL_LOF/PD_WGS_ALL_LOF_"$chnum".vcf.gz
-ALL_CADD_20/PD_WGS_ALL_CADD_20_"$chnum".vcf.gz
+AAO_ALL_MISSENSE_and_LOF/PD_WGS_ALL_MISSENSE_and_LOF_"$chnum".vcf.gz
+AAO_ALL_MISSENSE/PD_WGS_ALL_MISSENSE_"$chnum".vcf.gz
+AAO_ALL_CADD_10/PD_WGS_ALL_CADD_10_"$chnum".vcf.gz
+AAO_ALL_LOF/PD_WGS_ALL_LOF_"$chnum".vcf.gz
+AAO_ALL_CADD_20/PD_WGS_ALL_CADD_20_"$chnum".vcf.gz
 
 # pheno/covariate:
-PHENO_FOR_GWAS_v1_november11_with_PC.txt
+PHENO_FOR_AAO_GWAS_v1_november11_with_PC.txt
 names are:
 SEX,AGE_ANALYSIS,PC1,PC2,PC3,PC4,PC5 
 pheno is:
@@ -235,27 +209,39 @@ PHENO
 
 # start burdening...
 
-module load rvtests
+module load rvtests # 2.1.0
 
 # sanity checks...
 # GBA
-rvtest --noweb --hide-covar --out BURDEN/ALL_MISSENSE/PD_WGS_burden_chr1 --burden cmc  \
---inVcf ALL_MISSENSE_and_LOF/PD_WGS_ALL_MISSENSE_and_LOF_1.vcf.gz \
---pheno PHENO_FOR_GWAS_v1_november11_with_PC.txt --pheno-name PHENO_RV \
---covar PHENO_FOR_GWAS_v1_november11_with_PC.txt --freqUpper 0.05 --imputeCov \
---covar-name SEX,AGE_ANALYSIS,PC1,PC2,PC3,PC4,PC5 --geneFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/refFlat_HG38_chr1.txt --gene GBA
-# Loaded 2788 cases, 4105 controls, and 0 missing phenotypes => 6893 samples
-P = 4.00621e-13
-# LRRK2
-rvtest --noweb --hide-covar --out BURDEN/ALL_MISSENSE/PD_WGS_burden_chr12 --burden cmc  \
---inVcf ALL_MISSENSE/PD_WGS_ALL_MISSENSE_12.vcf.gz \
---pheno PHENO_FOR_GWAS_v1_november11_with_PC.txt --pheno-name PHENO_RV \
---covar PHENO_FOR_GWAS_v1_november11_with_PC.txt --freqUpper 0.05 --imputeCov \
---covar-name SEX,AGE_ANALYSIS,PC1,PC2,PC3,PC4,PC5 --geneFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/refFlat_HG38_chr12.txt --gene LRRK2
-# Loaded 2788 cases, 4105 controls, and 0 missing phenotypes => 6893 samples
-P = 0.101713 ALL_MISSENSE
+rvtest --noweb --hide-covar --out AAO_BURDEN/GBA_TEST --burden cmc  \
+--inVcf AAO_ALL_MISSENSE_and_LOF/PD_WGS_ALL_MISSENSE_and_LOF_1.vcf.gz \
+--pheno PHENO_FOR_AAO_GWAS_v1_november11_with_PC.txt --pheno-name AGE_ANALYSIS \
+--covar PHENO_FOR_AAO_GWAS_v1_november11_with_PC.txt --freqUpper 0.05 --imputeCov \
+--covar-name SEX,PC1,PC2,PC3,PC4,PC5 --geneFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/refFlat_HG38_chr1.txt --gene GBA
+# Loaded 2769 cases and 37 variants
+P = 0.0133265 => ALL_MISSENSE_and_LOF
 
+# LRRK2
+rvtest --noweb --hide-covar --out AAO_BURDEN/LRRK2_TEST --burden cmc  \
+--inVcf AAO_ALL_MISSENSE_and_LOF/PD_WGS_ALL_MISSENSE_and_LOF_12.vcf.gz \
+--pheno PHENO_FOR_AAO_GWAS_v1_november11_with_PC.txt --pheno-name AGE_ANALYSIS \
+--covar PHENO_FOR_AAO_GWAS_v1_november11_with_PC.txt --freqUpper 0.05 --imputeCov \
+--covar-name SEX,PC1,PC2,PC3,PC4,PC5 --geneFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/refFlat_HG38_chr12.txt --gene LRRK2
+# Loaded 2769 cases and 76 variants
+P = 0.774175 => ALL_MISSENSE_and_LOF
+
+# GCH1
+rvtest --noweb --hide-covar --out AAO_BURDEN/GCH1_TEST --burden cmc  \
+--inVcf AAO_ALL_MISSENSE_and_LOF/PD_WGS_ALL_MISSENSE_and_LOF_14.vcf.gz \
+--pheno PHENO_FOR_AAO_GWAS_v1_november11_with_PC.txt --pheno-name AGE_ANALYSIS \
+--covar PHENO_FOR_AAO_GWAS_v1_november11_with_PC.txt --freqUpper 0.05 --imputeCov \
+--covar-name SEX,PC1,PC2,PC3,PC4,PC5 --geneFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/refFlat_HG38_chr14.txt --gene GCH1
+# Loaded 2769 cases and 12 variants
+P = 0.383495 => ALL_MISSENSE_and_LOF
 ```
+
+
+# CONTINUE HERE...
 
 ```
 # now running all
@@ -297,7 +283,7 @@ done
 
 ```
 
-###  post burden testing file prepping for meta-analyses...
+###  post burden testing file prepping for interpretation...
 
 
 ```
