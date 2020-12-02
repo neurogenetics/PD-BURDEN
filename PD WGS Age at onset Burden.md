@@ -155,7 +155,7 @@ for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
   do
  	plink2 --pgen pd.june2019.chr"$chnum".freeze9.sqc.pgen --pvar PVAR_files/NEW"$chnum".pvar \
 	--psam pd.june2019.chr"$chnum".freeze9.sqc.psam \
-	--extract annotation/all_missense.txt \
+	--extract annotation/ALL_MISSENSE.txt \
 	--keep PHENO_FOR_AAO_GWAS_v1_november11_with_PC.txt \
 	--out AAO_ALL_MISSENSE/PD_WGS_ALL_MISSENSE_"$chnum" \
 	--mac 1 --export vcf bgz id-paste=iid
@@ -209,7 +209,7 @@ PHENO
 
 # start burdening...
 
-module load rvtests # 2.1.0
+module load rvtests # v2.1.0
 
 # sanity checks...
 # GBA
@@ -240,20 +240,26 @@ rvtest --noweb --hide-covar --out AAO_BURDEN/GCH1_TEST --burden cmc  \
 P = 0.383495 => ALL_MISSENSE_and_LOF
 ```
 
+Running all combinations....
 
-# CONTINUE HERE...
+Check => AAO_WGS_BURDEN_TESTING_CMC_SKAT_2020.sh
 
+but then in the launch format => LAUNCH_AAO_WGS_BURDEN_TESTING_CMC_SKAT_2020.sh
+
+sh LAUNCH_AAO_WGS_BURDEN_TESTING_CMC_SKAT_2020.sh 
+
+this is 20 combinations... 5 variant level and 4 frequency level
+ 
 ```
-# now running all
 #!/bin/bash
-# sbatch --cpus-per-task=10 --mem=5g --mail-type=END --time=24:00:00 WGS_BURDEN_TESTING_CMC_SKAT_2020.sh variant frequency
-# sbatch --cpus-per-task=10 --mem=5g --time=24:00:00 WGS_BURDEN_TESTING_CMC_SKAT_2020.sh ALL_MISSENSE_and_LOF 0.05
-# sbatch --cpus-per-task=10 --mem=5g --time=24:00:00 WGS_BURDEN_TESTING_CMC_SKAT_2020.sh ALL_LOF 0.05
+# sbatch --cpus-per-task=10 --mem=5g --mail-type=END --time=24:00:00 AAO_WGS_BURDEN_TESTING_CMC_SKAT_2020.sh variant frequency
+# sbatch --cpus-per-task=10 --mem=5g --time=24:00:00 AAO_WGS_BURDEN_TESTING_CMC_SKAT_2020.sh ALL_MISSENSE_and_LOF 0.05
+# sbatch --cpus-per-task=10 --mem=5g --time=24:00:00 AAO_WGS_BURDEN_TESTING_CMC_SKAT_2020.sh ALL_LOF 0.05
 VARIANT=$1
 FREQUENCY=$2
 ###
 echo "this is"
-echo "PD case control" 
+echo "PD age of onset" 
 echo "whit variant type"
 echo $VARIANT
 echo "using frequency cut off of"
@@ -274,12 +280,13 @@ echo $FREQUENCY
 module load rvtests
 for CHNUM in {1..22};
 do
-rvtest --noweb --hide-covar --out BURDEN/"$VARIANT"/PD_WGS_"$FREQUENCY"_chr$CHNUM --burden cmc --kernel skato \
---inVcf "$VARIANT"/PD_WGS_"$VARIANT"_"$CHNUM".vcf.gz \
---pheno PHENO_FOR_GWAS_v1_november11_with_PC.txt --pheno-name PHENO_RV --imputeCov \
---covar PHENO_FOR_GWAS_v1_november11_with_PC.txt --freqUpper $FREQUENCY \
---covar-name SEX,AGE_ANALYSIS,PC1,PC2,PC3,PC4,PC5 --geneFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/refFlat_HG38_chr$CHNUM.txt
+rvtest --noweb --hide-covar --out AAO_BURDEN/"$VARIANT"/AAO_PD_WGS_"$FREQUENCY"_chr$CHNUM --burden cmc --kernel skato \
+--inVcf AAO_"$VARIANT"/PD_WGS_"$VARIANT"_"$CHNUM".vcf.gz \
+--pheno PHENO_FOR_AAO_GWAS_v1_november11_with_PC.txt --pheno-name AGE_ANALYSIS --imputeCov \
+--covar PHENO_FOR_AAO_GWAS_v1_november11_with_PC.txt --freqUpper "$FREQUENCY" \
+--covar-name SEX,PC1,PC2,PC3,PC4,PC5 --geneFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/refFlat_HG38_chr$CHNUM.txt
 done
+
 
 ```
 
@@ -291,25 +298,22 @@ Steps:
 - merge per chromosome
 - sort based on P-value
 
-cd BURDEN
+cd AAO_BURDEN
 ALL_MISSENSE
 ALL_LOF
 ALL_CADD_20
 ALL_CADD_10
 ALL_MISSENSE_and_LOF
 
-rm *_FREQUENCY_*
-264 files per folder 
-
 ## big loop....
 
-cd /data/CARD/PD/WGS/june2019/BURDEN/
+cd /data/CARD/PD/WGS/june2019/AAO_BURDEN/
 
 cat variant_types.txt | while read line
 do 
 	cd $line
-	head -1 PD_WGS_0.05_chr8.CMC.assoc > CMC_header.txt
-	head -1 PD_WGS_0.05_chr8.SkatO.assoc > SkatO_header.txt
+	head -1 AAO_PD_WGS_0.05_chr8.CMC.assoc > CMC_header.txt
+	head -1 AAO_PD_WGS_0.05_chr8.SkatO.assoc > SkatO_header.txt
 	# SKATO
 	cat *_0.05_*.SkatO.assoc | sort -gk 8 | grep -v "Pvalue" > temp.txt
 	cat SkatO_header.txt temp.txt > ../"$line"_0.05.SkatO.assoc
@@ -334,4 +338,20 @@ done
 # move files to results file
 mkdir RESULTS
 mv *.assoc RESULTS/
+
+
+# done...
+
+```
+
+###  Interpretation...
+
+```
+GBA looks potentially interesting and is also expected of course...
+Several other hits though but nothing genome wide passing (as expected....)
+
+
+```
+
+
 
