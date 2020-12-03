@@ -338,8 +338,6 @@ ALL_CADD_10.txt
 ALL_MISSENSE_and_LOF.txt
 
 
-# CONTINUE HERE
-
 ```
 # make folders for new vcf files
 
@@ -355,8 +353,8 @@ module load samtools
 # ALL_LOF
 for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
   do
- 	plink2 --pfile pd.june2019.chr"$chnum".freeze9.sqc \
-	--extract annotation/ALL_LOF.txt \
+  	plink2 --pgen pd.june2019.chr"$chnum".freeze9.sqc.pgen --pvar PVAR_files/NEW"$chnum".pvar \
+	--psam pd.june2019.chr"$chnum".freeze9.sqc.psam --extract annotation/ALL_LOF.txt \
 	--keep PHENO_FOR_GWAS_v1_november11_with_PC.txt \
 	--out ALL_LOF/PD_WGS_ALL_LOF_"$chnum" \
 	--mac 1 --export vcf bgz id-paste=iid
@@ -366,8 +364,8 @@ done
 # ALL_CADD_20
 for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
   do
- 	plink2 --pfile pd.june2019.chr"$chnum".freeze9.sqc \
-	--extract annotation/ALL_CADD_20.txt \
+  	plink2 --pgen pd.june2019.chr"$chnum".freeze9.sqc.pgen --pvar PVAR_files/NEW"$chnum".pvar \
+	--psam pd.june2019.chr"$chnum".freeze9.sqc.psam --extract annotation/ALL_CADD_20.txt \
 	--keep PHENO_FOR_GWAS_v1_november11_with_PC.txt \
 	--out ALL_CADD_20/PD_WGS_ALL_CADD_20_"$chnum" \
 	--mac 1 --export vcf bgz id-paste=iid
@@ -377,8 +375,8 @@ done
 # ALL_CADD_10
 for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
   do
- 	plink2 --pfile pd.june2019.chr"$chnum".freeze9.sqc \
-	--extract annotation/ALL_CADD_10.txt \
+  	plink2 --pgen pd.june2019.chr"$chnum".freeze9.sqc.pgen --pvar PVAR_files/NEW"$chnum".pvar \
+	--psam pd.june2019.chr"$chnum".freeze9.sqc.psam --extract annotation/ALL_CADD_10.txt \
 	--keep PHENO_FOR_GWAS_v1_november11_with_PC.txt \
 	--out ALL_CADD_10/PD_WGS_ALL_CADD_10_"$chnum" \
 	--mac 1 --export vcf bgz id-paste=iid
@@ -388,8 +386,8 @@ done
 # ALL_MISSENSE
 for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
   do
- 	plink2 --pfile pd.june2019.chr"$chnum".freeze9.sqc \
-	--extract annotation/all_missense.txt \
+  	plink2 --pgen pd.june2019.chr"$chnum".freeze9.sqc.pgen --pvar PVAR_files/NEW"$chnum".pvar \
+	--psam pd.june2019.chr"$chnum".freeze9.sqc.psam --extract annotation/ALL_MISSENSE.txt \
 	--keep PHENO_FOR_GWAS_v1_november11_with_PC.txt \
 	--out ALL_MISSENSE/PD_WGS_ALL_MISSENSE_"$chnum" \
 	--mac 1 --export vcf bgz id-paste=iid
@@ -399,8 +397,8 @@ done
 # ALL_MISSENSE_and_LOF
 for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
   do
- 	plink2 --pfile pd.june2019.chr"$chnum".freeze9.sqc \
-	--extract annotation/ALL_MISSENSE_and_LOF.txt \
+  	plink2 --pgen pd.june2019.chr"$chnum".freeze9.sqc.pgen --pvar PVAR_files/NEW"$chnum".pvar \
+	--psam pd.june2019.chr"$chnum".freeze9.sqc.psam --extract annotation/ALL_MISSENSE_and_LOF.txt \
 	--keep PHENO_FOR_GWAS_v1_november11_with_PC.txt \
 	--out ALL_MISSENSE_and_LOF/PD_WGS_ALL_MISSENSE_and_LOF_"$chnum" \
 	--mac 1 --export vcf bgz id-paste=iid
@@ -442,7 +440,7 @@ PHENO
 
 # start burdening...
 
-module load rvtests
+module load rvtests # 2.1.0 
 
 # sanity checks...
 # GBA
@@ -503,6 +501,8 @@ rvtest --noweb --hide-covar --out BURDEN/"$VARIANT"/PD_WGS_"$FREQUENCY"_chr$CHNU
 done
 
 ```
+
+# CONTINUE HERE...
 
 ###  post burden testing file prepping for meta-analyses...
 
@@ -585,6 +585,9 @@ DCDC2C => restless leg GWAS hit
 
 ```
 
+# work in progress....
+
+# Continue here
 
 ### create cumulative frequency list for each group...
 
@@ -593,7 +596,7 @@ Input files needed:
 /data/CARD/PD/WGS/june2019/annotation/PD_WGS_chr*.hg38_multianno.withafreq.txt
 
 Variant classes:
-all_missense.txt
+ALL_MISSENSE.txt
 ALL_LOF.txt
 ALL_CADD_20.txt
 ALL_CADD_10.txt
@@ -655,7 +658,7 @@ n
 
 ## merge files with result files...
 
-work in progress....
+
 
 
 ```
