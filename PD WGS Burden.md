@@ -219,13 +219,16 @@ cat all_frameshift.txt all_stopgain.txt all_stoploss.txt all_splice_bp.txt > ALL
 
 cat ALL_MISSENSE.txt all_frameshift.txt all_stopgain.txt all_stoploss.txt all_splice_bp.txt > ALL_MISSENSE_and_LOF.txt
 
+cat ALL_CADD_20.txt all_frameshift.txt all_stopgain.txt all_stoploss.txt all_splice_bp.txt > ALL_CADD_20_and_LOF.txt
+
 ### FINAL GROUPS:
 
-ALL_CADD_10.txt
-ALL_CADD_20.txt
-ALL_MISSENSE_and_LOF.txt
-ALL_LOF.txt
-ALL_MISSENSE.txt
+wc -l ALL_CADD_10.txt # 46372
+wc -l ALL_CADD_20.txt # 38390
+wc -l ALL_MISSENSE_and_LOF.txt # 1000070
+wc -l ALL_LOF.txt # 66260
+wc -l ALL_MISSENSE.txt # 933810
+wc -l ALL_CADD_20_and_LOF.txt # 104650
 
 ```
 
@@ -336,7 +339,7 @@ ALL_LOF.txt
 ALL_CADD_20.txt
 ALL_CADD_10.txt
 ALL_MISSENSE_and_LOF.txt
-
+ALL_CADD_20_and_LOF.txt
 
 ```
 # make folders for new vcf files
@@ -346,6 +349,7 @@ mkdir ALL_LOF
 mkdir ALL_CADD_20
 mkdir ALL_CADD_10
 mkdir ALL_MISSENSE_and_LOF
+mkdir ALL_CADD_20_and_LOF
 
 module load plink/2.0-dev-20191128
 module load samtools
@@ -405,6 +409,19 @@ for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
 	tabix -p vcf ALL_MISSENSE_and_LOF/PD_WGS_ALL_MISSENSE_and_LOF_"$chnum".vcf.gz
 done
 
+# ALL_CADD_20_and_LOF
+for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
+  do
+  	plink2 --pgen pd.june2019.chr"$chnum".freeze9.sqc.pgen --pvar PVAR_files/NEW"$chnum".pvar \
+	--psam pd.june2019.chr"$chnum".freeze9.sqc.psam --extract annotation/ALL_CADD_20_and_LOF.txt \
+	--keep PHENO_FOR_GWAS_v1_november11_with_PC.txt \
+	--out ALL_CADD_20_and_LOF/PD_WGS_ALL_CADD_20_and_LOF_"$chnum" \
+	--mac 1 --export vcf bgz id-paste=iid
+	tabix -p vcf ALL_CADD_20_and_LOF/PD_WGS_ALL_CADD_20_and_LOF_"$chnum".vcf.gz
+done
+
+
+
 
 ```
 
@@ -423,6 +440,7 @@ mkdir ALL_LOF
 mkdir ALL_CADD_20
 mkdir ALL_CADD_10
 mkdir ALL_MISSENSE_and_LOF
+mkdir ALL_CADD_20_and_LOF
 
 # input files:
 ALL_MISSENSE_and_LOF/PD_WGS_ALL_MISSENSE_and_LOF_"$chnum".vcf.gz
@@ -430,6 +448,7 @@ ALL_MISSENSE/PD_WGS_ALL_MISSENSE_"$chnum".vcf.gz
 ALL_CADD_10/PD_WGS_ALL_CADD_10_"$chnum".vcf.gz
 ALL_LOF/PD_WGS_ALL_LOF_"$chnum".vcf.gz
 ALL_CADD_20/PD_WGS_ALL_CADD_20_"$chnum".vcf.gz
+ALL_CADD_20_and_LOF/PD_WGS_ALL_CADD_20_and_LOF_"$chnum".vcf.gz
 
 # pheno/covariate:
 PHENO_FOR_GWAS_v1_november11_with_PC.txt
@@ -484,6 +503,7 @@ echo $FREQUENCY
 # ALL_CADD_10
 # ALL_LOF
 # ALL_MISSENSE
+# ALL_CADD_20_and_LOF
 ###
 # input examples frequency level:
 # 0.05
@@ -502,7 +522,7 @@ done
 
 ```
 
-# CONTINUE HERE...
+# ADD ALL_CADD_20_and_LOF here
 
 ###  post burden testing file prepping for meta-analyses...
 
@@ -518,6 +538,7 @@ ALL_LOF
 ALL_CADD_20
 ALL_CADD_10
 ALL_MISSENSE_and_LOF
+ALL_CADD_20_and_LOF
 
 rm *_FREQUENCY_*
 264 files per folder 
