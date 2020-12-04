@@ -266,40 +266,33 @@ done
 # annotate all
 # note optional.... => -arg '-splicing 15',,,
 
+-------------------
+#!/bin/bash
+# sbatch --cpus-per-task=10 --mem=200g --time=24:00:00 annotate_UKBv2.sh
+
+cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/PLINK_files/
+
 module load annovar
 for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22};
   do
   	table_annovar.pl anno"$chnum".vcf $ANNOVAR_DATA/hg38 --thread 16 -buildver hg38 \
-	-out UKB_exomes_200K_chr"$chnum" -arg '-splicing 15',,, -remove -protocol refGene,avsnp150,clinvar_20200316,dbnsfp41a \
+	-out UKB_exomes_200K_v2_chr"$chnum" -remove -protocol refGene,avsnp150,clinvar_20200316,dbnsfp41a \
 	-operation g,f,f,f -nastring . -vcfinput
 done
 
-
-# separately for chr X and Y...
-plink --bim UKBexomeOQFE_chrX.bim --fam ukb23155_c1_b0_v1_s200632.fam \
---bed ukb23155_cX_b0_v1.bed --freq --out FREQchr23
-
-plink --bim UKBexomeOQFE_chrY.bim --fam ukb23155_c1_b0_v1_s200632.fam \
---bed ukb23155_cY_b0_v1.bed --freq --out FREQchr24
-
-plink --bim UKBexomeOQFE_chrX.bim --fam ukb23155_c1_b0_v1_s200632.fam \
---bed ukb23155_cX_b0_v1.bed --export vcf id-paste=iid --out anno23 --keep textsample.txt
-
-plink --bim UKBexomeOQFE_chrY.bim --fam ukb23155_c1_b0_v1_s200632.fam \
---bed ukb23155_cY_b0_v1.bed --export vcf id-paste=iid --out anno24 --keep textsample.txt
-
 table_annovar.pl anno23.vcf $ANNOVAR_DATA/hg38 --thread 16 -buildver hg38 \
--out UKB_exomes_200K_chr23 -arg '-splicing 15',,, -remove -protocol refGene,avsnp150,clinvar_20200316,dbnsfp41a \
+-out UKB_exomes_200K_v2_chr23 -remove -protocol refGene,avsnp150,clinvar_20200316,dbnsfp41a \
 -operation g,f,f,f -nastring . -vcfinput
 
 table_annovar.pl anno24.vcf $ANNOVAR_DATA/hg38 --thread 16 -buildver hg38 \
--out UKB_exomes_200K_chr24 -arg '-splicing 15',,, -remove -protocol refGene,avsnp150,clinvar_20200316,dbnsfp41a \
+-out UKB_exomes_200K_v2_chr24 -remove -protocol refGene,avsnp150,clinvar_20200316,dbnsfp41a \
 -operation g,f,f,f -nastring . -vcfinput
+-------------------
 
 
 # move data to annotation folder
 
-mv UKB_exomes_200K_chr* ../annotation_of_plink_files/
+mv UKB_exomes_200K_v2_chr* ../annotation_of_plink_files/
 mv FREQchr*afreq ../annotation_of_plink_files/
 
 # clean up folder
@@ -309,78 +302,64 @@ mv *.avinput inputfiles/
 rm *.vcf 
 
 # merge data with frequency file...
+mkdir freq_files
+mv *.afreq freq_files/
 
 for chnum in {1..24};
   do
-	paste UKB_exomes_200K_chr"$chnum".hg38_multianno.txt FREQchr"$chnum".afreq > UKB_exomes_200K_chr"$chnum".hg38_multianno.withafreq.txt
+	paste UKB_exomes_200K_v2_chr"$chnum".hg38_multianno.txt freq_files/FREQchr"$chnum".afreq > UKB_exomes_200K_v2_chr"$chnum".hg38_multianno.withafreq.txt
 done
 
 # clean up folder
-mkdir freq_files
-mv *.afreq freq_files/
+
 mkdir anno_no_freq
 mv *.hg38_multianno.txt anno_no_freq/
 
 ### subset "groups" of variants...
 
 # missense
-grep exonic UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt | grep nonsynonymous | cut -f 92 > ALL_MISSENSE.txt
-# n=4672378
+grep exonic UKB_exomes_200K_v2_chr*.hg38_multianno.withafreq.txt | grep nonsynonymous | cut -f 92 > ALL_MISSENSE.txt
+# n=4672717
+grep exonic UKB_exomes_200K_v2_chr*.hg38_multianno.withafreq.txt | grep nonsynonymous | cut -f 73 > ALL_MISSENSE.txt
 
 # LOF (stop, frame)
-grep stopgain UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt > all_stopgain.txt
-# n=159685
-grep stoploss UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt > all_stoploss.txt
-# n=7085
-grep nonframeshift UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt > all_nonframeshift.txt
-# n=107106
-grep frame UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt | grep -v nonframeshift | grep -v nonsynonymous > all_frameshift.txt
-# n=203994
+grep stopgain UKB_exomes_200K_v2_chr*.hg38_multianno.withafreq.txt | cut -f 73 > all_stopgain.txt
+# n=159722
+grep stoploss UKB_exomes_200K_v2_chr*.hg38_multianno.withafreq.txt | cut -f 73 > all_stoploss.txt
+# n=7051
+grep nonframeshift UKB_exomes_200K_v2_chr*.hg38_multianno.withafreq.txt | cut -f 73 > all_nonframeshift.txt
+# n=107177
+grep frame UKB_exomes_200K_v2_chr*.hg38_multianno.withafreq.txt | grep -v nonframeshift | grep -v nonsynonymous | cut -f 73 > all_frameshift.txt
+# n=203946
 
 # splicing 
-grep splicing UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt | \
-grep -v ncRNA | cut -f 6,92 | grep splicing | cut -f 2 > all_splice_15bp.txt
-# 24852 exonic;splicing
-# 1134001 splicing
-
-# make a separate splicing one...
-cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/annotation_of_plink_files/SPLICING/
-
-for chnum in {1..24};
-  do
-	paste SPLICING_UKB_exomes_200K_chr"$chnum".hg38_multianno.txt ../freq_files/FREQchr"$chnum".afreq > SPLICING_UKB_exomes_200K_chr"$chnum".hg38_multianno.withafreq.txt
-done
-
-grep splicing SPLICING_UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt | \
-grep -v ncRNA | cut -f 6,22 | grep splicing | cut -f 2 > all_splice_normal.txt
-#   3146 exonic;splicing
-#  89913 splicing
-
-
+grep splicing UKB_exomes_200K_v2_chr*.hg38_multianno.withafreq.txt | \
+grep -v ncRNA | cut -f 6,73 | grep splicing | cut -f 2 > all_splice.txt
+# n=93257
 
 # CADD <10
-awk '{ if($58 > 10) { print }}' UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt | cut -f 92 > ALL_CADD_10.txt
-# n=265920
+awk '{ if($42 >= 10) { print }}' UKB_exomes_200K_v2_chr*.hg38_multianno.withafreq.txt | cut -f 73 > ALL_CADD_10.txt
+# n=276502
 
 # CADD <20
-awk '{ if($58 > 20) { print }}' UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt | cut -f 92 > ALL_CADD_20.txt
-# n=228934
+awk '{ if($42 >= 20) { print }}' UKB_exomes_200K_v2_chr*.hg38_multianno.withafreq.txt | cut -f 73 > ALL_CADD_20.txt
+# n=244442
 
 
 #### Prepping final files:
 
-cat all_frameshift.txt all_stopgain.txt all_stoploss.txt all_splice_normal.txt > ALL_LOF.txt
+cat all_frameshift.txt all_stopgain.txt all_stoploss.txt all_splice.txt > ALL_LOF.txt
 
-cat all_missense.txt all_frameshift.txt all_stopgain.txt all_stoploss.txt all_splice_normal.txt > ALL_MISSENSE_and_LOF.txt
+cat all_missense.txt all_frameshift.txt all_stopgain.txt all_stoploss.txt all_splice.txt > ALL_MISSENSE_and_LOF.txt
 
+cat ALL_CADD_20.txt all_frameshift.txt all_stopgain.txt all_stoploss.txt all_splice.txt > ALL_CADD_20_and_LOF.txt
 
-ALL_CADD_10.txt
-ALL_CADD_20.txt
-ALL_MISSENSE_and_LOF.txt
-ALL_LOF.txt
-ALL_MISSENSE.txt
-
-add ALL_CADD_20_and_LOF.txt ???
+wc -l ALL_CADD_10.txt # 276502
+wc -l ALL_CADD_20.txt # 244442
+wc -l ALL_MISSENSE_and_LOF.txt # 5136354
+wc -l ALL_LOF.txt # 463976
+wc -l ALL_MISSENSE.txt # 4672717
+wc -l ALL_CADD_20_and_LOF.txt # 708418
 
 ```
 
@@ -399,11 +378,12 @@ scp UKBexomeOQFE_chrX.bim UKBexomeOQFE_chr23.bim
 
 # make vcf files for input for rvtests....
 # need to make the following combinations:
-all_missense.txt
+ALL_MISSENSE.txt
 ALL_LOF.txt
 ALL_CADD_20.txt
 ALL_CADD_10.txt
 ALL_MISSENSE_and_LOF.txt
+ALL_CADD_20_and_LOF.txt
 
 # make subfolders
 mkdir PD_CASE_CONTROL
@@ -411,7 +391,7 @@ mkdir PD_PARENT_CONTROL
 mkdir AD_CASE_CONTROL
 mkdir AD_PARENT_CONTROL
 
-### big loop
+### big loop # check => subset_data_prior_burden.sh
 
 module load plink/2.0-dev-20191128
 module load samtools #1.11
@@ -420,16 +400,43 @@ cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/PLINK_files/
 for CHNUM in {1..23};
 do
 plink2 --bed ukb23155_c"$CHNUM"_b0_v1.bed --bim UKBexomeOQFE_chr$CHNUM.bim --fam ukb23155_c1_b0_v1_s200632.fam \
---extract ../annotation_of_plink_files/all_missense.txt --keep ../BURDEN/UKB_EXOM_PD_CASE_CONTROL_with_PC.txt \
---export vcf bgz id-paste=iid --out PD_CASE_CONTROL/UKB_EXOM_PD_CASE_CONTROL_chr$CHNUM --mac 1
-tabix -p vcf PD_CASE_CONTROL/UKB_EXOM_PD_CASE_CONTROL_chr$CHNUM.vcf.gz
+--extract ../annotation_of_plink_files/ALL_MISSENSE.txt --keep ../BURDEN/UKB_EXOM_PD_CASE_CONTROL_with_PC.txt \
+--export vcf bgz id-paste=iid --out PD_CASE_CONTROL/UKB_EXOM_PD_CASE_CONTROL_ALL_MISSENSE_chr$CHNUM --mac 1
+tabix -p vcf PD_CASE_CONTROL/UKB_EXOM_PD_CASE_CONTROL_ALL_MISSENSE_chr$CHNUM.vcf.gz
 done
 
-and do for all 4 groups:
-PD_CASE_CONTROL
-PD_PARENT_CONTROL
-AD_CASE_CONTROL
-AD_PARENT_CONTROL
+for CHNUM in {1..23};
+do
+plink2 --bed ukb23155_c"$CHNUM"_b0_v1.bed --bim UKBexomeOQFE_chr$CHNUM.bim --fam ukb23155_c1_b0_v1_s200632.fam \
+--extract ../annotation_of_plink_files/ALL_MISSENSE.txt --keep ../BURDEN/UKB_EXOM_PD_PARENT_CONTROL_with_PC.txt \
+--export vcf bgz id-paste=iid --out PD_PARENT_CONTROL/UKB_EXOM_PD_PARENT_CONTROL_ALL_MISSENSE_chr$CHNUM --mac 1
+tabix -p vcf PD_PARENT_CONTROL/UKB_EXOM_PD_PARENT_CONTROL_ALL_MISSENSE_chr$CHNUM.vcf.gz
+done
+
+for CHNUM in {1..23};
+do
+plink2 --bed ukb23155_c"$CHNUM"_b0_v1.bed --bim UKBexomeOQFE_chr$CHNUM.bim --fam ukb23155_c1_b0_v1_s200632.fam \
+--extract ../annotation_of_plink_files/ALL_MISSENSE.txt --keep ../BURDEN/UKB_EXOM_AD_CASE_CONTROL_with_PC.txt \
+--export vcf bgz id-paste=iid --out AD_CASE_CONTROL/UKB_EXOM_AD_CASE_CONTROL_ALL_MISSENSE_chr$CHNUM --mac 1
+tabix -p vcf AD_CASE_CONTROL/UKB_EXOM_AD_CASE_CONTROL_ALL_MISSENSE_chr$CHNUM.vcf.gz
+done
+
+for CHNUM in {1..23};
+do
+plink2 --bed ukb23155_c"$CHNUM"_b0_v1.bed --bim UKBexomeOQFE_chr$CHNUM.bim --fam ukb23155_c1_b0_v1_s200632.fam \
+--extract ../annotation_of_plink_files/ALL_MISSENSE.txt --keep ../BURDEN/UKB_EXOM_AD_PARENT_CONTROL_with_PC.txt \
+--export vcf bgz id-paste=iid --out AD_PARENT_CONTROL/UKB_EXOM_AD_PARENT_CONTROL_ALL_MISSENSE_chr$CHNUM --mac 1
+tabix -p vcf AD_PARENT_CONTROL/UKB_EXOM_AD_PARENT_CONTROL_ALL_MISSENSE_chr$CHNUM.vcf.gz
+done
+
+and do for all 6 groups:
+ALL_MISSENSE.txt
+ALL_LOF.txt
+ALL_CADD_20.txt
+ALL_CADD_10.txt
+ALL_MISSENSE_and_LOF.txt
+ALL_CADD_20_and_LOF.txt
+
 
 ### examples below for just 1 chromosome....
 # PD - control
