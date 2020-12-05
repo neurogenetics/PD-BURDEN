@@ -522,10 +522,7 @@ done
 
 ```
 
-# ADD ALL_CADD_20_and_LOF here
-
 ###  post burden testing file prepping for meta-analyses...
-
 
 ```
 Steps:
@@ -577,7 +574,7 @@ done
 mkdir RESULTS
 mv *.assoc RESULTS/
 
-40 files => 2 tests, 4 variant thresholds, 5 variant groups => 40
+48 files => 2 tests, 4 variant thresholds, 6 variant groups => 48
 
 ### quick check of hits...
 
@@ -622,16 +619,26 @@ ALL_LOF.txt
 ALL_CADD_20.txt
 ALL_CADD_10.txt
 ALL_MISSENSE_and_LOF.txt
+ALL_CADD_20_and_LOF.txt
+
+cd /data/CARD/PD/WGS/june2019/freq_case_control_per_variant_class/
+mkdir ALL_MISSENSE
+mkdir ALL_LOF
+mkdir ALL_CADD_20
+mkdir ALL_CADD_10
+mkdir mkdir ALL_MISSENSE_and_LOF
+mkdir ALL_CADD_20_and_LOF
 
 Case-control files to generate:
 module load plink/2.0-dev-20191128
 
-mkdir freq_case_control_per_variant_class
 # make plink1 files
+cd /data/CARD/PD/WGS/june2019
+
 for chnum in {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
   do
  	plink2 --pfile pd.june2019.chr"$chnum".freeze9.sqc \
-	--extract annotation/ALL_LOF.txt \
+	--extract annotation/ALL_MISSENSE_and_LOF.txt \
 	--keep PHENO_FOR_GWAS_v1_november11_with_PC.txt \
 	--pheno PHENO_FOR_GWAS_v1_november11_with_PC.txt \
 	--pheno-name PHENO_RV --make-bed \
