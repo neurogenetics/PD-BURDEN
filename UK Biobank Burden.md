@@ -488,54 +488,81 @@ UKB_EXOM_AD_CASE_CONTROL_ALL_CADD_20_chr
 UKB_EXOM_AD_CASE_CONTROL_ALL_CADD_10_chr
 UKB_EXOM_AD_CASE_CONTROL_ALL_LOF_chr
 UKB_EXOM_AD_CASE_CONTROL_ALL_MISSENSE_chr
+UKB_EXOM_AD_CASE_CONTROL_ALL_MISSENSE_chr
+UKB_EXOM_AD_CASE_CONTROL_ALL_CADD_20_and_LOF_chr
 
-module load rvtests
+module load rvtests # 2.1.0
 
 # sanity checks...
 # GBA
-rvtest --noweb --hide-covar --out UKB_EXOM_PD_CASE_CONTROL_chr1 --burden cmc  \
+rvtest --noweb --hide-covar --out GBA --burden cmc  \
 --inVcf ../PLINK_files/PD_CASE_CONTROL/UKB_EXOM_PD_CASE_CONTROL_ALL_MISSENSE_and_LOF_chr1.vcf.gz \
 --pheno UKB_EXOM_PD_CASE_CONTROL_with_PC.txt --pheno-name PHENO \
 --covar UKB_EXOM_PD_CASE_CONTROL_with_PC.txt --freqUpper 0.05 \
---covar-name GENETIC_SEX,AGE_OF_RECRUIT,TOWNSEND,PC1,PC2,PC3,PC4,PC5 --geneFile ../refFlat_HG38.txt --gene GBA
+--covar-name GENETIC_SEX,AGE_OF_RECRUIT,TOWNSEND,PC1,PC2,PC3,PC4,PC5 \
+--geneFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/refFlat_HG38_chr1.txt --gene GBA
 # 1.57857e-05
-rvtest --noweb --hide-covar --out GBA --burden cmc  \
+rvtest --noweb --hide-covar --out GBA_parent --burden cmc  \
 --inVcf ../PLINK_files/PD_PARENT_CONTROL/UKB_EXOM_PD_PARENT_CONTROL_ALL_MISSENSE_and_LOF_chr1.vcf.gz \
 --pheno UKB_EXOM_PD_PARENT_CONTROL_with_PC.txt --pheno-name PHENO \
 --covar UKB_EXOM_PD_PARENT_CONTROL_with_PC.txt --freqUpper 0.05 \
---covar-name GENETIC_SEX,AGE_OF_RECRUIT,TOWNSEND,PC1,PC2,PC3,PC4,PC5 --geneFile ../REFFLAT/refFlat_HG38.txt --gene PCSK9
+--covar-name GENETIC_SEX,AGE_OF_RECRUIT,TOWNSEND,PC1,PC2,PC3,PC4,PC5 \
+--geneFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/refFlat_HG38_chr1.txt --gene GBA
 # 1.8764e-08
+rvtest --noweb --hide-covar --out GBA_parent2 --burden cmc  \
+--inVcf ../PLINK_files/PD_PARENT_CONTROL/UKB_EXOM_PD_PARENT_CONTROL_ALL_CADD_20_and_LOF_chr1.vcf.gz \
+--pheno UKB_EXOM_PD_PARENT_CONTROL_with_PC.txt --pheno-name PHENO \
+--covar UKB_EXOM_PD_PARENT_CONTROL_with_PC.txt --freqUpper 0.05 \
+--covar-name GENETIC_SEX,AGE_OF_RECRUIT,TOWNSEND,PC1,PC2,PC3,PC4,PC5 \
+--geneFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/refFlat_HG38_chr1.txt --gene GBA
+# 0.0606762
 # GBA all good 
 # LRRK2
-rvtest --noweb --hide-covar --out UKB_EXOM_PD_CASE_CONTROL_chr12 --burden cmc  \
+rvtest --noweb --hide-covar --out LRRK2 --burden cmc  \
 --inVcf ../PLINK_files/PD_CASE_CONTROL/UKB_EXOM_PD_CASE_CONTROL_ALL_MISSENSE_chr12.vcf.gz \
 --pheno UKB_EXOM_PD_CASE_CONTROL_with_PC.txt --pheno-name PHENO \
 --covar UKB_EXOM_PD_CASE_CONTROL_with_PC.txt --freqUpper 0.01 \
---covar-name GENETIC_SEX,AGE_OF_RECRUIT,TOWNSEND,PC1,PC2,PC3,PC4,PC5 --geneFile ../refFlat_HG38.txt --gene LRRK2
+--covar-name GENETIC_SEX,AGE_OF_RECRUIT,TOWNSEND,PC1,PC2,PC3,PC4,PC5 \
+--geneFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/refFlat_HG38_chr12.txt --gene LRRK2
 # 0.0757585
-rvtest --noweb --hide-covar --out UKB_EXOM_PD_PARENT_CONTROL_chr12 --burden cmc  \
+rvtest --noweb --hide-covar --out LRRK2_parent --burden cmc  \
 --inVcf ../PLINK_files/PD_PARENT_CONTROL/UKB_EXOM_PD_PARENT_CONTROL_ALL_MISSENSE_chr12.vcf.gz \
 --pheno UKB_EXOM_PD_PARENT_CONTROL_with_PC.txt --pheno-name PHENO \
 --covar UKB_EXOM_PD_PARENT_CONTROL_with_PC.txt --freqUpper 0.01 \
---covar-name GENETIC_SEX,AGE_OF_RECRUIT,TOWNSEND,PC1,PC2,PC3,PC4,PC5 --geneFile ../refFlat_HG38.txt --gene LRRK2
+--covar-name GENETIC_SEX,AGE_OF_RECRUIT,TOWNSEND,PC1,PC2,PC3,PC4,PC5 \
+--geneFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/refFlat_HG38_chr12.txt --gene LRRK2
 # 0.586234 => probably too rare...
 # TREM2
-rvtest --noweb --hide-covar --out UKB_EXOM_AD_CASE_CONTROL_chr6 --burden cmc  \
+rvtest --noweb --hide-covar --out TREM2 --burden cmc  \
 --inVcf ../PLINK_files/AD_CASE_CONTROL/UKB_EXOM_AD_CASE_CONTROL_ALL_MISSENSE_and_LOF_chr6.vcf.gz \
 --pheno UKB_EXOM_AD_CASE_CONTROL_with_PC.txt --pheno-name PHENO \
 --covar UKB_EXOM_AD_CASE_CONTROL_with_PC.txt --freqUpper 0.05 \
---covar-name GENETIC_SEX,AGE_OF_RECRUIT,TOWNSEND,PC1,PC2,PC3,PC4,PC5 --geneFile ../refFlat_HG38.txt --gene TREM2
+--covar-name GENETIC_SEX,AGE_OF_RECRUIT,TOWNSEND,PC1,PC2,PC3,PC4,PC5 \
+--geneFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/refFlat_HG38_chr6.txt --gene TREM2
 # 0.33655, probably too rare here
-rvtest --noweb --hide-covar --out UKB_EXOM_AD_PARENT_CONTROL_chr6 --burden cmc  \
+rvtest --noweb --hide-covar --out TREM2_parent --burden cmc  \
 --inVcf ../PLINK_files/AD_PARENT_CONTROL/UKB_EXOM_AD_PARENT_CONTROL_ALL_MISSENSE_and_LOF_chr6.vcf.gz \
 --pheno UKB_EXOM_AD_PARENT_CONTROL_with_PC.txt --pheno-name PHENO \
 --covar UKB_EXOM_AD_PARENT_CONTROL_with_PC.txt --freqUpper 0.05 \
---covar-name GENETIC_SEX,AGE_OF_RECRUIT,TOWNSEND,PC1,PC2,PC3,PC4,PC5 --geneFile ../refFlat_HG38.txt --gene TREM2
+--covar-name GENETIC_SEX,AGE_OF_RECRUIT,TOWNSEND,PC1,PC2,PC3,PC4,PC5 \
+--geneFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/refFlat_HG38_chr6.txt --gene TREM2
 # 7.26046e-06
 
 ```
 
 Script format:
+```
+This is mainly for small data => AD case-control and PD case-control
+BURDEN_TESTING_CMC_SKAT_2020.sh # general script to run per group etc
+LAUNCH_BURDEN_TESTING_CMC_SKAT_2020.sh # launches above
+sh LAUNCH_BURDEN_TESTING_CMC_SKAT_2020.sh
+
+This is mainly for big data => AD proxy-control and PD proxy-control
+BURDEN_TESTING_CMC_SKAT_2020_per_chr.sh # general script to run per chromosome etc
+LAUNCH_BURDEN_TESTING_CMC_SKAT_2020_per_chr.sh # launches above
+sh LAUNCH_BURDEN_TESTING_CMC_SKAT_2020_per_chr.sh
+```
+
 ```
 #!/bin/bash
 # sbatch --cpus-per-task=10 --mem=5g --mail-type=END --time=24:00:00 BURDEN_TESTING_CMC_SKAT_2020.sh disease variant frequency
@@ -563,6 +590,7 @@ echo $FREQUENCY
 # ALL_CADD_10
 # ALL_LOF
 # ALL_MISSENSE
+# ALL_CADD_20_and_LOF
 ###
 # input examples frequency level:
 # 0.05
