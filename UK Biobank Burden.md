@@ -609,69 +609,83 @@ done
 
 ```
 
-# DOUBLE CHECK HERE
 ```
 ## checking results files:
 # PD_CASE_CONTROL
 ls | grep ALL_CADD_10 | wc -l #264
-ls | grep ALL_CADD_20 | wc -l #264
+ls | grep ALL_CADD_20_0 | wc -l #264
 ls | grep ALL_MISSENSE_and_LOF | wc -l  #264
-ls | grep ALL_LOF | wc -l  #12 
 ls | grep ALL_MISSENSE_0 | wc -l #264
----> redo ALL_LOF!!!!
+!!!!---> redo ALL_LOF and ALL_CADD_20_and!!!!
+ls | grep ALL_LOF | wc -l  #12 
+ls | grep ALL_CADD_20_and | wc -l  #12 
 # 264 => 3 files, 4 frequency, 22 chromosomes => 264
 
 # PD_PARENT_CONTROL
 ls | grep ALL_CADD_10 | wc -l #264
-ls | grep ALL_CADD_20 | wc -l #264
+ls | grep ALL_CADD_20_0 | wc -l #264
 ls | grep ALL_MISSENSE_and_LOF | wc -l #264
 ls | grep ALL_LOF | wc -l #264 
 ls | grep ALL_MISSENSE_0 | wc -l #264
+ls | grep ALL_CADD_20_and | wc -l #264
+# 264 => 3 files, 4 frequency, 22 chromosomes => 264
+
+# AD_CASE_CONTROL
+ls | grep ALL_CADD_10 | wc -l #264
+ls | grep ALL_CADD_20_0 | wc -l #264
+ls | grep ALL_MISSENSE_and_LOF | wc -l #264
+ls | grep ALL_LOF | wc -l #264 
+ls | grep ALL_MISSENSE_0 | wc -l #264
+ls | grep ALL_CADD_20_and | wc -l #264
+# 264 => 3 files, 4 frequency, 22 chromosomes => 264
+
+# AD_PARENT_CONTROL
+ls | grep ALL_CADD_10 | wc -l #264
+ls | grep ALL_CADD_20_0 | wc -l #264
+ls | grep ALL_MISSENSE_and_LOF | wc -l #264
+ls | grep ALL_LOF | wc -l #264 
+ls | grep ALL_MISSENSE_0 | wc -l #264
+ls | grep ALL_CADD_20_and | wc -l #264
 # 264 => 3 files, 4 frequency, 22 chromosomes => 264
 
 # confirm filesizes....
 # PD_CASE_CONTROL
 wc -l *.assoc | sort -nk1 | head
--> all look good except for chr1 files of LOF files ??? times 4 (frequency levels)
+-> all look good except for LOF ALL_CADD_20_and_LOF files???
 # PD_PARENT_CONTROL
 wc -l *.assoc | sort -nk1 | head
--> all look good except for chr2 files of ALL_MISSENSE and ALL_MISSENSE_and_LOF ????? both times 4 (frequency levels)
+-> all look good # noise
+# AD_CASE_CONTROL
 wc -l *.assoc | sort -nk1 | head
+-> all look good # noise
+# AD_PARENT_CONTROL
+wc -l *.assoc | sort -nk1 | head
+-> all look good # noise
+
 
 # trying to understand what goes wrong....
 module load plink/2.0-dev-20191128
 
-PD_CASE_CONTROL chr1 files of LOF files
+ALL_LOF
+ALL_CADD_20_and_LOF
 
-UKB_EXOM_PD_CASE_CONTROL_ALL_LOF_chr1.log
-UKB_EXOM_PD_CASE_CONTROL_ALL_LOF_chr1.vcf.gz
-UKB_EXOM_PD_CASE_CONTROL_ALL_LOF_chr1.vcf.gz.tbi
-"4738 variants remaining after main filters."
-"6193 samples (3182 females, 3011 males; 6193 founders)"
-according to plink:
-6193 samples and 4738 variants
-# rerun.....
-sbatch --cpus-per-task=10 --mem=25g --time=24:00:00 BURDEN_TESTING_CMC_SKAT_2020_per_chr.sh PD_CASE_CONTROL ALL_LOF 0.05 1
-sbatch --cpus-per-task=10 --mem=25g --time=24:00:00 BURDEN_TESTING_CMC_SKAT_2020_per_chr.sh PD_CASE_CONTROL ALL_LOF 0.01 1
-sbatch --cpus-per-task=10 --mem=25g --time=24:00:00 BURDEN_TESTING_CMC_SKAT_2020_per_chr.sh PD_CASE_CONTROL ALL_LOF 0.005 1
-sbatch --cpus-per-task=10 --mem=25g --time=24:00:00 BURDEN_TESTING_CMC_SKAT_2020_per_chr.sh PD_CASE_CONTROL ALL_LOF 0.001 1
-
-# if still doesnt work?
-Recreate vcf file?
+# sbatch --cpus-per-task=10 --mem=5g --time=24:00:00 BURDEN_TESTING_CMC_SKAT_2020.sh PD_CASE_CONTROL ALL_MISSENSE_and_LOF 0.05
+# sbatch --cpus-per-task=6 --mem=10g --time=24:00:00 BURDEN_TESTING_CMC_SKAT_2020_per_chr.sh PD_CASE_CONTROL ALL_LOF 0.05 22 
 
 
-PD_PARENT_CONTROL chr2 files of ALL_MISSENSE and ALL_MISSENSE_and_LOF
-# rerun.....
+sh BURDEN_TESTING_CMC_SKAT_2020_per_chr.sh PD_CASE_CONTROL ALL_CADD_20_and_LOF 0.05 22 
 
-sbatch --cpus-per-task=15 --mem=50g --time=24:00:00 BURDEN_TESTING_CMC_SKAT_2020_per_chr.sh PD_PARENT_CONTROL ALL_MISSENSE 0.05 2
-sbatch --cpus-per-task=15 --mem=50g --time=24:00:00 BURDEN_TESTING_CMC_SKAT_2020_per_chr.sh PD_PARENT_CONTROL ALL_MISSENSE 0.01 2
-sbatch --cpus-per-task=15 --mem=50g --time=24:00:00 BURDEN_TESTING_CMC_SKAT_2020_per_chr.sh PD_PARENT_CONTROL ALL_MISSENSE 0.005 2
-sbatch --cpus-per-task=15 --mem=50g --time=24:00:00 BURDEN_TESTING_CMC_SKAT_2020_per_chr.sh PD_PARENT_CONTROL ALL_MISSENSE 0.001 2
 
-sbatch --cpus-per-task=15 --mem=50g --time=24:00:00 BURDEN_TESTING_CMC_SKAT_2020_per_chr.sh PD_PARENT_CONTROL ALL_MISSENSE_and_LOF 0.05 2
-sbatch --cpus-per-task=15 --mem=50g --time=24:00:00 BURDEN_TESTING_CMC_SKAT_2020_per_chr.sh PD_PARENT_CONTROL ALL_MISSENSE_and_LOF 0.01 2
-sbatch --cpus-per-task=15 --mem=50g --time=24:00:00 BURDEN_TESTING_CMC_SKAT_2020_per_chr.sh PD_PARENT_CONTROL ALL_MISSENSE_and_LOF 0.005 2
-sbatch --cpus-per-task=15 --mem=50g --time=24:00:00 BURDEN_TESTING_CMC_SKAT_2020_per_chr.sh PD_PARENT_CONTROL ALL_MISSENSE_and_LOF 0.001 2
+sh BURDEN_TESTING_CMC_SKAT_2020.sh PD_CASE_CONTROL ALL_LOF 0.05
+
+wc -l ../PLINK_files/PD_CASE_CONTROL/UKB_EXOM_PD_CASE_CONTROL_ALL_LOF_chr9.vcf.gz
+# 971
+wc -l ../PLINK_files/PD_CASE_CONTROL/UKB_EXOM_PD_CASE_CONTROL_ALL_CADD_20_and_LOF_chr9.vcf.gz
+# 1062
+wc -l ../PLINK_files/PD_CASE_CONTROL/UKB_EXOM_PD_CASE_CONTROL_ALL_LOF_chr1.vcf.gz
+# 2065
+wc -l ../PLINK_files/PD_CASE_CONTROL/UKB_EXOM_PD_CASE_CONTROL_ALL_CADD_20_and_LOF_chr1.vcf.gz
+# 2131
 
 
 ```
@@ -738,19 +752,102 @@ do
 	cat CMC_header.txt temp.txt > ../PD_PARENT_CONTROL_"$line"_0.001.CMC.assoc
 done
 
-```
-# DOUBLE CHECK HERE
+## AD_CASE_CONTROL
+
+cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/BURDEN/RESULTS/AD_CASE_CONTROL
+
+cat ../variant_types.txt | while read line
+do 
+	head -1 ALL_MISSENSE_0.01_chr20.CMC.assoc > CMC_header.txt
+	head -1 ALL_MISSENSE_0.01_chr20.SkatO.assoc > SkatO_header.txt
+	# SKATO
+	cat "$line"_0.05_*.SkatO.assoc | sort -gk 8 | grep -v "Pvalue" > temp.txt
+	cat SkatO_header.txt temp.txt > ../AD_CASE_CONTROL_"$line"_0.05.SkatO.assoc
+	cat "$line"_0.01_*.SkatO.assoc | sort -gk 8 | grep -v "Pvalue" > temp.txt
+	cat SkatO_header.txt temp.txt > ../AD_CASE_CONTROL_"$line"_0.01.SkatO.assoc
+	cat "$line"_0.005_*.SkatO.assoc | sort -gk 8 | grep -v "Pvalue" > temp.txt
+	cat SkatO_header.txt temp.txt > ../AD_CASE_CONTROL_"$line"_0.005.SkatO.assoc
+	cat "$line"_0.001_*.SkatO.assoc | sort -gk 8 | grep -v "Pvalue" > temp.txt
+	cat SkatO_header.txt temp.txt > ../AD_CASE_CONTROL_"$line"_0.001.SkatO.assoc
+	# CMC
+	cat "$line"_0.05_*.CMC.assoc | sort -gk 7 | grep -v "Pvalue" > temp.txt
+	cat CMC_header.txt temp.txt > ../AD_CASE_CONTROL_"$line"_0.05.CMC.assoc
+	cat "$line"_0.01_*.CMC.assoc | sort -gk 7 | grep -v "Pvalue" > temp.txt
+	cat CMC_header.txt temp.txt > ../AD_CASE_CONTROL_"$line"_0.01.CMC.assoc
+	cat "$line"_0.005_*.CMC.assoc | sort -gk 7 | grep -v "Pvalue" > temp.txt
+	cat CMC_header.txt temp.txt > ../AD_CASE_CONTROL_"$line"_0.005.CMC.assoc
+	cat "$line"_0.001_*.CMC.assoc | sort -gk 7 | grep -v "Pvalue" > temp.txt
+	cat CMC_header.txt temp.txt > ../AD_CASE_CONTROL_"$line"_0.001.CMC.assoc
+done
+
+## AD_PARENT_CONTROL
+
+cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/BURDEN/RESULTS/AD_PARENT_CONTROL
+
+cat ../variant_types.txt | while read line
+do 
+	head -1 ALL_MISSENSE_0.01_chr20.CMC.assoc > CMC_header.txt
+	head -1 ALL_MISSENSE_0.01_chr20.SkatO.assoc > SkatO_header.txt
+	# SKATO
+	cat "$line"_0.05_*.SkatO.assoc | sort -gk 8 | grep -v "Pvalue" > temp.txt
+	cat SkatO_header.txt temp.txt > ../AD_PARENT_CONTROL_"$line"_0.05.SkatO.assoc
+	cat "$line"_0.01_*.SkatO.assoc | sort -gk 8 | grep -v "Pvalue" > temp.txt
+	cat SkatO_header.txt temp.txt > ../AD_PARENT_CONTROL_"$line"_0.01.SkatO.assoc
+	cat "$line"_0.005_*.SkatO.assoc | sort -gk 8 | grep -v "Pvalue" > temp.txt
+	cat SkatO_header.txt temp.txt > ../AD_PARENT_CONTROL_"$line"_0.005.SkatO.assoc
+	cat "$line"_0.001_*.SkatO.assoc | sort -gk 8 | grep -v "Pvalue" > temp.txt
+	cat SkatO_header.txt temp.txt > ../AD_PARENT_CONTROL_"$line"_0.001.SkatO.assoc
+	# CMC
+	cat "$line"_0.05_*.CMC.assoc | sort -gk 7 | grep -v "Pvalue" > temp.txt
+	cat CMC_header.txt temp.txt > ../AD_PARENT_CONTROL_"$line"_0.05.CMC.assoc
+	cat "$line"_0.01_*.CMC.assoc | sort -gk 7 | grep -v "Pvalue" > temp.txt
+	cat CMC_header.txt temp.txt > ../AD_PARENT_CONTROL_"$line"_0.01.CMC.assoc
+	cat "$line"_0.005_*.CMC.assoc | sort -gk 7 | grep -v "Pvalue" > temp.txt
+	cat CMC_header.txt temp.txt > ../AD_PARENT_CONTROL_"$line"_0.005.CMC.assoc
+	cat "$line"_0.001_*.CMC.assoc | sort -gk 7 | grep -v "Pvalue" > temp.txt
+	cat CMC_header.txt temp.txt > ../AD_PARENT_CONTROL_"$line"_0.001.CMC.assoc
+done
+
+
 
 ```
-# move files to results file
-mkdir RESULTS
-mv *.assoc RESULTS/
 
-40 files => 2 tests, 4 variant thresholds, 5 variant groups => 40
+```
+# investigate results file
+cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/BURDEN/RESULTS/
+ls | grep assoc | wc -l
+192 files
+4 groups x 4 freq levels x 2 tests x 6 variant groups => 192 !!! BOOM
+
+Small note though that chr 1 and 9 dont work for ALL_LOF and ALL_CADD_20_and_LOF for PD_CASE_CONTROL only (somehow?)
+
 ```
 
 
 ### Create cumulative frequency list for each group...
+
+```
+
+cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/PLINK_files/
+
+Using script => Cumulative_MAF_prep.sh
+
+sbatch --cpus-per-task=10 --mem=20g --time=24:00:00 Cumulative_MAF_prep.sh PD_CASE_CONTROL ALL_LOF 0.005
+
+Check => LAUNCH_Cumulative_MAF_prep.sh
+6 groups x 4 diseases x 4 frequency levels => 96!!
+
+# ALL_MISSENSE_and_LOF
+# ALL_CADD_20
+# ALL_CADD_10
+# ALL_LOF
+# ALL_MISSENSE
+# ALL_CADD_20_and_LOF
+
+# LAUNCH all
+sh LAUNCH_Cumulative_MAF_prep.sh
+
+```
 
 ```
 ----------------------------------
@@ -819,7 +916,7 @@ echo "bye bye"
 ```
 # prep annotation...
 # cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/annotation_of_plink_files/
-# cut -f 1-11,92 UKB_exomes_200K_chr*.hg38_multianno.withafreq.txt > SHORT_annotation.txt
+# cut -f 1-11,73 UKB_exomes_200K_v2_chr*.hg38_multianno.withafreq.txt > SHORT_annotation.txt
 
 # then merge in R and filter....
 ```
@@ -878,6 +975,8 @@ n
 
 ## note major downside here is that if annovar annotates the variants with this format: AMY1A;AMY1B;AMY1C then these variants do net get counted towards any of these three genes... Probably genome-wide not a real problem, but something worth double checking for genes of interest.
 ```
+
+# CONTINUE HERE...
 
 ```
 ## merge files with result files...
