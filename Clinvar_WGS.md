@@ -3,11 +3,12 @@
 Cornelis
 December 22 2020
 
-General idea:
+General idea: Checking if any ClinVar pathogenic variants associated with disease are enriched in PD vs Control
 
 
 
-### Step 1: Find variants and make final lists
+### Step 1: Find variants and make final lists....
+
 ```
 # search for pathogenic variants....
 
@@ -247,7 +248,8 @@ rvtest --noweb --hide-covar --out BURDEN/CLINVAR/GBA_TEST_ALL_likely_and_pathoge
 ----
 ```
 
-### Step 3: creating pathway files...
+### Step 3: creating pathway files....
+
 ```
 cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/
 
@@ -309,7 +311,8 @@ grep -v -w GBA DISGENET_full.txt | grep -v LRRK2 | cut -f 2,3 > DISGENET_disease
 ```
 
 
-### Step 4: # Start testing...
+### Step 4: Start testing....
+
 ```
 cd /data/CARD/PD/WGS/june2019/
 
@@ -355,8 +358,10 @@ cut -f 1,3,4,5,6,7 BURDEN/CLINVAR/ALL_likely_and_pathogenic_variants_full_DISGEN
 cut -f 1,3,4,5,6,7 BURDEN/CLINVAR/ALL_likely_and_pathogenic_variants_no_LRRK2_GBA_DISGENET_disease_file.CMC.assoc | grep -v nan | sort -gk 6 | head 
 
 # create final result files
-cut -f 1,3,4,5,6,7 BURDEN/CLINVAR/ALL_clinvar_variants_full_DISGENET_disease_file.CMC.assoc | grep -v nan | sort -gk 6 > BURDEN/CLINVAR/
-cut -f 1,3,4,5,6,7 BURDEN/CLINVAR/ALL_clinvar_variants_no_LRRK2_GBA_DISGENET_disease_file.CMC.assoc | grep -v nan | sort -gk 6 > BURDEN/CLINVAR/
-cut -f 1,3,4,5,6,7 BURDEN/CLINVAR/ALL_likely_and_pathogenic_variants_full_DISGENET_disease_file.CMC.assoc | grep -v nan | sort -gk 6 > BURDEN/CLINVAR/
-cut -f 1,3,4,5,6,7 BURDEN/CLINVAR/ALL_likely_and_pathogenic_variants_no_LRRK2_GBA_DISGENET_disease_file.CMC.assoc | grep -v nan | sort -gk 6 > BURDEN/CLINVAR/
+cut -f 1,3,4,5,6,7 BURDEN/CLINVAR/ALL_clinvar_variants_full_DISGENET_disease_file.CMC.assoc | grep -v nan | sort -gk 6 > BURDEN/CLINVAR/ALL_clinvar_variants_full_DISGENET_disease_file_filtered_sorted.txt
+cut -f 1,3,4,5,6,7 BURDEN/CLINVAR/ALL_clinvar_variants_no_LRRK2_GBA_DISGENET_disease_file.CMC.assoc | grep -v nan | sort -gk 6 > BURDEN/CLINVAR/ALL_clinvar_variants_no_LRRK2_GBA_DISGENET_disease_file_filtered_sorted.txt
+cut -f 1,3,4,5,6,7 BURDEN/CLINVAR/ALL_likely_and_pathogenic_variants_full_DISGENET_disease_file.CMC.assoc | grep -v nan | sort -gk 6 > BURDEN/CLINVAR/ALL_likely_and_pathogenic_variants_full_DISGENET_disease_file_filtered_sorted.txt
+cut -f 1,3,4,5,6,7 BURDEN/CLINVAR/ALL_likely_and_pathogenic_variants_no_LRRK2_GBA_DISGENET_disease_file.CMC.assoc | grep -v nan | sort -gk 6 > BURDEN/CLINVAR/ALL_likely_and_pathogenic_variants_no_LRRK2_GBA_DISGENET_disease_file_filtered_sorted.txt
 ```
+
+Done...
