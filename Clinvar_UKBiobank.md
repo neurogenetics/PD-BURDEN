@@ -336,7 +336,6 @@ DISGENET_disease_file.txt
 # Loaded 11116 set to tests
 
 module load rvtests # 2.1.0 
------ run these two...
 rvtest --noweb --hide-covar --out ../BURDEN/CLINVAR/ALL_clinvar_variants_full_DISGENET_disease_file --burden cmc \
 --inVcf CLINVAR/ALL_clinvar_variants.vcf.gz \
 --pheno ../BURDEN/UKB_EXOM_PD_PARENT_CONTROL_with_PC.txt --pheno-name PHENO \
@@ -348,7 +347,6 @@ rvtest --noweb --hide-covar --out ../BURDEN/CLINVAR/ALL_clinvar_variants_no_LRRK
 --pheno ../BURDEN/UKB_EXOM_PD_PARENT_CONTROL_with_PC.txt --pheno-name PHENO \
 --covar ../BURDEN/UKB_EXOM_PD_PARENT_CONTROL_with_PC.txt --freqUpper 0.05 --imputeCov \
 --covar-name GENETIC_SEX,AGE_OF_RECRUIT,TOWNSEND,PC1,PC2,PC3,PC4,PC5 --setFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/DISGENET/DISGENET_disease_file_no_LRRK2_GBA.txt 
-----
 
 rvtest --noweb --hide-covar --out ../BURDEN/CLINVAR/ALL_likely_and_pathogenic_variants_full_DISGENET_disease_file --burden cmc \
 --inVcf CLINVAR/ALL_likely_and_pathogenic_variants.vcf.gz \
@@ -363,16 +361,16 @@ rvtest --noweb --hide-covar --out ../BURDEN/CLINVAR/ALL_likely_and_pathogenic_va
 --covar-name GENETIC_SEX,AGE_OF_RECRUIT,TOWNSEND,PC1,PC2,PC3,PC4,PC5 --setFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/DISGENET/DISGENET_disease_file_no_LRRK2_GBA.txt 
 
 # inspect result files...
-cut -f 1,3,4,5,6,7 BURDEN/CLINVAR/ALL_clinvar_variants_full_DISGENET_disease_file.CMC.assoc | grep -v nan | sort -gk 6 | head 
-cut -f 1,3,4,5,6,7 BURDEN/CLINVAR/ALL_clinvar_variants_no_LRRK2_GBA_DISGENET_disease_file.CMC.assoc | grep -v nan | sort -gk 6 | head 
+cut -f 1,3,4,5,6,7 ../BURDEN/CLINVAR/ALL_clinvar_variants_full_DISGENET_disease_file.CMC.assoc | grep -v nan | sort -gk 6 | head 
+cut -f 1,3,4,5,6,7 ../BURDEN/CLINVAR/ALL_clinvar_variants_no_LRRK2_GBA_DISGENET_disease_file.CMC.assoc | grep -v nan | sort -gk 6 | head 
 cut -f 1,3,4,5,6,7 ../BURDEN/CLINVAR/ALL_likely_and_pathogenic_variants_full_DISGENET_disease_file.CMC.assoc | grep -v nan | sort -gk 6 | head 
 cut -f 1,3,4,5,6,7 ../BURDEN/CLINVAR/ALL_likely_and_pathogenic_variants_no_LRRK2_GBA_DISGENET_disease_file.CMC.assoc | grep -v nan | sort -gk 6 | head 
 
 # create final result files
-cut -f 1,3,4,5,6,7 BURDEN/CLINVAR/ALL_clinvar_variants_full_DISGENET_disease_file.CMC.assoc | grep -v nan | sort -gk 6 > BURDEN/CLINVAR/ALL_clinvar_variants_full_DISGENET_disease_file_filtered_sorted.txt
-cut -f 1,3,4,5,6,7 BURDEN/CLINVAR/ALL_clinvar_variants_no_LRRK2_GBA_DISGENET_disease_file.CMC.assoc | grep -v nan | sort -gk 6 > BURDEN/CLINVAR/ALL_clinvar_variants_no_LRRK2_GBA_DISGENET_disease_file_filtered_sorted.txt
-cut -f 1,3,4,5,6,7 BURDEN/CLINVAR/ALL_likely_and_pathogenic_variants_full_DISGENET_disease_file.CMC.assoc | grep -v nan | sort -gk 6 > BURDEN/CLINVAR/ALL_likely_and_pathogenic_variants_full_DISGENET_disease_file_filtered_sorted.txt
-cut -f 1,3,4,5,6,7 BURDEN/CLINVAR/ALL_likely_and_pathogenic_variants_no_LRRK2_GBA_DISGENET_disease_file.CMC.assoc | grep -v nan | sort -gk 6 > BURDEN/CLINVAR/ALL_likely_and_pathogenic_variants_no_LRRK2_GBA_DISGENET_disease_file_filtered_sorted.txt
+cut -f 1,3,4,5,6,7 ../BURDEN/CLINVAR/ALL_clinvar_variants_full_DISGENET_disease_file.CMC.assoc | grep -v nan | sort -gk 6 > ../BURDEN/CLINVAR/ALL_clinvar_variants_full_DISGENET_disease_file_filtered_sorted.txt
+cut -f 1,3,4,5,6,7 ../BURDEN/CLINVAR/ALL_clinvar_variants_no_LRRK2_GBA_DISGENET_disease_file.CMC.assoc | grep -v nan | sort -gk 6 > ../BURDEN/CLINVAR/ALL_clinvar_variants_no_LRRK2_GBA_DISGENET_disease_file_filtered_sorted.txt
+cut -f 1,3,4,5,6,7 ../BURDEN/CLINVAR/ALL_likely_and_pathogenic_variants_full_DISGENET_disease_file.CMC.assoc | grep -v nan | sort -gk 6 > ../BURDEN/CLINVAR/ALL_likely_and_pathogenic_variants_full_DISGENET_disease_file_filtered_sorted.txt
+cut -f 1,3,4,5,6,7 ../BURDEN/CLINVAR/ALL_likely_and_pathogenic_variants_no_LRRK2_GBA_DISGENET_disease_file.CMC.assoc | grep -v nan | sort -gk 6 > ../BURDEN/CLINVAR/ALL_likely_and_pathogenic_variants_no_LRRK2_GBA_DISGENET_disease_file_filtered_sorted.txt
 ```
 
 Done...
