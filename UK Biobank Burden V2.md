@@ -148,50 +148,63 @@ CONTROLSv2$PHENO <- "CONTROL"
 PD <- subset(PD_mergedv2, PHENO=="PD" & EUROPEAN==1)
 PARENT <- subset(PD_mergedv2, PHENO=="parent" & EUROPEAN==1)
 SIBLING <- subset(PD_mergedv2, PHENO=="sibling" & EUROPEAN==1)
-
-
-# 4
+set.seed(123458)
+RANDOM_order <- sample(1:3, size=95812, replace=TRUE, prob=c(.15,.76,.09))
+CONTROLSv3 <- cbind(CONTROLSv2, RANDOM_order)
+PD_control <- subset(CONTROLSv3, RANDOM_order==1)
+PARENT_control <- subset(CONTROLSv3, RANDOM_order==2)
+SIBLING_control <- subset(CONTROLSv3, RANDOM_order==3)
+PD_control$RANDOM_order <- NULL
+PARENT_control$RANDOM_order <- NULL
+SIBLING_control$RANDOM_order <- NULL
+# 1 all PD case
+PD_CONTROL <- rbind(PD,PD_control)
+# 2 all PD parent
+PARENT_CONTROL <- rbind(PARENT,PARENT_control)
+# 3 all PD sibling
+SIBLING_CONTROL <- rbind(SIBLING,SIBLING_control)
+# 4 something with PD
 ALL_PD_CONTROL <- rbind(PD_mergedv2,CONTROLSv2)
 ALL_PD_CONTROLv2 <- subset(ALL_PD_CONTROL, EUROPEAN==1)
-
-
-
-
 #### Merge with (filtered) exome data for relatedness...
 unrelateds <- read.table("/data/CARD/UKBIOBANK/EXOME_DATA_200K/genotype_data_of_exome_people/genotype_data_of_exome_people_N200469_no_cousins.fam", header=F)
 unrelateds <- unrelateds[,c(1,5)]
 names(unrelateds)[1] <- "eid"
 names(unrelateds)[2] <- "SEX"
-MM6 <- merge(MM5,unrelateds,by.x="FID",by.y="eid")
-# MM6 => 159253 
-# unrelateds => 158317 
+# merge
+PD_CONTROLv2 <- merge(PD_CONTROL,unrelateds,by.x="FID",by.y="eid")
+PARENT_CONTROLv2 <- merge(PARENT_CONTROL,unrelateds,by.x="FID",by.y="eid")
+SIBLING_CONTROLv2 <- merge(SIBLING_CONTROL,unrelateds,by.x="FID",by.y="eid")
+ALL_PD_CONTROLv2 <- merge(ALL_PD_CONTROL,unrelateds,by.x="FID",by.y="eid")
+# save
+write.table(PD_CONTROLv2, file="UKB_EXOM_PD_CASE_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(PARENT_CONTROLv2, file="UKB_EXOM_PARENT_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(SIBLING_CONTROLv2, file="UKB_EXOM_SIBLING_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(ALL_PD_CONTROLv2, file="UKB_EXOM_ALL_PD_CASE_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
+#### Merge with (filtered) genotype data for relatedness...
+unrelateds <- read.table("/data/CARD/UKBIOBANK/raw_genotypes_no_cousins/UKBB_raw_data_no_cousins.fam", header=F)
+unrelateds <- unrelateds[,c(1,5)]
+names(unrelateds)[1] <- "eid"
+names(unrelateds)[2] <- "SEX"
+# merge
+PD_CONTROLv2 <- merge(PD_CONTROL,unrelateds,by.x="FID",by.y="eid")
+PARENT_CONTROLv2 <- merge(PARENT_CONTROL,unrelateds,by.x="FID",by.y="eid")
+SIBLING_CONTROLv2 <- merge(SIBLING_CONTROL,unrelateds,by.x="FID",by.y="eid")
+ALL_PD_CONTROLv2 <- merge(ALL_PD_CONTROL,unrelateds,by.x="FID",by.y="eid")
+# save
+write.table(PD_CONTROLv2, file="UKB_GENO_PD_CASE_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(PARENT_CONTROLv2, file="UKB_GENO_PARENT_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(SIBLING_CONTROLv2, file="UKB_GENO_SIBLING_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(ALL_PD_CONTROLv2, file="UKB_GENO_ALL_PD_CASE_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
+```
 
-### start making final lists.... (POST EXOME FILTER)
-CONTROLS <- subset(MM6, EUROPEAN==1 & AGE_OF_RECRUIT >=60 & PD==0 & PD_parent==0 & AD_parent==0 & AD==0 & PDism==0)
-# 56311
-PD <- subset(MM6, EUROPEAN==1 & PD==1)
-# 633
-PDPARENT <- subset(MM6, EUROPEAN==1 & PD_parent==1 & PD==0 )
-# 6174
-AD <- subset(MM6, EUROPEAN==1 & AD==1)
-# 794
-ADPARENT <- subset(MM6, EUROPEAN==1 & AD==0 & AD_parent==1)
-# 22421
 
-#### now randomly assign controls...
-# PD first
-# PD, PDPARENT, CONTROLS
-# split controls 
-n <- 56311
-ind <- sample(c(TRUE, FALSE), n, replace=TRUE, prob=c(0.1, 0.9))
-control_for_PD <- CONTROLS[ind, ]
-# 5562
-control_for_PDparents <- CONTROLS[!ind, ]
-# 50749
-PD_CASE_CONTROL <- rbind(PD, control_for_PD)
-# 6195 <= 5562 + 633
-PD_PARENT_CONTROL <- rbind(PDPARENT, control_for_PDparents)
-# 56923 <= 50749 + 6174
+@@@@ NOW DO SAME FOR AD
+
+
+```
+
+
 write.table(PD_CASE_CONTROL, file="UKB_EXOM_PD_CASE_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
 write.table(PD_PARENT_CONTROL, file="UKB_EXOM_PD_PARENT_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
 
