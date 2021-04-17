@@ -134,6 +134,7 @@ remove <- read.csv("/data/CARD/UKBIOBANK/SAMPLES_WHO_WITHDRAWAL.csv",header=F)
 names(remove)[1] <- "FID"
 PD_mergedv2 <- anti_join(PD_merged, remove, by="FID")
 AD_mergedv2 <- anti_join(AD_merged, remove, by="FID")
+
 ### PD !! start making final lists.... 
 ------------------------------------
 CONTROLS <- read.table("/data/CARD/UKBIOBANK/ALL_NDD_FREE_CONTROLS_AGE60PLUS.txt",header=T)
@@ -196,37 +197,74 @@ write.table(PD_CONTROLv2, file="UKB_GENO_PD_CASE_CONTROL.txt", quote=FALSE,row.n
 write.table(PARENT_CONTROLv2, file="UKB_GENO_PARENT_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
 write.table(SIBLING_CONTROLv2, file="UKB_GENO_SIBLING_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
 write.table(ALL_PD_CONTROLv2, file="UKB_GENO_ALL_PD_CASE_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
-```
-
 
 @@@@ NOW DO SAME FOR AD
-
+### AD !! start making final lists.... 
+------------------------------------
+CONTROLS <- read.table("/data/CARD/UKBIOBANK/ALL_NDD_FREE_CONTROLS_AGE60PLUS.txt",header=T)
+CONTROLSv2 <- anti_join(CONTROLS, AD_mergedv2, by="FID")
+CONTROLSv2$PHENO <- "CONTROL"
+### NEED 4 lists + EUROPEAN==1
+# 1) all AD case (2342) vs control (N=14372, ratio -> 0.04)
+# 2) all AD parent (51303) vs control (N=72817, ratio -> 0.93)
+# 3) all AD sibling (1464) vs control (N=8623, ratio -> 0.03)
+# 4) something with AD (55109) vs control
+# total controls => 95695
+AD <- subset(AD_mergedv2, PHENO=="AD" & EUROPEAN==1)
+PARENT <- subset(AD_mergedv2, PHENO=="parent" & EUROPEAN==1)
+SIBLING <- subset(AD_mergedv2, PHENO=="sibling" & EUROPEAN==1)
+set.seed(123458)
+RANDOM_order <- sample(1:3, size=95695, replace=TRUE, prob=c(.04,.93,.03))
+CONTROLSv3 <- cbind(CONTROLSv2, RANDOM_order)
+AD_control <- subset(CONTROLSv3, RANDOM_order==1)
+PARENT_control <- subset(CONTROLSv3, RANDOM_order==2)
+SIBLING_control <- subset(CONTROLSv3, RANDOM_order==3)
+AD_control$RANDOM_order <- NULL
+PARENT_control$RANDOM_order <- NULL
+SIBLING_control$RANDOM_order <- NULL
+# 1 all AD case
+AD_CONTROL <- rbind(AD,AD_control)
+# 2 all PD parent
+PARENT_CONTROL <- rbind(PARENT,PARENT_control)
+# 3 all PD sibling
+SIBLING_CONTROL <- rbind(SIBLING,SIBLING_control)
+# 4 something with AD
+ALL_AD_CONTROL <- rbind(PD_mergedv2,CONTROLSv2)
+ALL_AD_CONTROLv2 <- subset(ALL_AD_CONTROL, EUROPEAN==1)
+#### Merge with (filtered) exome data for relatedness...
+unrelateds <- read.table("/data/CARD/UKBIOBANK/EXOME_DATA_200K/genotype_data_of_exome_people/genotype_data_of_exome_people_N200469_no_cousins.fam", header=F)
+unrelateds <- unrelateds[,c(1,5)]
+names(unrelateds)[1] <- "eid"
+names(unrelateds)[2] <- "SEX"
+# merge
+AD_CONTROLv2 <- merge(AD_CONTROL,unrelateds,by.x="FID",by.y="eid")
+PARENT_CONTROLv2 <- merge(PARENT_CONTROL,unrelateds,by.x="FID",by.y="eid")
+SIBLING_CONTROLv2 <- merge(SIBLING_CONTROL,unrelateds,by.x="FID",by.y="eid")
+ALL_AD_CONTROLv2 <- merge(ALL_AD_CONTROL,unrelateds,by.x="FID",by.y="eid")
+# save
+write.table(AD_CONTROLv2, file="UKB_EXOM_AD_CASE_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(PARENT_CONTROLv2, file="UKB_EXOM_AD_PARENT_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(SIBLING_CONTROLv2, file="UKB_EXOM_AD_SIBLING_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(ALL_AD_CONTROLv2, file="UKB_EXOM_ALL_AD_CASE_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
+#### Merge with (filtered) genotype data for relatedness...
+unrelateds <- read.table("/data/CARD/UKBIOBANK/raw_genotypes_no_cousins/UKBB_raw_data_no_cousins.fam", header=F)
+unrelateds <- unrelateds[,c(1,5)]
+names(unrelateds)[1] <- "eid"
+names(unrelateds)[2] <- "SEX"
+# merge
+AD_CONTROLv2 <- merge(AD_CONTROL,unrelateds,by.x="FID",by.y="eid")
+PARENT_CONTROLv2 <- merge(PARENT_CONTROL,unrelateds,by.x="FID",by.y="eid")
+SIBLING_CONTROLv2 <- merge(SIBLING_CONTROL,unrelateds,by.x="FID",by.y="eid")
+ALL_AD_CONTROLv2 <- merge(ALL_AD_CONTROL,unrelateds,by.x="FID",by.y="eid")
+# save
+write.table(AD_CONTROLv2, file="UKB_GENO_AD_CASE_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(PARENT_CONTROLv2, file="UKB_GENO_AD_PARENT_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(SIBLING_CONTROLv2, file="UKB_GENO_AD_SIBLING_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(ALL_AD_CONTROLv2, file="UKB_GENO_ALL_AD_CASE_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
 
 ```
 
 
-write.table(PD_CASE_CONTROL, file="UKB_EXOM_PD_CASE_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
-write.table(PD_PARENT_CONTROL, file="UKB_EXOM_PD_PARENT_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
-
-# then AD
-# AD, ADPARENT, CONTROLS
-# split controls 
-n <- 56311
-ind <- sample(c(TRUE, FALSE), n, replace=TRUE, prob=c(0.1, 0.9))
-control_for_AD <- CONTROLS[ind, ]
-# 5582
-control_for_ADparents <- CONTROLS[!ind, ]
-# 50729
-AD_CASE_CONTROL <- rbind(AD, control_for_AD)
-# 6376 <= 5562 + 794
-AD_PARENT_CONTROL <- rbind(ADPARENT, control_for_ADparents)
-# 73150 <= 50729 + 22421
-write.table(AD_CASE_CONTROL, file="UKB_EXOM_AD_CASE_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
-write.table(AD_PARENT_CONTROL, file="UKB_EXOM_AD_PARENT_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
-
-# DONE
-
-```
 
 - Make PC's from genotypes....
 
