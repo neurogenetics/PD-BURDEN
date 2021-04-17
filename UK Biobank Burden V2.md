@@ -73,53 +73,90 @@ cd /data/CARD/UKBIOBANK/PHENOTYPE_DATA/disease_groups/
 
 module load R
 R
+library(dplyr)
 cov <- read.table("../covariates_phenome_to_use.txt",header=T)
 # parkinson
-PD <- read.table("PD.txt",header=T)
-PD$PD <- 1
-PD <- PD[,c(1,5)]
+PD <- read.table("/data/CARD/UKBIOBANK/PHENOTYPE_DATA/disease_groups_NEW_2021/parkinson_disease.txt",header=T)
+PD$X131022.0.0 <- NULL 
+PD$X131023.0.0 <- NULL 
+PD$PHENO <- "PD"
 # PD parent
-PD_parent <- read.table("PD_parent_no_PD.txt",header=F)
-PD_parent$PD_parent <- 1
+PD_parent <- read.table("ALL_indi_with_PD_parent_UNIQUE.txt",header=F)
+PD_parent$PHENO <- "parent"
 names(PD_parent)[1] <- "eid"
 PD_parent$V2 <- NULL
+# PD sibling
+PD_sibling <- read.table("sibling_with_PD.txt",header=F)
+PD_sibling$PHENO <- "sibling"
+names(PD_sibling)[1] <- "eid"
+PD_sibling$V2 <- NULL
 # AD parent
-AD_parent <- read.table("ALL_indi_with_AD_parent.txt",header=F)
-AD_parent$AD_parent <- 1
+AD_parent <- read.table("ALL_indi_with_AD_parent_UNIQUE.txt",header=F)
+AD_parent$PHENO <- "parent"
 names(AD_parent)[1] <- "eid"
 AD_parent$V2 <- NULL
 # dementia
-Dementia <- read.table("Dementia.txt",header=T)
-Dementia$AD <- 1
-Dementia <- Dementia[,c(1,5)]
-# parkinsonism
-PD_ism <- read.table("Parkinsonism.txt",header=T)
-PD_ism$PDism <- 1
-PD_ism <- PD_ism[,c(1,5)]
-# merge all
-MM <- merge(cov,PD,by.x="FID",by.y="eid",all=TRUE)
-MM1 <- merge(MM,PD_parent,by.x="FID",by.y="eid",all=TRUE)
-MM2 <- merge(MM1,AD_parent,by.x="FID",by.y="eid",all=TRUE)
-MM3 <- merge(MM2,Dementia,by.x="FID",by.y="eid",all=TRUE)
-MM4 <- merge(MM3,PD_ism,by.x="FID",by.y="eid",all=TRUE)
-# remove samples no consent...
+Dementia <- read.table("/data/CARD/UKBIOBANK/PHENOTYPE_DATA/disease_groups_NEW_2021/alzheimer_disease.txt",header=T)
+Dementia$X131036.0.0 <- NULL 
+Dementia$X131037.0.0 <- NULL 
+Dementia$PHENO <- "AD"
+# AD sibling
+AD_sibling <- read.table("sibling_with_AD.txt",header=F)
+AD_sibling$PHENO <- "sibling"
+names(AD_sibling)[1] <- "eid"
+AD_sibling$V2 <- NULL
+#### remove potential duplicates for PD
+PD_parentv2 <- anti_join(PD_parent, PD, by="eid")
+PD_siblingv2 <- anti_join(PD_sibling, PD, by="eid")
+PD_siblingv3 <- anti_join(PD_siblingv2,PD_parentv2 , by="eid")
+#### remove potential duplicates for Dementia
+AD_parentv2 <- anti_join(AD_parent, Dementia, by="eid")
+AD_siblingv2 <- anti_join(AD_sibling, Dementia, by="eid")
+AD_siblingv3 <- anti_join(AD_siblingv2,AD_parentv2 , by="eid")
+#### merge all PD
+MM <- merge(cov,PD,by.x="FID",by.y="eid")
+MM1 <- merge(cov,PD_parentv2,by.x="FID",by.y="eid")
+MM2 <- merge(cov,PD_siblingv3,by.x="FID",by.y="eid")
+PD_merged <- rbind(MM, MM1, MM2)
+# check for duplicates...
+n_occur <- data.frame(table(PD_merged$FID))
+n_occur[n_occur$Freq > 1,] # good no duplicates
+#### merge all Dementia
+BB <- merge(cov,Dementia,by.x="FID",by.y="eid")
+BB1 <- merge(cov,AD_parentv2,by.x="FID",by.y="eid")
+BB2 <- merge(cov,AD_siblingv3,by.x="FID",by.y="eid")
+AD_merged <- rbind(BB, BB1, BB2)
+# check for duplicates...
+n_occur <- data.frame(table(AD_merged$FID))
+n_occur[n_occur$Freq > 1,] # good no duplicates
+#### remove samples no consent...
 remove <- read.csv("/data/CARD/UKBIOBANK/SAMPLES_WHO_WITHDRAWAL.csv",header=F)
 names(remove)[1] <- "FID"
-library(dplyr)
-MM5 <- anti_join(MM4, remove, by="FID",)
-# replace NA with 0
-MM5[is.na(MM5)] <- 0
-### start making final lists.... (PRE EXOME FILTER)
-CONTROLS <- subset(MM5, EUROPEAN==1 & AGE_OF_RECRUIT >=60 & PD==0 & PD_parent==0 & AD_parent==0 & AD==0 & PDism==0)
-# 148948
-PD <- subset(MM5, EUROPEAN==1 & PD==1)
-# 1735
-PDPARENT <- subset(MM5, EUROPEAN==1 & PD_parent==1 & PD==0 )
-# 15331
-AD <- subset(MM5, EUROPEAN==1 & AD==1)
-# 2227
-ADPARENT <- subset(MM5, EUROPEAN==1 & AD==0 & AD_parent==1)
-# 53460
+PD_mergedv2 <- anti_join(PD_merged, remove, by="FID")
+AD_mergedv2 <- anti_join(AD_merged, remove, by="FID")
+### PD !! start making final lists.... 
+------------------------------------
+CONTROLS <- read.table("/data/CARD/UKBIOBANK/ALL_NDD_FREE_CONTROLS_AGE60PLUS.txt",header=T)
+CONTROLSv2 <- anti_join(CONTROLS, PD_mergedv2, by="FID")
+CONTROLSv2$PHENO <- "CONTROL"
+### NEED 4 lists + EUROPEAN==1
+# 1) all PD case (2998) vs control (N=14372, ratio -> 0.15)
+# 2) all PD parent (15010) vs control (N=72817, ratio -> 0.76)
+# 3) all PD sibling (1669) vs control (N=8623, ratio -> 0.09)
+# 4) something with PD (19677) vs control
+# total controls => 95812
+PD <- subset(PD_mergedv2, PHENO=="PD" & EUROPEAN==1)
+PARENT <- subset(PD_mergedv2, PHENO=="parent" & EUROPEAN==1)
+SIBLING <- subset(PD_mergedv2, PHENO=="sibling" & EUROPEAN==1)
+
+
+# 4
+ALL_PD_CONTROL <- rbind(PD_mergedv2,CONTROLSv2)
+ALL_PD_CONTROLv2 <- subset(ALL_PD_CONTROL, EUROPEAN==1)
+
+
+
+
 #### Merge with (filtered) exome data for relatedness...
 unrelateds <- read.table("/data/CARD/UKBIOBANK/EXOME_DATA_200K/genotype_data_of_exome_people/genotype_data_of_exome_people_N200469_no_cousins.fam", header=F)
 unrelateds <- unrelateds[,c(1,5)]
