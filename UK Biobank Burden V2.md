@@ -1,7 +1,7 @@
 ## PD UK Biobank exome data burden testing
 
 ```
-November 2020
+April 2021
 Cornelis
 
 For more information on UK Biobank exome data please visit: 
@@ -64,7 +64,10 @@ plink --bfile genotype_data_of_exome_people_N200469 --keep GRM_matrix_0.125.grm.
 ```
 all cases
 all proxies => no cases
-using controls => no PD parent, no AD parent, no PD-ism, no dementia and over >60
+all sibling with disease => no cases and no proxies
+
+using controls => ALL_NDD_FREE_CONTROLS_AGE60PLUS.txt -> see https://github.com/neurogenetics/UK-Biobank-neuro-controls for more details
+
 
 cd /data/CARD/UKBIOBANK/PHENOTYPE_DATA/disease_groups/
 
