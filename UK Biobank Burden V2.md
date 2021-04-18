@@ -177,11 +177,46 @@ PD_CONTROLv2 <- merge(PD_CONTROL,unrelateds,by.x="FID",by.y="eid")
 PARENT_CONTROLv2 <- merge(PARENT_CONTROL,unrelateds,by.x="FID",by.y="eid")
 SIBLING_CONTROLv2 <- merge(SIBLING_CONTROL,unrelateds,by.x="FID",by.y="eid")
 ALL_PD_CONTROLv2 <- merge(ALL_PD_CONTROL,unrelateds,by.x="FID",by.y="eid")
+# add in exome covariate
+version1 <- read.table("/data/CARD/UKBIOBANK/EXOME_DATA/PLINK_files/ukb33601_efe_chr1_v1_s49959.fam",header=F)
+version2 <- read.table("/data/CARD/UKBIOBANK/EXOME_DATA_200K/PLINK_files/ukb23155_c1_b0_v1_s200632.fam",header=F)
+version1$EXOMEBATCH <- 1
+version2$EXOMEBATCH <- 2
+version1$V2 <- version1$V3 <- version1$V4 <- version1$V5 <- version1$V6 <- NULL
+version2$V2 <- version2$V3 <- version2$V4 <- version2$V5 <- version2$V6 <- NULL
+names(version1)[1] <- "FID"
+names(version2)[1] <- "FID"
+version2v2 <- anti_join(version2, version1, by="FID")
+exome_cov <- rbind(version1, version2v2)
+PD_CONTROLv3 <- merge(PD_CONTROLv2,exome_cov,by="FID")
+PARENT_CONTROLv3 <- merge(PARENT_CONTROLv2,exome_cov,by="FID")
+SIBLING_CONTROLv3 <- merge(SIBLING_CONTROLv2,exome_cov,by="FID")
+ALL_PD_CONTROLv3 <- merge(ALL_PD_CONTROLv2,exome_cov,by="FID")
+# update phenotype name
+PD_CONTROLv3$PHENO_NAME <- PD_CONTROLv3$PHENO
+PD_CONTROLv3$PHENO[PD_CONTROLv3$PHENO == "CONTROL"] <- 1
+PD_CONTROLv3$PHENO[PD_CONTROLv3$PHENO == "PD"] <- 2
+
+PARENT_CONTROLv3$PHENO_NAME <- PARENT_CONTROLv3$PHENO
+PARENT_CONTROLv3$PHENO[PARENT_CONTROLv3$PHENO == "CONTROL"] <- 1
+PARENT_CONTROLv3$PHENO[PARENT_CONTROLv3$PHENO == "parent"] <- 2
+
+SIBLING_CONTROLv3$PHENO_NAME <- SIBLING_CONTROLv3$PHENO
+SIBLING_CONTROLv3$PHENO[SIBLING_CONTROLv3$PHENO == "CONTROL"] <- 1
+SIBLING_CONTROLv3$PHENO[SIBLING_CONTROLv3$PHENO == "sibling"] <- 2
+
+ALL_PD_CONTROLv3$PHENO_NAME <- ALL_PD_CONTROLv3$PHENO
+ALL_PD_CONTROLv3$PHENO[ALL_PD_CONTROLv3$PHENO == "CONTROL"] <- 1
+ALL_PD_CONTROLv3$PHENO[ALL_PD_CONTROLv3$PHENO == "PD"] <- 2
+ALL_PD_CONTROLv3$PHENO[ALL_PD_CONTROLv3$PHENO == "sibling"] <- 2
+ALL_PD_CONTROLv3$PHENO[ALL_PD_CONTROLv3$PHENO == "parent"] <- 2
+
 # save
-write.table(PD_CONTROLv2, file="UKB_EXOM_PD_CASE_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
-write.table(PARENT_CONTROLv2, file="UKB_EXOM_PARENT_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
-write.table(SIBLING_CONTROLv2, file="UKB_EXOM_SIBLING_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
-write.table(ALL_PD_CONTROLv2, file="UKB_EXOM_ALL_PD_CASE_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(PD_CONTROLv3, file="UKB_EXOM_PD_CASE_CONTROL_2021.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(PARENT_CONTROLv3, file="UKB_EXOM_PD_PARENT_CONTROL_2021.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(SIBLING_CONTROLv3, file="UKB_EXOM_PD_SIBLING_CONTROL_2021.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(ALL_PD_CONTROLv3, file="UKB_EXOM_ALL_PD_PHENOTYPES_CONTROL_2021.txt", quote=FALSE,row.names=F,sep="\t")
+
 #### Merge with (filtered) genotype data for relatedness...
 unrelateds <- read.table("/data/CARD/UKBIOBANK/raw_genotypes_no_cousins/UKBB_raw_data_no_cousins.fam", header=F)
 unrelateds <- unrelateds[,c(1,5)]
@@ -192,11 +227,31 @@ PD_CONTROLv2 <- merge(PD_CONTROL,unrelateds,by.x="FID",by.y="eid")
 PARENT_CONTROLv2 <- merge(PARENT_CONTROL,unrelateds,by.x="FID",by.y="eid")
 SIBLING_CONTROLv2 <- merge(SIBLING_CONTROL,unrelateds,by.x="FID",by.y="eid")
 ALL_PD_CONTROLv2 <- merge(ALL_PD_CONTROL,unrelateds,by.x="FID",by.y="eid")
+
+# update phenotype name
+PD_CONTROLv2$PHENO_NAME <- PD_CONTROLv2$PHENO
+PD_CONTROLv2$PHENO[PD_CONTROLv2$PHENO == "CONTROL"] <- 1
+PD_CONTROLv2$PHENO[PD_CONTROLv2$PHENO == "PD"] <- 2
+
+PARENT_CONTROLv2$PHENO_NAME <- PARENT_CONTROLv2$PHENO
+PARENT_CONTROLv2$PHENO[PARENT_CONTROLv2$PHENO == "CONTROL"] <- 1
+PARENT_CONTROLv2$PHENO[PARENT_CONTROLv2$PHENO == "parent"] <- 2
+
+SIBLING_CONTROLv2$PHENO_NAME <- SIBLING_CONTROLv2$PHENO
+SIBLING_CONTROLv2$PHENO[SIBLING_CONTROLv2$PHENO == "CONTROL"] <- 1
+SIBLING_CONTROLv2$PHENO[SIBLING_CONTROLv2$PHENO == "sibling"] <- 2
+
+ALL_PD_CONTROLv2$PHENO_NAME <- ALL_PD_CONTROLv2$PHENO
+ALL_PD_CONTROLv2$PHENO[ALL_PD_CONTROLv2$PHENO == "CONTROL"] <- 1
+ALL_PD_CONTROLv2$PHENO[ALL_PD_CONTROLv2$PHENO == "PD"] <- 2
+ALL_PD_CONTROLv2$PHENO[ALL_PD_CONTROLv2$PHENO == "sibling"] <- 2
+ALL_PD_CONTROLv2$PHENO[ALL_PD_CONTROLv2$PHENO == "parent"] <- 2
+
 # save
-write.table(PD_CONTROLv2, file="UKB_GENO_PD_CASE_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
-write.table(PARENT_CONTROLv2, file="UKB_GENO_PARENT_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
-write.table(SIBLING_CONTROLv2, file="UKB_GENO_SIBLING_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
-write.table(ALL_PD_CONTROLv2, file="UKB_GENO_ALL_PD_CASE_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(PD_CONTROLv2, file="UKB_GENO_PD_CASE_CONTROL_2021.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(PARENT_CONTROLv2, file="UKB_GENO_PD_PARENT_CONTROL_2021.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(SIBLING_CONTROLv2, file="UKB_GENO_PD_SIBLING_CONTROL_2021.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(ALL_PD_CONTROLv2, file="UKB_GENO_ALL_PD_PHENOTYPES_CONTROL_2021.txt", quote=FALSE,row.names=F,sep="\t")
 
 @@@@ NOW DO SAME FOR AD
 ### AD !! start making final lists.... 
