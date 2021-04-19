@@ -296,11 +296,36 @@ AD_CONTROLv2 <- merge(AD_CONTROL,unrelateds,by.x="FID",by.y="eid")
 PARENT_CONTROLv2 <- merge(PARENT_CONTROL,unrelateds,by.x="FID",by.y="eid")
 SIBLING_CONTROLv2 <- merge(SIBLING_CONTROL,unrelateds,by.x="FID",by.y="eid")
 ALL_AD_CONTROLv2 <- merge(ALL_AD_CONTROL,unrelateds,by.x="FID",by.y="eid")
+
+# update phenotype name
+AD_CONTROLv2$PHENO_NAME <- AD_CONTROLv2$PHENO
+AD_CONTROLv2$PHENO[AD_CONTROLv2$PHENO == "CONTROL"] <- 1
+AD_CONTROLv2$PHENO[AD_CONTROLv2$PHENO == "PD"] <- 2
+
+PARENT_CONTROLv2$PHENO_NAME <- PARENT_CONTROLv2$PHENO
+PARENT_CONTROLv2$PHENO[PARENT_CONTROLv2$PHENO == "CONTROL"] <- 1
+PARENT_CONTROLv2$PHENO[PARENT_CONTROLv2$PHENO == "parent"] <- 2
+
+SIBLING_CONTROLv2$PHENO_NAME <- SIBLING_CONTROLv2$PHENO
+SIBLING_CONTROLv2$PHENO[SIBLING_CONTROLv2$PHENO == "CONTROL"] <- 1
+SIBLING_CONTROLv2$PHENO[SIBLING_CONTROLv2$PHENO == "sibling"] <- 2
+
+ALL_AD_CONTROLv2$PHENO_NAME <- ALL_AD_CONTROLv2$PHENO
+ALL_AD_CONTROLv2$PHENO[ALL_AD_CONTROLv2$PHENO == "CONTROL"] <- 1
+ALL_AD_CONTROLv2$PHENO[ALL_AD_CONTROLv2$PHENO == "PD"] <- 2
+ALL_AD_CONTROLv2$PHENO[ALL_AD_CONTROLv2$PHENO == "sibling"] <- 2
+ALL_AD_CONTROLv2$PHENO[ALL_AD_CONTROLv2$PHENO == "parent"] <- 2
+
 # save
-write.table(AD_CONTROLv2, file="UKB_EXOM_AD_CASE_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
-write.table(PARENT_CONTROLv2, file="UKB_EXOM_AD_PARENT_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
-write.table(SIBLING_CONTROLv2, file="UKB_EXOM_AD_SIBLING_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
-write.table(ALL_AD_CONTROLv2, file="UKB_EXOM_ALL_AD_CASE_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(AD_CONTROLv2, file="
+.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(PARENT_CONTROLv2, file="
+.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(SIBLING_CONTROLv2, file="
+.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(ALL_AD_CONTROLv2, file="
+.txt", quote=FALSE,row.names=F,sep="\t")
+
 #### Merge with (filtered) genotype data for relatedness...
 unrelateds <- read.table("/data/CARD/UKBIOBANK/raw_genotypes_no_cousins/UKBB_raw_data_no_cousins.fam", header=F)
 unrelateds <- unrelateds[,c(1,5)]
@@ -311,14 +336,33 @@ AD_CONTROLv2 <- merge(AD_CONTROL,unrelateds,by.x="FID",by.y="eid")
 PARENT_CONTROLv2 <- merge(PARENT_CONTROL,unrelateds,by.x="FID",by.y="eid")
 SIBLING_CONTROLv2 <- merge(SIBLING_CONTROL,unrelateds,by.x="FID",by.y="eid")
 ALL_AD_CONTROLv2 <- merge(ALL_AD_CONTROL,unrelateds,by.x="FID",by.y="eid")
+
+# update phenotype name
+AD_CONTROLv2$PHENO_NAME <- AD_CONTROLv2$PHENO
+AD_CONTROLv2$PHENO[AD_CONTROLv2$PHENO == "CONTROL"] <- 1
+AD_CONTROLv2$PHENO[AD_CONTROLv2$PHENO == "PD"] <- 2
+
+PARENT_CONTROLv2$PHENO_NAME <- PARENT_CONTROLv2$PHENO
+PARENT_CONTROLv2$PHENO[PARENT_CONTROLv2$PHENO == "CONTROL"] <- 1
+PARENT_CONTROLv2$PHENO[PARENT_CONTROLv2$PHENO == "parent"] <- 2
+
+SIBLING_CONTROLv2$PHENO_NAME <- SIBLING_CONTROLv2$PHENO
+SIBLING_CONTROLv2$PHENO[SIBLING_CONTROLv2$PHENO == "CONTROL"] <- 1
+SIBLING_CONTROLv2$PHENO[SIBLING_CONTROLv2$PHENO == "sibling"] <- 2
+
+ALL_AD_CONTROLv2$PHENO_NAME <- ALL_AD_CONTROLv2$PHENO
+ALL_AD_CONTROLv2$PHENO[ALL_AD_CONTROLv2$PHENO == "CONTROL"] <- 1
+ALL_AD_CONTROLv2$PHENO[ALL_AD_CONTROLv2$PHENO == "PD"] <- 2
+ALL_AD_CONTROLv2$PHENO[ALL_AD_CONTROLv2$PHENO == "sibling"] <- 2
+ALL_AD_CONTROLv2$PHENO[ALL_AD_CONTROLv2$PHENO == "parent"] <- 2
+
 # save
-write.table(AD_CONTROLv2, file="UKB_GENO_AD_CASE_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
-write.table(PARENT_CONTROLv2, file="UKB_GENO_AD_PARENT_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
-write.table(SIBLING_CONTROLv2, file="UKB_GENO_AD_SIBLING_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
-write.table(ALL_AD_CONTROLv2, file="UKB_GENO_ALL_AD_CASE_CONTROL.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(AD_CONTROLv2, file="UKB_GENO_AD_CASE_CONTROL_2021.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(PARENT_CONTROLv2, file="UKB_GENO_AD_PARENT_CONTROL_2021.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(SIBLING_CONTROLv2, file="UKB_GENO_AD_SIBLING_CONTROL_2021.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(ALL_AD_CONTROLv2, file="UKB_GENO_ALL_AD_CASE_CONTROL_2021.txt", quote=FALSE,row.names=F,sep="\t")
 
 ```
-
 
 
 - Make PC's from genotypes....
@@ -326,23 +370,45 @@ write.table(ALL_AD_CONTROLv2, file="UKB_GENO_ALL_AD_CASE_CONTROL.txt", quote=FAL
 ```
 /data/CARD/UKBIOBANK/PHENOTYPE_DATA/disease_groups
 
-UKB_EXOM_PD_CASE_CONTROL.txt
-UKB_EXOM_AD_PARENT_CONTROL.txt
-UKB_EXOM_AD_CASE_CONTROL.txt
-UKB_EXOM_PD_PARENT_CONTROL.txt
+### PD
+UKB_GENO_PD_CASE_CONTROL_2021.txt
+UKB_GENO_PD_PARENT_CONTROL_2021.txt
+UKB_GENO_PD_SIBLING_CONTROL_2021.txt
+UKB_GENO_ALL_PD_PHENOTYPES_CONTROL_2021.txt
+UKB_EXOM_PD_CASE_CONTROL_2021.txt
+UKB_EXOM_PD_PARENT_CONTROL_2021.txt
+UKB_EXOM_PD_SIBLING_CONTROL_2021.txt
+UKB_EXOM_ALL_PD_PHENOTYPES_CONTROL_2021.txt
 
+### AD
+UKB_GENO_AD_CASE_CONTROL_2021.txt
+UKB_GENO_AD_PARENT_CONTROL_2021.txt
+UKB_GENO_AD_SIBLING_CONTROL_2021.txt
+UKB_GENO_ALL_AD_CASE_CONTROL_2021.txt
+UKB_EXOM_AD_CASE_CONTROL_2021.txt
+UKB_EXOM_AD_PARENT_CONTROL_2021.txt
+UKB_EXOM_AD_SIBLING_CONTROL_2021.txt
+UKB_EXOM_ALL_AD_CASE_CONTROL_2021.txt
+
+#!/bin/sh
+# sbatch --cpus-per-task=20 --mem=200g --mail-type=BEGIN,END --time=24:00:00 make_PC_flash_biowulf_UKB_2021.sh
 module load flashpca
 module load plink
+# cd /data/CARD/UKBIOBANK/PHENOTYPE_DATA/disease_groups/
+# ls | grep UKB_ | grep 2021 > need_PC.txt
+cd /data/CARD/UKBIOBANK/raw_genotypes_no_cousins/
+cat /data/CARD/UKBIOBANK/PHENOTYPE_DATA/disease_groups/need_PC.txt  | while read line
+do 
+	plink --bfile UKBB_raw_data_no_cousins --memory 195000 \
+	--maf 0.05 --geno 0.01 --hwe 5e-6 --autosome --keep /data/CARD/UKBIOBANK/PHENOTYPE_DATA/disease_groups/"$line" \
+	--exclude /data/CARD/GENERAL/exclusion_regions_hg19.txt --make-bed --out FILENAME_2 
+	plink --bfile FILENAME_2 --indep-pairwise 1000 10 0.02 --autosome --out pruned_data --memory 195000
+	plink --bfile FILENAME_2 --extract pruned_data.prune.in --make-bed --out FILENAME_3 --memory 195000
+	flashpca --bfile FILENAME_3 --suffix _"$line" --numthreads 19
+	echo done with "$line"
+done
 
-cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/genotype_data_of_exome_people/
 
-plink --bfile genotype_data_of_exome_people_N200469_no_cousins \
---maf 0.05 --geno 0.01 --hwe 5e-6 --autosome \
---exclude /data/CARD/GENERAL/exclusion_regions_hg19.txt --make-bed --out FILENAME_2 \
---keep /data/CARD/UKBIOBANK/PHENOTYPE_DATA/disease_groups/UKB_EXOM_PD_CASE_CONTROL.txt
-plink --bfile FILENAME_2 --indep-pairwise 1000 10 0.02 --autosome --out pruned_data
-plink --bfile FILENAME_2 --extract pruned_data.prune.in --make-bed --out FILENAME_3 
-flashpca --bfile FILENAME_3 --suffix _UKB_EXOM_PD_CASE_CONTROL.txt --numthreads 19
 # for all 4 subsets...
 
 # merge with phenotype file
