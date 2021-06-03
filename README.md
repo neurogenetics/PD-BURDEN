@@ -10,15 +10,27 @@
 
 ---
 ### Quick Description: 
-Performing genome-wide burden testing in all exome/genome Parkinson's disease data of European ancestry available in AMP, UKB, and the NIH clinical center
+Performing genome-wide burden testing in all exome/genome Parkinson's disease data of European ancestry available in AMP, UKB, and the NIH clinical center. Release xx of the UKB and release v2.5 of AMP-PD were used for this analysis.
 
 ### Motivation/Goals:
 To perform case-control burden tests in large-scale PD cohorts to look at both known and candidate genes associated with each of the phenotypes in our cohort and 1) confirm the known genes 2) assess the burden associated with candidate genes.
 
-Analysis will be split as the following:
-1. PD cases vs controls + AAO (AMP+NIH and UKB separately)
-2. PD proxies (parents and siblings with PD) vs controls (UKB only)
-3. All PD cases and proxies vs controls (UKB only)
+Burden analysis will be split as the following:
+1. PD cases vs controls (AMP+NIH and UKB separately)
+	- PD cases vs controls in AMP+NIH data
+	- PD cases vs controls in UKB data
+	- Meta-analyze case-controls
+2. PD cases AAO vs controls (AMP+NIH and UKB separately)
+	- PD cases AAO vs controls in AMP+NIH data
+	- PD cases AAO vs controls in UKB data
+	- Meta-analyze AAO 
+3. PD proxies (parents and siblings with PD) vs controls (UKB only)
+4. All PD cases and proxies vs controls (UKB only)
+
+Follow-up Analysis:
+
+ 1. Enrichment Analysis
+ 2.  Pathway Analysis
 
 ### Background:
 There are a number of known genes implicated in Parkinson's disease (PD). Missense and loss-of-function mutations (defined as stop-gain, stop-loss, frameshift, and splicing variants) have been shown to cause autosomal dominant Parkinson's disease. **Gene burden tests are conducted to find the association of rare variants on a particular phenotype.** Generally, information is aggregated across several variant sites within a gene to calculate association signals and to reduce the penalty of multiple testing. Burden tests generate a burden score by taking a weighted linear combination of the mutations found within a gene or indicating whether there is any mutation within a gene. 
@@ -34,7 +46,7 @@ We have identified xx
 ### Link to Manuscript:
 
 ### Data 
-- PD WGS (Combination of AMP-PD data and internal LNG WGS data)
+- PD WGS (Combination of AMP-PD data and internal LNG/NIH WGS data)
 	- xx controls, xx cases 
 	- Controls defined as healthy control with no neurological disorders
 	- Cases defined as a positive PD case not in a genetic enrichment study, but includes prodromal or SWEDDs
