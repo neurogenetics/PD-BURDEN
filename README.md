@@ -16,9 +16,9 @@ Performing genome-wide burden testing in all exome/genome Parkinson's disease da
 To perform case-control burden tests in large-scale PD cohorts to look at both known and candidate genes associated with each of the phenotypes in our cohort and 1) confirm the known genes 2) assess the burden associated with candidate genes.
 
 Analysis will be split as the following:
-1. Positive PD cases vs controls
-2. Positive PD proxies (parents and siblings with PD) vs controls 
-3. All PD cases and proxies vs controls 
+1. PD cases vs controls + AAO (AMP+NIH and UKB separately)
+2. PD proxies (parents and siblings with PD) vs controls (UKB only)
+3. All PD cases and proxies vs controls (UKB only)
 
 ### Background:
 There are a number of known genes implicated in Parkinson's disease (PD). Missense and loss-of-function mutations (defined as stop-gain, stop-loss, frameshift, and splicing variants) have been shown to cause autosomal dominant Parkinson's disease. **Gene burden tests are conducted to find the association of rare variants on a particular phenotype.** Generally, information is aggregated across several variant sites within a gene to calculate association signals and to reduce the penalty of multiple testing. Burden tests generate a burden score by taking a weighted linear combination of the mutations found within a gene or indicating whether there is any mutation within a gene. 
