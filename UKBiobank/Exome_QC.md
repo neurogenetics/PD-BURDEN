@@ -12,6 +12,11 @@ unzip plink2_linux_avx2_20210420.zip
 
 ls | grep to_merge_combined_filtered | grep psam | sed -e 's/.psam//g' > MERGE_LIST.txt
 
+OR
+
+ls | grep to_merge_combined_filtered | grep psam | sed -e 's/.psam//g' | grep -v "X" | grep -v "Y" > MERGE_LIST_autosomes.txt
+
+
 ./plink2 --pmerge-list MERGE_LIST.txt --make-pgen --memory 99000 \
 --threads 10 --out MERGED_UKB_first_pass
 
@@ -20,6 +25,25 @@ ls | grep to_merge_combined_filtered | grep psam | sed -e 's/.psam//g' > MERGE_L
 
 ```
 #annotation
+
+grep -v "#" MERGED_UKB_first_pass.pvar | cut -f 1,2 > temp1
+grep -v "#" MERGED_UKB_first_pass.pvar | cut -f 2 > temp2
+grep -v "#" MERGED_UKB_first_pass.pvar | cut -f 3,7 > temp3
+grep -v "#" MERGED_UKB_first_pass.pvar | cut -f 4,5 > temp4
+paste temp1 temp2 temp4 temp3 > to_annotate_pass1.txt
+
+#!/bin/bash
+# sbatch --cpus-per-task=10 --mem=200g --time=24:00:00 annotate_UKB_plink2_format_June2021.sh
+
+module load annovar 
+table_annovar.pl to_annotate_pass1.txt $ANNOVAR_DATA/hg38 --thread 16 -buildver hg38 \
+-out TESTING -remove --otherinfo -polish -protocol refGene,avsnp150,clinvar_20200316 \
+-operation g,f,f -nastring . 
+
+
+---- below is old...
+
+
 
 # selecting one test sample to make annotation faster...
 echo 4250267 4250267 > textsample.txt
