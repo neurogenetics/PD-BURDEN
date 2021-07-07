@@ -61,30 +61,37 @@ Some discrapancies but overall looks good...
 ```
 #annotation
 
+-----------------
+
 #!/bin/bash
 # sbatch --cpus-per-task=10 --mem=10g --time=1:00:00 annotate_UKB_200K_vcf_annotation_July2021.sh ukb23156_c10_b15_v1
 # load packages
 module load samtools
 module load annovar
+module load bcftools/1.9
 # variables
 FILE=$1
 echo "this is"
 echo $FILE 
 # previously done
-# ls | grep ukb23156_ | grep _v1.vcf.gz | sed -e 's/.vcf.gz//g' > PVCF_TO_LOOP_OVER.txt
+# ls | grep ukb23156_ | grep _v1.vcf.gz > PVCF_TO_LOOP_OVER.txt
 # start here
 zcat "$FILE".vcf.gz | cut -f 1-12 | bgzip -c > "$FILE".for.anno.vcf.gz
 
+# for SNPs and 0.20 for indels.
+echo "split multiallelics, and get rid of bad variants"
+bcftools norm -m- "$FILE".for.anno.vcf.gz > filtered_"$FILE".for.anno.vcf
+bcftools annotate --set-id '%CHROM\_%POS\_%REF\_%ALT' filtered_"$FILE".for.anno.vcf > filtered_"$FILE".for.anno.names.vcf
+
 echo "starting annovar"
 
-tabix -p vcf "$FILE".for.anno.vcf.gz
-
-table_annovar.pl "$FILE".for.anno.vcf.gz $ANNOVAR_DATA/hg38 --thread 16 -buildver hg38 \
+table_annovar.pl filtered_"$FILE".for.anno.names.vcf $ANNOVAR_DATA/hg38 --thread 16 -buildver hg38 \
 -out VCF_annotation/"$FILE" -remove --otherinfo -polish -protocol refGene,avsnp150,clinvar_20200316 \
 -operation g,f,f -nastring . -vcfinput
 
 echo "done"
 
+-----------------
 
 ## to start massive loop
 
