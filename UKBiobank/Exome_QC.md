@@ -40,6 +40,15 @@ table_annovar.pl to_annotate_pass1.txt $ANNOVAR_DATA/hg38 --thread 16 -buildver 
 -out TESTING -remove --otherinfo -polish -protocol refGene,avsnp150,clinvar_20200316 \
 -operation g,f,f -nastring . 
 
+---- below is experimental...
+
+table_annovar.pl TESTING_VCFv2.vcf $ANNOVAR_DATA/hg38 --thread 16 -buildver hg38 \
+-out TESTING_VCF_INPUT -remove --otherinfo -polish -protocol refGene,avsnp150,clinvar_20200316 \
+-operation g,f,f -nastring . -vcfinput
+
+zless ukb23156_c1_b0_v1.vcf.gz | cut -f 1-12 > TESTING_VCF.vcf
+
+
 
 ---- below is old...
 
