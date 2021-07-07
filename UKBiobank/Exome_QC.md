@@ -93,6 +93,48 @@ do
    sbatch --cpus-per-task=10 --mem=10g --time=1:00:00 annotate_UKB_200K_vcf_annotation_July2021.sh $line
 done
    
+```
+
+```
+## merge annotation
+
+cd VCF_annotation/
+ls | wc -l
+2931
+# 2931 / 3 = 977 -> makes sense..
+
+cat ukb23156_c*v1.hg38_multianno.txt > MERGED_annotation.txt
+wc -l MERGED_annotation.txt
+# 17982874 MERGED_annotation.txt
+
+cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/
+# autosomes + X
+cat to_merge_combined_filtered_c*_b*.pvar | grep -v "#" | grep -v "Y" > MERGED_PLINK.txt
+grep -v "##" to_merge_combined_filtered_c19_b45.pvar | grep "#" > header_merged_plink.txt
+cat header_merged_plink.txt MERGED_PLINK.txt > MERGED_PLINK_with_header.txt
+sed -i -e 's/:/_/g' MERGED_PLINK_with_header.txt
+# Y only
+cat to_merge_combined_filtered_cY_b*.pvar | grep -v "#" > MERGED_PLINK_Y.txt
+grep -v "##" to_merge_combined_filtered_cY_b0.pvar | grep "#" > header_merged_plink_Y.txt
+cat header_merged_plink_Y.txt MERGED_PLINK_Y.txt > MERGED_PLINK_Y_with_header.txt
+sed -i -e 's/:/_/g' MERGED_PLINK_Y_with_header.txt
+
+cd VCF_annotation/
+
+module load R
+R
+require(data.table)
+anno <- fread("MERGED_annotation.txt",header=T)
+anno_Y <- fread("ukb23156_cY_b0_v1.hg38_multianno.txt",header=T)
+plink <- fread("../MERGED_PLINK_with_header.txt",header=T)
+plink_Y <- fread("../MERGED_PLINK_Y_with_header.txt",header=T)
+MM <- merge(plink,anno,by.x="ID",by.y="Otherinfo6")
+MM_Y <- merge(plink_Y,anno_Y,by.x="ID",by.y="Otherinfo6")
+write.table(MM, file="MERGED_annotation_added_pvar.txt",quote=F,row.names=F,sep="\t")
+write.table(MM_Y, file="MERGED_annotation_added_pvar_Y.txt",quote=F,row.names=F,sep="\t")
+
+
+MM_Y <- merge(plink_Y,anno_Y,by.x="ID",by.y="Otherinfo6",all.x=T)
 
 
 ```
