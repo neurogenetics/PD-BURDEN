@@ -146,3 +146,15 @@ write.table(MM_Y, file="MERGED_annotation_added_pvar_Y.txt",quote=F,row.names=F,
 Done for now...
 
 ```
+
+
+```
+Side-job for Derek...
+cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/VCF_annotation/
+grep PRKN MERGED_annotation.txt > PRKN_variants_Derek.txt > 
+head -1 MERGED_annotation.txt > header.txt
+cat header.txt PRKN_variants_Derek.txt > PRKN_variants_Derek_with_header.txt
+
+scp blauwendraatc@biowulf.nih.gov:///data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/VCF_annotation/PRKN_variants_Derek_with_header.txt /Users/blauwendraatc/Desktop/Phase1_INDI/ 
+```
+
