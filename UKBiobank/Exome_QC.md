@@ -156,5 +156,29 @@ head -1 MERGED_annotation.txt > header.txt
 cat header.txt PRKN_variants_Derek.txt > PRKN_variants_Derek_with_header.txt
 
 scp blauwendraatc@biowulf.nih.gov:///data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/VCF_annotation/PRKN_variants_Derek_with_header.txt /Users/blauwendraatc/Desktop/Phase1_INDI/ 
+
+scp /Users/blauwendraatc/Desktop/PRKN_variants_LOFORpathORVUSORconflicting.txt /Users/blauwendraatc/Desktop/PRKN_variants_AllNonsynMissense.txt blauwendraatc@biowulf.nih.gov:///data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES
+
+cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/
+
+sed -i -e 's/_/:/g' PRKN_variants_LOFORpathORVUSORconflicting.txt 
+sed -i -e 's/_/:/g' PRKN_variants_AllNonsynMissense.txt 
+
+./plink2 --pfile MERGED_UKB_first_pass --make-bed --out PRKN_variants_LOFORpathORVUSORconflicting --extract PRKN_variants_LOFORpathORVUSORconflicting.txt 
+
+./plink2 --pfile MERGED_UKB_first_pass --make-bed --out PRKN_variants_AllNonsynMissense --extract PRKN_variants_AllNonsynMissense.txt
+
+module load plink
+
+plink --bfile PRKN_variants_LOFORpathORVUSORconflicting --recodeA --out PRKN_variants_LOFORpathORVUSORconflicting
+
+plink --bfile PRKN_variants_AllNonsynMissense --recodeA --out PRKN_variants_AllNonsynMissense
+
+scp blauwendraatc@biowulf.nih.gov:///data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/*.raw /Users/blauwendraatc/Desktop/
+
+scp blauwendraatc@biowulf.nih.gov:/data/CARD/UKBIOBANK/PHENOTYPE_DATA/disease_groups_NEW_2021/PD_more_details/PD_April2021_with_covariates.txt /Users/blauwendraatc/Desktop/
+
+scp blauwendraatc@biowulf.nih.gov:/data/CARD/UKBIOBANK/PHENOTYPE_DATA/disease_groups/ALL_indi_with_PD_parent_UNIQUE.txt /Users/blauwendraatc/Desktop/
+
 ```
 
