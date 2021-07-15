@@ -407,8 +407,57 @@ do
 	flashpca --bfile FILENAME_3 --suffix _"$line" --numthreads 19
 	echo done with "$line"
 done
+```
 
+```
+# for the genotype files
+### Merge PCs with phenotype file to make final covariate files
+cd /data/CARD/UKBIOBANK/PHENOTYPE_DATA/disease_groups/
+module load R
+R
+# Import PCs
+GENO_ALL_PD_pcs <- read.table("/data/CARD/UKBIOBANK/raw_genotypes_no_cousins/pcs_UKB_GENO_ALL_PD_PHENOTYPES_CONTROL_2021.txt",header=T)
+GENO_PD_CASE_pcs <- read.table("/data/CARD/UKBIOBANK/raw_genotypes_no_cousins/pcs_UKB_GENO_PD_CASE_CONTROL_2021.txt",header=T)
+GENO_PD_PARENT_pcs <- read.table("/data/CARD/UKBIOBANK/raw_genotypes_no_cousins/pcs_UKB_GENO_PD_PARENT_CONTROL_2021.txt",header=T)
+GENO_PD_SIBLING_pcs <- read.table("/data/CARD/UKBIOBANK/raw_genotypes_no_cousins/pcs_UKB_GENO_PD_SIBLING_CONTROL_2021.txt",header=T)
 
+# Remove IID so not duplicated when merged
+GENO_ALL_PD_pcs$IID <- NULL
+GENO_PD_CASE_pcs$IID <- NULL
+GENO_PD_PARENT_pcs$IID <- NULL
+GENO_PD_SIBLING_pcs$IID <- NULL
+
+# Import other covariates
+GENO_ALL_PD_cov <- read.table("UKB_GENO_ALL_PD_PHENOTYPES_CONTROL_2021.txt",header=T)
+GENO_PD_CASE_cov <- read.table("UKB_GENO_PD_CASE_CONTROL_2021.txt",header=T)
+GENO_PD_PARENT_cov <- read.table("UKB_GENO_PD_PARENT_CONTROL_2021.txt",header=T)
+GENO_PD_SIBLING_cov <- read.table("UKB_GENO_PD_SIBLING_CONTROL_2021.txt",header=T)
+
+# Merge PCs with other covariates
+MM1 <- merge(GENO_ALL_PD_cov, GENO_ALL_PD_pcs, by="FID")
+MM2 <- merge(GENO_PD_CASE_cov, GENO_PD_CASE_pcs, by="FID")
+MM3 <- merge(GENO_PD_PARENT_cov, GENO_PD_PARENT_pcs, by="FID")
+MM4 <- merge(GENO_PD_SIBLING_cov, GENO_PD_SIBLING_pcs, by="FID")
+
+# Make sure no duplicates (there are none)
+MM11 <- MM1[!duplicated(MM1), ]
+MM22 <- MM2[!duplicated(MM2), ]
+MM33 <- MM3[!duplicated(MM3), ]
+MM44 <- MM4[!duplicated(MM4), ]
+
+# Check PHENO column
+unique(MM11$PHENO)
+# 1 2
+
+# Save
+write.table(MM11, file="UKB_GENO_ALL_PD_PHENOTYPES_CONTROL_with_PC.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(MM22, file="UKB_GENO_PD_CASE_CONTROL_with_PC.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(MM33, file="UKB_GENO_PD_PARENT_CONTROL_with_PC.txt", quote=FALSE,row.names=F,sep="\t")
+write.table(MM44, file="UKB_GENO_PD_SIBLING_CONTROL_with_PC.txt", quote=FALSE,row.names=F,sep="\t")
+q()
+n
+```
+```
 # for all 4 subsets...
 
 # merge with phenotype file
@@ -450,7 +499,6 @@ write.table(MM33, file="UKB_EXOM_PD_CASE_CONTROL_with_PC.txt", quote=FALSE,row.n
 write.table(MM44, file="UKB_EXOM_PD_PARENT_CONTROL_with_PC.txt", quote=FALSE,row.names=F,sep="\t")
 q()
 n
-
 ```
 
 ### Annotation
