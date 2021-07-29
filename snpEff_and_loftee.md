@@ -98,7 +98,7 @@ gerp_bigwig:${VEPCACHEDIR}/Plugins/loftee_GRCh38/gerp_conservation_scores.homo_s
 
 # See the summary html -> /data/CARD/PD/AMP_NIH/no_relateds/test_snpEff/subset_NIH_ONLY_forANNOVAR_chr22_summary.html
 
-# Filter for only 
+# Filter for only LoF=HC
 grep 'LoF=HC' subset_NIH_ONLY_forANNOVAR_chr22.loftee| uniq > refined.LoF.all
 grep 'LoF=HC' subset_NIH_ONLY_forANNOVAR_chr22.loftee|cut -f1 | uniq > refined.LoF.rsid
 
