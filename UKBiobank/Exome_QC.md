@@ -16,7 +16,7 @@ OR
 
 ls | grep to_merge_combined_filtered | grep psam | sed -e 's/.psam//g' | grep -v "X" | grep -v "Y" > MERGE_LIST_autosomes.txt
 
-./plink2 --pmerge-list MERGE_LIST.txt --make-pgen --memory 99000 \
+./plink2 --pmerge-list MERGE_LIST_autosomes.txt --make-pgen --memory 99000 \
 --threads 10 --out MERGED_UKB_first_pass
 
 AND
