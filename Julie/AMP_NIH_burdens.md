@@ -114,9 +114,9 @@ cd snpEff_loftee
 ### snpEff/snpSift
 
 - Biowulf documentation:  https://hpc.nih.gov/apps/snpEff.html
+- See here for all the fields you can extract: https://pcingola.github.io/SnpEff/ss_extractfields/
 
 ```
-# See here for all the fields you can extract: https://pcingola.github.io/SnpEff/ss_extractfields/
 echo "CHROM
 POS
 ID
@@ -625,7 +625,8 @@ rvtest --noweb --hide-covar --out ${OUTNAME}_freqUpper${MAF} --burden cmc --kern
 --freqUpper $MAF \
 --covar-name SEX,AGE_ANALYSIS,PC1,PC2,PC3,PC4,PC5 \
 --geneFile refFlat_HG38_all_chr.txt
-
+```
+```
 ## Analyze results
 
 ls AMP*SkatO.assoc | wc -l
@@ -739,7 +740,8 @@ rvtest --noweb --hide-covar --out ${OUTNAME}_freqUpper${MAF} --burden cmc --kern
 --freqUpper $MAF \
 --covar-name SEX,AGE_ANALYSIS,PC1,PC2,PC3,PC4,PC5 \
 --geneFile /data/CARD/PD/AMP_NIH/no_relateds/burden_annovar/refFlat_HG38_all_chr.txt
-
+```
+```
 ## Analyze results
 
 ls AMP*SkatO.assoc | wc -l
