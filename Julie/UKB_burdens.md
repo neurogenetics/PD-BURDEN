@@ -503,10 +503,10 @@ rvtest --noweb --hide-covar --out GBA --burden cmc --kernel skato \
 --pheno-name PHENO \
 --covar reformatted_UKB_EXOM_PD_CASE_CONTROL_2021_with_PC.txt \
 --freqUpper 0.05 \
---covar-name SEX,AGE_OF_RECRUIT,TOWNSEND,PC1,PC2,PC3,PC4,PC5 \
+--covar-name SEX,TOWNSEND,PC1,PC2,PC3,PC4,PC5 \
 --geneFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/refFlat_HG38_chr1.txt --gene GBA
-# CMC: 2.29815e-08
-# SKATO: 7.01163e-08
+# CMC: .17592e-09
+# SKATO: 5.58925e-08
 
 # LRRK2
 rvtest --noweb --hide-covar --out LRRK2 --burden cmc --kernel skato \
@@ -515,10 +515,11 @@ rvtest --noweb --hide-covar --out LRRK2 --burden cmc --kernel skato \
 --pheno-name PHENO \
 --covar reformatted_UKB_EXOM_PD_CASE_CONTROL_2021_with_PC.txt \
 --freqUpper 0.01 \
---covar-name SEX,AGE_OF_RECRUIT,TOWNSEND,PC1,PC2,PC3,PC4,PC5 \
+--covar-name SEX,TOWNSEND,PC1,PC2,PC3,PC4,PC5 \
 --geneFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/refFlat_HG38_chr12.txt --gene LRRK2
-# CMC: 0.237723
-# SKATO: 0.414194
+# CMC: 0.194985
+# SKATO: 0.337583
+
 ```
 
 *[Will add the sanity checks for AAO later]*
@@ -530,7 +531,7 @@ cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/burden_annova
 # Use the new covariate files with the phenotype column at the end, otherwise RVTESTS will fail
 ls reformatted_UKB* | while read line
 do
->     wc -l $line
+    wc -l $line
 done
 # 45858 reformatted_UKB_EXOM_ALL_PD_PHENOTYPES_CONTROL_2021_with_PC.txt
 # 6749 reformatted_UKB_EXOM_PD_CASE_CONTROL_2021_with_PC.txt
@@ -545,37 +546,36 @@ wc -l vcf_files_for_annovar_burden.txt
 
 cat vcf_files_for_annovar_burden.txt | grep SIBLING | while read line
 do
-    sbatch --cpus-per-task=2 --mem=1g --mail-type=FAIL --time=1:00:00 run_burden_annovar.sh $line 0.05
-    sbatch --cpus-per-task=2 --mem=1g --mail-type=FAIL --time=1:00:00 run_burden_annovar.sh $line 0.01
-    sbatch --cpus-per-task=2 --mem=1g --mail-type=FAIL --time=1:00:00 run_burden_annovar.sh $line 0.005
-    sbatch --cpus-per-task=2 --mem=1g --mail-type=FAIL --time=1:00:00 run_burden_annovar.sh $line 0.001
+    sbatch --cpus-per-task=2 --mem=2g --mail-type=FAIL --time=1:00:00 run_burden_annovar.sh $line 0.05
+    sbatch --cpus-per-task=2 --mem=2g --mail-type=FAIL --time=1:00:00 run_burden_annovar.sh $line 0.01
+    sbatch --cpus-per-task=2 --mem=2g --mail-type=FAIL --time=1:00:00 run_burden_annovar.sh $line 0.005
+    sbatch --cpus-per-task=2 --mem=2g --mail-type=FAIL --time=1:00:00 run_burden_annovar.sh $line 0.001
 done
 
 cat vcf_files_for_annovar_burden.txt | grep CASE_CONTROL | while read line
 do
-    sbatch --cpus-per-task=2 --mem=1g --mail-type=FAIL --time=1:00:00 run_burden_annovar.sh $line 0.05
-    sbatch --cpus-per-task=2 --mem=1g --mail-type=FAIL --time=1:00:00 run_burden_annovar.sh $line 0.01
-    sbatch --cpus-per-task=2 --mem=1g --mail-type=FAIL --time=1:00:00 run_burden_annovar.sh $line 0.005
-    sbatch --cpus-per-task=2 --mem=1g --mail-type=FAIL --time=1:00:00 run_burden_annovar.sh $line 0.001
+    sbatch --cpus-per-task=2 --mem=3g --mail-type=FAIL --time=2:00:00 run_burden_annovar.sh $line 0.05
+    sbatch --cpus-per-task=2 --mem=3g --mail-type=FAIL --time=2:00:00 run_burden_annovar.sh $line 0.01
+    sbatch --cpus-per-task=2 --mem=3g --mail-type=FAIL --time=2:00:00 run_burden_annovar.sh $line 0.005
+    sbatch --cpus-per-task=2 --mem=3g --mail-type=FAIL --time=2:00:00 run_burden_annovar.sh $line 0.001
 done
 
 cat vcf_files_for_annovar_burden.txt | grep PARENT | while read line
 do
-    sbatch --cpus-per-task=2 --mem=8g --mail-type=FAIL --time=6:00:00 run_burden_annovar.sh $line 0.05
-    sbatch --cpus-per-task=2 --mem=8g --mail-type=FAIL --time=6:00:00 run_burden_annovar.sh $line 0.01
-    sbatch --cpus-per-task=2 --mem=8g --mail-type=FAIL --time=6:00:00 run_burden_annovar.sh $line 0.005
-    sbatch --cpus-per-task=2 --mem=8g --mail-type=FAIL --time=6:00:00 run_burden_annovar.sh $line 0.001
+    sbatch --cpus-per-task=2 --mem=12g --mail-type=FAIL --time=12:00:00 run_burden_annovar.sh $line 0.05
+    sbatch --cpus-per-task=2 --mem=12g --mail-type=FAIL --time=12:00:00 run_burden_annovar.sh $line 0.01
+    sbatch --cpus-per-task=2 --mem=12g --mail-type=FAIL --time=12:00:00 run_burden_annovar.sh $line 0.005
+    sbatch --cpus-per-task=2 --mem=12g --mail-type=FAIL --time=12:00:00 run_burden_annovar.sh $line 0.001
 done
 
 cat vcf_files_for_annovar_burden.txt | grep ALL_PD_PHENOTYPES | while read line
 do
-    sbatch --cpus-per-task=2 --mem=9g --mail-type=FAIL --time=10:00:00 run_burden_annovar.sh $line 0.05
-    sbatch --cpus-per-task=2 --mem=9g --mail-type=FAIL --time=10:00:00 run_burden_annovar.sh $line 0.01
-    sbatch --cpus-per-task=2 --mem=9g --mail-type=FAIL --time=10:00:00 run_burden_annovar.sh $line 0.005
-    sbatch --cpus-per-task=2 --mem=9g --mail-type=FAIL --time=10:00:00 run_burden_annovar.sh $line 0.001
+    sbatch --cpus-per-task=2 --mem=16g --mail-type=FAIL --time=24:00:00 run_burden_annovar.sh $line 0.05
+    sbatch --cpus-per-task=2 --mem=16g --mail-type=FAIL --time=24:00:00 run_burden_annovar.sh $line 0.01
+    sbatch --cpus-per-task=2 --mem=16g --mail-type=FAIL --time=24:00:00 run_burden_annovar.sh $line 0.005
+    sbatch --cpus-per-task=2 --mem=16g --mail-type=FAIL --time=24:00:00 run_burden_annovar.sh $line 0.001
 done
 
-# for cases and sibs
 ls UKB*SkatO.assoc | wc -l
 # 2208
 # 552 * 4 = 2,208 
@@ -593,20 +593,274 @@ rvtest --noweb --hide-covar --out ${OUTNAME}_freqUpper${MAF} --burden cmc --kern
 --pheno-name PHENO \
 --covar ${COV_NAME} \
 --freqUpper $MAF \
---covar-name SEX,TOWNSEND,AGE_OF_RECRUIT,PC1,PC2,PC3,PC4,PC5 \
+--covar-name SEX,TOWNSEND,PC1,PC2,PC3,PC4,PC5 \
 --geneFile /data/CARD/PD/AMP_NIH/no_relateds/burden_annovar/refFlat_HG38_all_chr.txt
 ```
-```
-## Analyze results
 
-# See if any files are empty, meaning failed
+### Troubleshoot the gene that is "stuck"
+
+Problem: RVTESTS sometimes fails to move past a gene that should be skipped, causing the burden to run indefinitely
+
+Solution: Loop through each gene for the burdnes that failed to isolate the genes that should have been skipped
+
+The corresponding burden commands that failed are: 
+- sh run_burden_annovar.sh UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5.vcf.gz 0.001
+- sh run_burden_annovar.sh UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5.vcf.gz 0.05
+- sh run_burden_annovar.sh UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5.vcf.gz 0.005
+- sh run_burden_annovar.sh UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5.vcf.gz 0.01
+
+```
+## Confirm these are the only burdens that failed
+
+# See if any files are empty
 ls -p | while read line
 do
      [ -s $line ] || echo $line "is empty"
 done
-# none
 
-***[ Note: add here the significant genes once finished ]***
+# UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper0.001.CMC.assoc is empty
+# UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper0.001.SkatO.assoc is empty
+# UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper0.005.CMC.assoc is empty
+# UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper0.005.SkatO.assoc is empty
+# UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper0.01.CMC.assoc is empty
+# UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper0.01.SkatO.assoc is empty
+# UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper0.05.CMC.assoc is empty
+# UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper0.05.SkatO.assoc is empty
+```
+
+### Gene loop for chromosome 5
+
+Condition we need to run per gene:
+- Chromosome 5
+- MAF cutoffs 0.05, 0.01, 0.005, 0.001
+- UKB case-control 
+- Annovar all CADD > 20
+  
+```
+cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis
+mkdir gene_loop_chr5
+cd gene_loop_chr5
+
+cut -f1 /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/refFlat_HG38_chr5.txt | sort -u > chr5_gene_list.txt
+
+wc -l chr5_gene_list.txt
+# 1314
+
+## Split up the gene list into 2 so that the swarm is only grouped by gene and can therefore identify failed genes (max is 1000 subjobs)
+head -n 657 chr5_gene_list.txt > chr5_gene_list_part1.txt
+tail -n 657 chr5_gene_list.txt > chr5_gene_list_part2.txt
+
+wc -l chr5_gene_list_part1.txt
+# 657
+wc -l chr5_gene_list_part2.txt
+# 657
+
+cat chr5_gene_list_part1.txt| while read GENE
+do
+    echo "sh run_burden_by_gene.sh $GENE 0.05" >> burden_by_gene_part1.swarm
+    echo "sh run_burden_by_gene.sh $GENE 0.01" >> burden_by_gene_part1.swarm
+    echo "sh run_burden_by_gene.sh $GENE 0.005" >> burden_by_gene_part1.swarm
+    echo "sh run_burden_by_gene.sh $GENE 0.001" >> burden_by_gene_part1.swarm
+done
+
+cat chr5_gene_list_part2.txt| while read GENE
+do
+    echo "sh run_burden_by_gene.sh $GENE 0.05" >> burden_by_gene_part2.swarm
+    echo "sh run_burden_by_gene.sh $GENE 0.01" >> burden_by_gene_part2.swarm
+    echo "sh run_burden_by_gene.sh $GENE 0.005" >> burden_by_gene_part2.swarm
+    echo "sh run_burden_by_gene.sh $GENE 0.001" >> burden_by_gene_part2.swarm
+done
+
+wc -l burden_by_gene_part1.swarm 
+# 2628
+wc -l burden_by_gene_part2.swarm 
+# 2628
+
+swarm -f burden_by_gene_part1.swarm --verbose 1 --sbatch "--mail-type=FAIL" --module rvtests --bundle 4
+# 2628 commands run in 657 subjobs, each command requiring 1.5 gb and 1 thread, running 4 processes serially per subjob, allocating 657 cores and 1314 cpus
+# 22836805
+
+swarm -f burden_by_gene_part2.swarm --verbose 1 --sbatch "--mail-type=FAIL" --module rvtests --bundle 4
+# 2628 commands run in 657 subjobs, each command requiring 1.5 gb and 1 thread, running 4 processes serially per subjob, allocating 657 cores and 1314 cpus
+# 22836813
+
+# The only gene that failed --> 22836805_257 --> gene is FAM153A
+
+## Check the genes that got stuck previously
+# For example, LINC01574 and MIR4281
+
+cat *LINC01574*assoc
+Gene	RANGE	N_INFORMATIVE	NumVar	NumPolyVar	NonRefSite	Pvalue
+Gene	RANGE	N_INFORMATIVE	NumVar	NumPolyVar	Q	rho	Pvalue
+Gene	RANGE	N_INFORMATIVE	NumVar	NumPolyVar	NonRefSite	Pvalue
+Gene	RANGE	N_INFORMATIVE	NumVar	NumPolyVar	Q	rho	Pvalue
+Gene	RANGE	N_INFORMATIVE	NumVar	NumPolyVar	NonRefSite	Pvalue
+Gene	RANGE	N_INFORMATIVE	NumVar	NumPolyVar	Q	rho	Pvalue
+Gene	RANGE	N_INFORMATIVE	NumVar	NumPolyVar	NonRefSite	Pvalue
+Gene	RANGE	N_INFORMATIVE	NumVar	NumPolyVar	Q	rho	Pvalue
+
+cat *MIR4281*assoc
+Gene	RANGE	N_INFORMATIVE	NumVar	NumPolyVar	NonRefSite	Pvalue
+Gene	RANGE	N_INFORMATIVE	NumVar	NumPolyVar	Q	rho	Pvalue
+Gene	RANGE	N_INFORMATIVE	NumVar	NumPolyVar	NonRefSite	Pvalue
+Gene	RANGE	N_INFORMATIVE	NumVar	NumPolyVar	Q	rho	Pvalue
+Gene	RANGE	N_INFORMATIVE	NumVar	NumPolyVar	NonRefSite	Pvalue
+Gene	RANGE	N_INFORMATIVE	NumVar	NumPolyVar	Q	rho	Pvalue
+Gene	RANGE	N_INFORMATIVE	NumVar	NumPolyVar	NonRefSite	Pvalue
+Gene	RANGE	N_INFORMATIVE	NumVar	NumPolyVar	Q	rho	Pvalue
+
+## Double check all genes are completed except FAM153A 
+cat chr5_gene_list.txt | while read GENE
+do
+    [ -s UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper0.05_${GENE}.log ] || echo $GENE "is empty"
+    [ -s UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper0.01_${GENE}.log ] || echo $GENE "is empty"
+    [ -s UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper0.005_${GENE}.log ] || echo $GENE "is empty"
+    [ -s UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper0.001_${GENE}.log ] || echo $GENE "is empty"
+done
+
+# FAM153A is empty
+# FAM153A is empty
+# FAM153A is empty
+
+ls UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper*.log | wc -l
+# 5253 (makes sense --> 2628 * 2 = 5256  - 3 for FAM153A)
+
+#!/bin/sh
+# sh run_burden_by_gene.sh LRRK2 0.05
+module load rvtests
+GENE=$1
+MAF=$2
+rvtest --noweb --hide-covar --out UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper${MAF}_${GENE} --burden cmc --kernel skato \
+--inVcf /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/subset_genetic_data_annovar/UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5.vcf.gz \
+--pheno /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/burden_annovar/reformatted_UKB_EXOM_PD_CASE_CONTROL_2021_with_PC.txt \
+--pheno-name PHENO \
+--covar /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/burden_annovar/reformatted_UKB_EXOM_PD_CASE_CONTROL_2021_with_PC.txt \
+--freqUpper $MAF \
+--covar-name SEX,TOWNSEND,PC1,PC2,PC3,PC4,PC5 \
+--geneFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/refFlat_HG38_chr5.txt --gene $GENE
+```
+
+### Reformat results
+```
+## Combine the chromosome 5 results per gene
+
+cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/gene_loop_chr5
+
+head -1 UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper0.05_ZSWIM6.SkatO.assoc > skat_header.txt
+head -1 UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper0.05_ZSWIM6.CMC.assoc  > cmc_header.txt
+
+## Combine genes
+cat UKB*freqUpper0.05*SkatO.assoc | grep -v N_INFORMATIVE > temp
+cat skat_header.txt temp > UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper0.05.SkatO.assoc
+cat UKB*freqUpper0.01*SkatO.assoc | grep -v N_INFORMATIVE > temp
+cat skat_header.txt temp > UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper0.01.SkatO.assoc
+cat UKB*freqUpper0.005*SkatO.assoc | grep -v N_INFORMATIVE > temp
+cat skat_header.txt temp > UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper0.005.SkatO.assoc
+cat UKB*freqUpper0.001*SkatO.assoc | grep -v N_INFORMATIVE > temp
+cat skat_header.txt temp > UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper0.001.SkatO.assoc
+
+cat UKB*freqUpper0.05*CMC.assoc | grep -v N_INFORMATIVE > temp
+cat cmc_header.txt temp > UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper0.05.CMC.assoc
+cat UKB*freqUpper0.01*CMC.assoc | grep -v N_INFORMATIVE > temp
+cat cmc_header.txt temp > UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper0.01.CMC.assoc
+cat UKB*freqUpper0.005*CMC.assoc | grep -v N_INFORMATIVE > temp
+cat cmc_header.txt temp > UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper0.005.CMC.assoc
+cat UKB*freqUpper0.001*CMC.assoc | grep -v N_INFORMATIVE > temp
+cat cmc_header.txt temp > UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper0.001.CMC.assoc
+
+## Move to the directory with the other burden results
+ls UKB_EXOM_PD_CASE_CONTROL_2021_ALL_CADD_20.chr5_freqUpper{0.05,0.01,0.005,0.001}.{SkatO,CMC}.assoc | while read line
+do
+    cp $line /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/burden_annovar/
+done
+
+## Now check that nothing is empty in the final burdens directory
+cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/burden_annovar
+ls -p | while read line
+do
+     [ -s $line ] || echo $line "is empty"
+done
+# none :)
+```
+```
+## Combine chromosomes for meta-analysis
+
+cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis
+mkdir meta_prep_annovar
+cd meta_prep_annovar
+
+ls /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/burden_annovar/UKB*SkatO.assoc | sed 's/.chr.*//g' | sort -u | sed 's@.*/@@' > file_prefixes_annovar.txt
+
+wc -l file_prefixes_annovar.txt
+# 24 (makes sense, 6 categories x 4 phenotypes)
+
+head -1 /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/burden_annovar/UKB_EXOM_PD_SIBLING_CONTROL_2021_ALL_MISSENSE.chr5_freqUpper0.05.SkatO.assoc > header_SkatO.txt
+head -1 /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/burden_annovar/UKB_EXOM_PD_SIBLING_CONTROL_2021_ALL_MISSENSE.chr5_freqUpper0.05.CMC.assoc > header_CMC.txt
+
+cat file_prefixes_annovar.txt | while read line
+do
+     for type in "SkatO" "CMC";
+     do
+          cat /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/burden_annovar/${line}.chr{1..23}_freqUpper0.05.${type}.assoc | grep -v N_INFORMATIVE > temp
+          cat header_${type}.txt temp > ${line}.freqUpper0.05.${type}.assoc
+          cat /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/burden_annovar/${line}.chr{1..23}_freqUpper0.01.${type}.assoc | grep -v N_INFORMATIVE > temp
+          cat header_${type}.txt temp > ${line}.freqUpper0.01.${type}.assoc
+          cat /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/burden_annovar/${line}.chr{1..23}_freqUpper0.005.${type}.assoc | grep -v N_INFORMATIVE > temp
+          cat header_${type}.txt temp > ${line}.freqUpper0.005.${type}.assoc
+          cat /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/burden_annovar/${line}.chr{1..23}_freqUpper0.001.${type}.assoc | grep -v N_INFORMATIVE > temp
+          cat header_${type}.txt temp > ${line}.freqUpper0.001.${type}.assoc
+     done
+done
+```
+
+### Analyze results
+```
+cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/meta_prep_annovar
+
+ls UKB*SkatO.assoc | wc -l
+# 96 (makes sense, 6 variant categories x 4 maf categories x 4 phenotypes)
+
+ls UKB*SkatO.assoc | while read line
+do
+    sed "s/$/ $line/" $line >> all_SkatO.txt
+done
+
+awk '$8 < 5e-8'  all_SkatO.txt | cut -f1 | sort -u
+# AUNIP
+# GBA
+# HPS4
+
+awk '$8 < 1e-6'  all_SkatO.txt | cut -f1 | sort -u
+# ADH5
+# AUNIP
+# GBA
+# HPS4
+# KIF9
+# OR1G1
+# PDZRN4
+# SEPT5-GP1BB
+# ZNF454
+```
+```
+ls UKB*CMC.assoc | wc -l
+# 96
+
+ls UKB*CMC.assoc | while read line
+do
+    sed "s/$/ $line/" $line >> all_CMC.txt
+done
+
+awk '$7 < 5e-8' all_CMC.txt | cut -f1 | sort -u
+# GBA
+
+awk '$7 < 1e-6' all_CMC.txt | cut -f1 | sort -u
+# ADH5
+# GBA
+# KIF9
+# NOXO1
+# SEPT5-GP1BB
+# TREML1
+# ZNF454
 ```
 
 ### 5c. Run burden (AAO) [to be completed later]
@@ -630,10 +884,10 @@ rvtest --noweb --hide-covar --out GBA --burden cmc --kernel skato \
 --pheno-name PHENO \
 --covar /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/burden_annovar/reformatted_UKB_EXOM_PD_CASE_CONTROL_2021_with_PC.txt \
 --freqUpper 0.05 \
---covar-name SEX,AGE_OF_RECRUIT,TOWNSEND,PC1,PC2,PC3,PC4,PC5 \
+--covar-name SEX,TOWNSEND,PC1,PC2,PC3,PC4,PC5 \
 --geneFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/refFlat_HG38_chr1.txt --gene GBA
-# CMC: 2.12215e-08
-# SKATO: 1.28641e-08
+# CMC: 4.27527e-09
+# SKATO: 2.68661e-09
 
 # LRRK2
 rvtest --noweb --hide-covar --out LRRK2 --burden cmc --kernel skato \
@@ -642,17 +896,172 @@ rvtest --noweb --hide-covar --out LRRK2 --burden cmc --kernel skato \
 --pheno-name PHENO \
 --covar /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/burden_annovar/reformatted_UKB_EXOM_PD_CASE_CONTROL_2021_with_PC.txt \
 --freqUpper 0.01 \
---covar-name SEX,AGE_OF_RECRUIT,TOWNSEND,PC1,PC2,PC3,PC4,PC5 \
+--covar-name SEX,TOWNSEND,PC1,PC2,PC3,PC4,PC5 \
 --geneFile /data/CARD/UKBIOBANK/EXOME_DATA_200K/REFFLAT/refFlat_HG38_chr12.txt --gene LRRK2
-# CMC: 0.261744
-# SKATO: 0.419593
+# CMC: 0.218849
+# SKATO: 0.371834
 ```
 
 *[Will add the sanity checks for AAO later]*
 
 ### 6b. Run burden (risk)
+```
+cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/burden_snpeff_loftee
 
-[will add here once finished]
+# Expect 1104 input VCFs…
+12 variant categories x 4 phenotypes x 23 chromosomes = 1104
+
+ls /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/subset_genetic_data_snpeff_loftee/*vcf.gz | sed 's@.*/@@' > vcf_files_for_snpeff_loftee_burden.txt
+wc -l vcf_files_for_snpeff_loftee_burden.txt
+# 1104
+
+23 * 12 = 276 * 4 = 1,104 
+
+cat vcf_files_for_snpeff_loftee_burden.txt | grep SIBLING | while read line
+do
+    sbatch --cpus-per-task=2 --mem=2g --mail-type=FAIL --time=2:00:00 run_burden_snpeff_loftee.sh $line 0.05
+    sbatch --cpus-per-task=2 --mem=2g --mail-type=FAIL --time=2:00:00 run_burden_snpeff_loftee.sh $line 0.01
+    sbatch --cpus-per-task=2 --mem=2g --mail-type=FAIL --time=2:00:00 run_burden_snpeff_loftee.sh $line 0.005
+    sbatch --cpus-per-task=2 --mem=2g --mail-type=FAIL --time=2:00:00 run_burden_snpeff_loftee.sh $line 0.001
+done
+
+cat vcf_files_for_snpeff_loftee_burden.txt | grep CASE_CONTROL | while read line
+do
+    sbatch --cpus-per-task=2 --mem=4g --mail-type=FAIL --time=5:00:00 run_burden_snpeff_loftee.sh $line 0.05
+    sbatch --cpus-per-task=2 --mem=4g --mail-type=FAIL --time=5:00:00 run_burden_snpeff_loftee.sh $line 0.01
+    sbatch --cpus-per-task=2 --mem=4g --mail-type=FAIL --time=5:00:00 run_burden_snpeff_loftee.sh $line 0.005
+    sbatch --cpus-per-task=2 --mem=4g --mail-type=FAIL --time=5:00:00 run_burden_snpeff_loftee.sh $line 0.001
+done
+
+cat vcf_files_for_snpeff_loftee_burden.txt | grep PARENT | while read line
+do
+    sbatch --cpus-per-task=2 --mem=16g --mail-type=FAIL --time=24:00:00 run_burden_snpeff_loftee.sh $line 0.05
+    sbatch --cpus-per-task=2 --mem=16g --mail-type=FAIL --time=24:00:00 run_burden_snpeff_loftee.sh $line 0.01
+    sbatch --cpus-per-task=2 --mem=16g --mail-type=FAIL --time=24:00:00 run_burden_snpeff_loftee.sh $line 0.005
+    sbatch --cpus-per-task=2 --mem=16g --mail-type=FAIL --time=24:00:00 run_burden_snpeff_loftee.sh $line 0.001
+done
+
+cat vcf_files_for_snpeff_loftee_burden.txt | grep ALL_PD_PHENOTYPES | while read line
+do
+    sbatch --cpus-per-task=2 --mem=25g --mail-type=FAIL --time=24:00:00 run_burden_snpeff_loftee.sh $line 0.05
+    sbatch --cpus-per-task=2 --mem=25g --mail-type=FAIL --time=24:00:00 run_burden_snpeff_loftee.sh $line 0.01
+    sbatch --cpus-per-task=2 --mem=25g --mail-type=FAIL --time=24:00:00 run_burden_snpeff_loftee.sh $line 0.005
+    sbatch --cpus-per-task=2 --mem=25g --mail-type=FAIL --time=24:00:00 run_burden_snpeff_loftee.sh $line 0.001
+done
+
+#!/bin/sh
+# sh run_burden_snpeff_loftee.sh UKB_EXOM_ALL_PD_PHENOTYPES_CONTROL_2021_ALL_MISSENSE_and_LOF_SNPEFF.chr1.vcf.gz 0.05
+module load rvtests
+FILENAME=$1
+MAF=$2
+OUTNAME=${FILENAME/".vcf.gz"/""}
+COV_NAME=/data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/burden_annovar/reformatted_${FILENAME%_2021*}_2021_with_PC.txt
+rvtest --noweb --hide-covar --out ${OUTNAME}_freqUpper${MAF} --burden cmc --kernel skato \
+--inVcf /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/subset_genetic_data_snpeff_loftee/${FILENAME} \
+--pheno ${COV_NAME} \
+--pheno-name PHENO \
+--covar ${COV_NAME} \
+--freqUpper $MAF \
+--covar-name SEX,TOWNSEND,PC1,PC2,PC3,PC4,PC5 \
+--geneFile /data/CARD/PD/AMP_NIH/no_relateds/burden_annovar/refFlat_HG38_all_chr.txt
+```
+
+```
+## Confirm that none of the burdens failed
+
+ls -p | while read line
+do
+     [ -s $line ] || echo $line "is empty"
+done
+# none
+```
+
+### Reformat results
+```
+## Combine chromosomes for meta-analysis
+
+cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis
+mkdir meta_prep_snpeff_loftee
+cd meta_prep_snpeff_loftee
+
+ls /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/burden_snpeff_loftee/UKB*SkatO.assoc | sed 's/.chr.*//g' | sort -u | sed 's@.*/@@' > file_prefixes_snpeff.txt
+
+wc -l file_prefixes_snpeff.txt
+# 48 (makes sense, 12 categories x 4 phenotypes)
+
+head -1 /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/burden_snpeff_loftee/UKB_EXOM_PD_SIBLING_CONTROL_2021_ALL_HIGH_IMPACT_SNPEFF.chr5_freqUpper0.05.SkatO.assoc > header_SkatO.txt
+head -1 /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/burden_snpeff_loftee/UKB_EXOM_PD_SIBLING_CONTROL_2021_ALL_HIGH_IMPACT_SNPEFF.chr5_freqUpper0.05.CMC.assoc > header_CMC.txt
+
+cat file_prefixes_snpeff.txt | while read line
+do
+     for type in "SkatO" "CMC";
+     do
+          cat /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/burden_snpeff_loftee/${line}.chr{1..23}_freqUpper0.05.${type}.assoc | grep -v N_INFORMATIVE > temp
+          cat header_${type}.txt temp > ${line}.freqUpper0.05.${type}.assoc
+          cat /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/burden_snpeff_loftee/${line}.chr{1..23}_freqUpper0.01.${type}.assoc | grep -v N_INFORMATIVE > temp
+          cat header_${type}.txt temp > ${line}.freqUpper0.01.${type}.assoc
+          cat /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/burden_snpeff_loftee/${line}.chr{1..23}_freqUpper0.005.${type}.assoc | grep -v N_INFORMATIVE > temp
+          cat header_${type}.txt temp > ${line}.freqUpper0.005.${type}.assoc
+          cat /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/burden_snpeff_loftee/${line}.chr{1..23}_freqUpper0.001.${type}.assoc | grep -v N_INFORMATIVE > temp
+          cat header_${type}.txt temp > ${line}.freqUpper0.001.${type}.assoc
+     done
+done
+```
+
+### Analyze results
+```
+cd /data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/meta_prep_snpeff_loftee
+
+ls UKB*SkatO.assoc | wc -l
+# 192 (makes sense, 12 variant categories x 4 maf categories x 4 phenotypes)
+
+ls UKB*SkatO.assoc | while read line
+do
+    sed "s/$/ $line/" $line >> all_SkatO.txt
+done
+
+awk '$8 < 5e-8'  all_SkatO.txt | cut -f1 | sort -u
+# AUNIP
+# DYNC1I1
+# GBA
+# PSMD11
+# SLC26A11
+
+awk '$8 < 1e-6'  all_SkatO.txt | cut -f1 | sort -u
+# AUNIP
+# DYNC1I1
+# GBA
+# KIF9
+# PDZRN4
+# PSMD11
+# SEPT5-GP1BB
+# SLC26A11
+# TUBA1B
+```
+```
+ls UKB*CMC.assoc | wc -l
+# 192
+
+ls UKB*CMC.assoc | while read line
+do
+    sed "s/$/ $line/" $line >> all_CMC.txt
+done
+
+awk '$7 < 5e-8' all_CMC.txt | cut -f1 | sort -u
+# GBA
+# PSMD11
+# SLC26A11
+
+awk '$7 < 1e-6' all_CMC.txt | cut -f1 | sort -u
+# CLRN1
+# DYNC1I1
+# GBA
+# KIF9
+# PSG7
+# PSMD11
+# SEPT5-GP1BB
+# SLC26A11
+```
 
 ### 6c. Run burden (AAO) [to be completed later]
 
