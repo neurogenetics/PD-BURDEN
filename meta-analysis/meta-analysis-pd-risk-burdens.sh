@@ -29,14 +29,14 @@
 # final AMPxNIH:
 	# /data/CARD/PD/AMP_NIH/no_relateds/burden_annovar
 	# /data/CARD/PD/AMP_NIH/no_relateds/burden_snpEff_loftee
-
+	
 # Meta-analysis for PD risk 
 	# Per ANNOVAR and SnpEff/LOFTEE group
 	# Per MAF and per variant group 
 	# For SkatO and CMC separately 
-		# WGS + UKB PD (@ AMPNIH_UKB_meta_analysis_SkatO.py and AMPNIH_UKB_meta_analysis_CMC.py) --ukb_cases, --amp_nih, -o 
-		# WGS + UKB PD + PROXY1 + PROXY 2 (@ AMPNIH_UKB_CASES_PROXIES_meta_analysis_SkatO.py and AMPNIH_UKB_CASES_PROXIES_meta_analysis_CMC.py )
-		# WGS + UKB PD_ALL (@ AMPNIH_UKB_ALL_meta_analysis_SkatO.py and AMPNIH_UKB_ALL_meta_analysis_CMC.py )
+		# WGS + UKB PD 
+		# WGS + UKB PD + PROXY1 + PROXY 2 
+		# WGS + UKB PD_ALL 
 
 # Structure 
 WORK_DIR="/data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis"
