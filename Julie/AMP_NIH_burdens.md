@@ -732,6 +732,7 @@ done
 module load rvtests
 FILENAME=$1
 MAF=$2
+OUTNAME=${FILENAME/".vcf.gz"/""}
 rvtest --noweb --hide-covar --out ${OUTNAME}_freqUpper${MAF} --burden cmc --kernel skato \
 --inVcf /data/CARD/PD/AMP_NIH/no_relateds/subset_genetic_data_snpEff_loftee/${FILENAME} \
 --pheno /data/CARD/PD/AMP_NIH/no_relateds/COV_PD_NIH_AMPv2.5_samplestoKeep_EuroOnly_noDups_noNIHDups_wPheno_wSex_no_cousins.txt \
