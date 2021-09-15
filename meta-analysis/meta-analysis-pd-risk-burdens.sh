@@ -29,7 +29,7 @@
 # final AMPxNIH:
 	# /data/CARD/PD/AMP_NIH/no_relateds/burden_annovar
 	# /data/CARD/PD/AMP_NIH/no_relateds/burden_snpEff_loftee
-
+	
 # Meta-analysis for PD risk 
 	# Per ANNOVAR and SnpEff/LOFTEE group
 	# Per MAF and per variant group 
