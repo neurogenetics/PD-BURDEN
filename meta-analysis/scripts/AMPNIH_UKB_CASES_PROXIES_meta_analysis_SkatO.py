@@ -16,6 +16,7 @@ import statsmodels.api as sm
 from scipy import stats
 from functools import reduce
 import argparse
+import os
 
 # Initialize parser and add arguments
     # Takes 3 arguments: UKB cases, UKB proxies, and WGS data
@@ -24,6 +25,10 @@ parser.add_argument("--amp_nih", help="Input file name (with suffix) for AMPxNIH
 parser.add_argument("--ukb_cases", help="Input file name (with suffix) for UKB cases .assoc")
 parser.add_argument("--ukb_sib", help="Input file name (with suffix) for UKB proxy siblings .assoc")
 parser.add_argument("--ukb_parent", help="Input file name (with suffix) for UKB proxy parents .assoc")
+
+parser.add_argument("--variant_group", help="Input string with what variant group was looked at")
+parser.add_argument("--maf", help="Input string with what MAF was looked at")
+parser.add_argument("--group", help="Input string with what groups are being analyzed")
 
 parser.add_argument("--output", "-o", help="Desired output name for files")
 args = parser.parse_args()
@@ -77,6 +82,13 @@ sorted_output.head()
 
 # Now merge with the original P values
 final_dataframe = sorted_output.merge(original_pval_df, how='left', on=['GENE'])
+
+# Add columns to help with merging full results later that indicate variant group, MAF, and meta-analysis it's from 
+final_dataframe['TEST'] = "SkatO"
+final_dataframe['VARIANT_GROUP'] = args.variant_group
+final_dataframe['MAF'] = args.maf 
+final_dataframe['META_ANALYSIS_GROUP'] = args.group
+
 
 # Now save out the file
 output_file = args.output + ".combined_Ps.SkatO.tab"

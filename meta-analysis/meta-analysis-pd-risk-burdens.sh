@@ -34,24 +34,26 @@
 	# Per ANNOVAR and SnpEff/LOFTEE group
 	# Per MAF and per variant group 
 	# For SkatO and CMC separately 
-		# WGS + UKB PD (@ AMPNIH_UKB_meta_analysis_SkatO.py and AMPNIH_UKB_meta_analysis_CMC.py) --ukb_cases, --amp_nih, -o 
-		# WGS + UKB PD + PROXY1 + PROXY 2 (@ AMPNIH_UKB_CASES_PROXIES_meta_analysis_SkatO.py and AMPNIH_UKB_CASES_PROXIES_meta_analysis_CMC.py )
-		# WGS + UKB PD_ALL (@ AMPNIH_UKB_ALL_meta_analysis_SkatO.py and AMPNIH_UKB_ALL_meta_analysis_CMC.py )
+		# WGS + UKB PD 
+		# WGS + UKB PD + PROXY1 + PROXY 2 
+		# WGS + UKB PD_ALL 
 
 # Structure 
 WORK_DIR="/data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis"
 
-$WORK_DIR
-├── AMP_NIH_UKB_ALL_PD_PHENO_META/
-│			├── ANNOVAR/
-│			└── SNPEFF_LOFTEE/
-├── AMP_NIH_UKB_CASE_CONTROL_META/
-│			├── ANNOVAR/
-│			└── SNPEFF_LOFTEE/
-├── AMP_NIH_UKB_CASE_PROXIES_META/
-│			├── ANNOVAR/
-│			└── SNPEFF_LOFTEE/
-└── etc... (Scripts and Swarm Files)
+# $WORK_DIR
+# ├── AMP_NIH_UKB_ALL_PD_PHENO_META/
+# │			├── ANNOVAR/
+# │			└── SNPEFF_LOFTEE/
+# ├── AMP_NIH_UKB_CASE_CONTROL_META/
+# │			├── ANNOVAR/
+# │			└── SNPEFF_LOFTEE/
+# ├── AMP_NIH_UKB_CASE_PROXIES_META/
+# │			├── ANNOVAR/
+# │			└── SNPEFF_LOFTEE/
+# ├── *.swarm files 
+# ├── swarm_logs/
+# └── scripts/
 
 # AMP_NIH_UKB_ALL_PD_PHENO_META/
 	# AMPxNIH (WGS) + UKB PD_ALL meta-analysis
@@ -80,6 +82,7 @@ UKB_ANNOVAR="/data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/met
 UKB_SNPEFF="/data/CARD/UKBIOBANK/EXOME_DATA_200K/PVCF_FILES/burden_analysis/meta_prep_snpeff_loftee"
 AMPNIH_ANNOVAR="/data/CARD/PD/AMP_NIH/no_relateds/burden_annovar"
 AMPNIH_SNPEFF="/data/CARD/PD/AMP_NIH/no_relateds/burden_snpEff_loftee"
+SCRIPTS="/data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/scripts_v2"
 
 # Loading the necessary modules 
 module load python 
@@ -173,9 +176,12 @@ do
     do
     	for cutoff in "${MAF[@]}"
     	do
-    		echo "python $WORK_DIR/AMPNIH_UKB_meta_analysis_${test}.py \
+    		echo "python $SCRIPTS/AMPNIH_UKB_meta_analysis_${test}.py \
 			--ukb_cases $UKB_ANNOVAR/UKB_EXOM_PD_CASE_CONTROL_2021_${variants}.freqUpper${cutoff}.${test}.assoc \
 			--amp_nih $AMPNIH_ANNOVAR/AMP_NIH_noRelateds_${variants}_freqUpper${cutoff}.${test}.assoc \
+			--variant_group ${variants} \
+			--maf ${cutoff} \
+			--group meta_AMP_NIH_noRelateds_UKB_EXOM_PD_CASE_CONTROL_2021 \
 			-o $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META/ANNOVAR/meta_AMP_NIH_noRelateds_UKB_EXOM_PD_CASE_CONTROL_2021_${variants}_freqUpper${cutoff}" >> $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META.annovar.swarm
     	done
     done
@@ -183,8 +189,7 @@ done
 
 swarm -f $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META.annovar.swarm --verbose 1 --sbatch "--mail-type=FAIL" --module python --bundle 4
 # 48 commands run in 12 subjobs, each command requiring 1.5 gb and 1 thread, running 4 processes serially per subjob, allocating 12 cores and 24 cpus
-# 22982137
-
+# 23000671
 
 ### SNPEFF/LOFTEE
 # 2 tests * 6 variant groups * 4 MAFs = 48 files 
@@ -194,9 +199,12 @@ do
     do
     	for cutoff in "${MAF[@]}"
     	do
-    		echo "python $WORK_DIR/AMPNIH_UKB_meta_analysis_${test}.py \
+    		echo "python $SCRIPTS/AMPNIH_UKB_meta_analysis_${test}.py \
 			--ukb_cases $UKB_SNPEFF/UKB_EXOM_PD_CASE_CONTROL_2021_${variants}.freqUpper${cutoff}.${test}.assoc \
 			--amp_nih $AMPNIH_SNPEFF/AMP_NIH_noRelateds_${variants}_freqUpper${cutoff}.${test}.assoc \
+			--variant_group ${variants} \
+			--maf ${cutoff} \
+			--group meta_AMP_NIH_noRelateds_UKB_EXOM_PD_CASE_CONTROL_2021 \
 			-o $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META/SNPEFF_LOFTEE/meta_AMP_NIH_noRelateds_UKB_EXOM_PD_CASE_CONTROL_2021_${variants}_freqUpper${cutoff}" >> $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META.loftee.swarm
     	done
     done
@@ -204,11 +212,10 @@ done
 
 swarm -f $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META.loftee.swarm --verbose 1 --sbatch "--mail-type=FAIL" --module python --bundle 4
 # 48 commands run in 12 subjobs, each command requiring 1.5 gb and 1 thread, running 4 processes serially per subjob, allocating 12 cores and 24 cpus
-# 22982146
+# 23000673
 
 ls $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META/ANNOVAR/ | wc -l #48
-ls $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META/SNPEFF_LOFTEE/ | wc -l #48 
-
+ls $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META/SNPEFF_LOFTEE/ | wc -l #48
 
 
 ##########################################################################################################################################
@@ -230,11 +237,14 @@ do
     do
     	for cutoff in "${MAF[@]}"
     	do
-    		echo "python $WORK_DIR/AMPNIH_UKB_CASES_PROXIES_meta_analysis_${test}.py \
+    		echo "python $SCRIPTS/AMPNIH_UKB_CASES_PROXIES_meta_analysis_${test}.py \
 			--ukb_cases $UKB_ANNOVAR/UKB_EXOM_PD_CASE_CONTROL_2021_${variants}.freqUpper${cutoff}.${test}.assoc \
 			--amp_nih $AMPNIH_ANNOVAR/AMP_NIH_noRelateds_${variants}_freqUpper${cutoff}.${test}.assoc \
 			--ukb_sib $UKB_ANNOVAR/UKB_EXOM_PD_SIBLING_CONTROL_2021_${variants}.freqUpper${cutoff}.${test}.assoc \
 			--ukb_parent $UKB_ANNOVAR/UKB_EXOM_PD_PARENT_CONTROL_2021_${variants}.freqUpper${cutoff}.${test}.assoc \
+			--variant_group ${variants} \
+			--maf ${cutoff} \
+			--group meta_AMP_NIH_noRelateds_UKB_EXOM_PD_CASE_PROXIES_CONTROL_2021 \
 			-o $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/ANNOVAR/meta_AMP_NIH_noRelateds_UKB_EXOM_PD_CASE_PROXIES_CONTROL_2021_${variants}_freqUpper${cutoff}" >> $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META.annovar.swarm
     	done
     done
@@ -242,7 +252,7 @@ done
 
 swarm -f $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META.annovar.swarm --verbose 1 --sbatch "--mail-type=FAIL" --module python --bundle 4
 # 48 commands run in 12 subjobs, each command requiring 1.5 gb and 1 thread, running 4 processes serially per subjob, allocating 12 cores and 24 cpus
-# 22982431
+# 23000677
 
 # SNPEFF/LOFTEE
 for test in "${test_type[@]}"
@@ -251,11 +261,14 @@ do
     do
     	for cutoff in "${MAF[@]}"
     	do
-    		echo "python $WORK_DIR/AMPNIH_UKB_CASES_PROXIES_meta_analysis_${test}.py \
+    		echo "python $SCRIPTS/AMPNIH_UKB_CASES_PROXIES_meta_analysis_${test}.py \
 			--ukb_cases $UKB_SNPEFF/UKB_EXOM_PD_CASE_CONTROL_2021_${variants}.freqUpper${cutoff}.${test}.assoc \
 			--amp_nih $AMPNIH_SNPEFF/AMP_NIH_noRelateds_${variants}_freqUpper${cutoff}.${test}.assoc \
 			--ukb_sib $UKB_SNPEFF/UKB_EXOM_PD_SIBLING_CONTROL_2021_${variants}.freqUpper${cutoff}.${test}.assoc \
 			--ukb_parent $UKB_SNPEFF/UKB_EXOM_PD_PARENT_CONTROL_2021_${variants}.freqUpper${cutoff}.${test}.assoc \
+			--variant_group ${variants} \
+			--maf ${cutoff} \
+			--group meta_AMP_NIH_noRelateds_UKB_EXOM_PD_CASE_PROXIES_CONTROL_2021 \
 			-o $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/SNPEFF_LOFTEE/meta_AMP_NIH_noRelateds_UKB_EXOM_PD_CASE_PROXIES_CONTROL_2021_${variants}_freqUpper${cutoff}" >> $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META.loftee.swarm
     	done
     done
@@ -263,10 +276,10 @@ done
 
 swarm -f $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META.loftee.swarm --verbose 1 --sbatch "--mail-type=FAIL" --module python --bundle 4
 # 48 commands run in 12 subjobs, each command requiring 1.5 gb and 1 thread, running 4 processes serially per subjob, allocating 12 cores and 24 cpus
-# 22982515
+# 23000846
 
-ls $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/ANNOVAR/ | wc -l 
-ls $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/SNPEFF_LOFTEE/ | wc -l 
+ls $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/ANNOVAR/ | wc -l #48
+ls $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/SNPEFF_LOFTEE/ | wc -l #48
 
 ##########################################################################################################################################
 ##########################################################################################################################################
@@ -287,9 +300,12 @@ do
     do
     	for cutoff in "${MAF[@]}"
     	do
-    		echo "python AMPNIH_UKB_ALL_meta_analysis_${test}.py \
+    		echo "python $SCRIPTS/AMPNIH_UKB_ALL_meta_analysis_${test}.py \
 			--ukb_all_cases $UKB_ANNOVAR/UKB_EXOM_ALL_PD_PHENOTYPES_CONTROL_2021_${variants}.freqUpper${cutoff}.${test}.assoc \
 			--amp_nih $AMPNIH_ANNOVAR/AMP_NIH_noRelateds_${variants}_freqUpper${cutoff}.${test}.assoc \
+			--variant_group ${variants} \
+			--maf ${cutoff} \
+			--group meta_AMP_NIH_noRelateds_UKB_EXOM_ALL_PD_PHENOTYPES_CONTROL_2021 \
 			-o $WORK_DIR/AMP_NIH_UKB_ALL_PD_PHENO_META/ANNOVAR/meta_AMP_NIH_noRelateds_UKB_EXOM_ALL_PD_PHENOTYPES_CONTROL_2021_${variants}_freqUpper${cutoff}" >> AMP_NIH_UKB_ALL_PD_PHENO_META_annovar.swarm
     	done
     done
@@ -297,7 +313,7 @@ done
 
 swarm -f AMP_NIH_UKB_ALL_PD_PHENO_META_annovar.swarm --verbose 1 --sbatch "--mail-type=FAIL" --module python --bundle 4
 # 48 commands run in 12 subjobs, each command requiring 1.5 gb and 1 thread, running 4 processes serially per subjob, allocating 12 cores and 24 cpus
-# 22981359
+# 23000913
 
 # SNPEFF/LOFTEE
 for test in "${test_type[@]}"
@@ -306,9 +322,12 @@ do
     do
     	for cutoff in "${MAF[@]}"
     	do
-    		echo "python AMPNIH_UKB_ALL_meta_analysis_${test}.py \
+    		echo "python $SCRIPTS/AMPNIH_UKB_ALL_meta_analysis_${test}.py \
 			--ukb_all_cases $UKB_SNPEFF/UKB_EXOM_ALL_PD_PHENOTYPES_CONTROL_2021_${variants}.freqUpper${cutoff}.${test}.assoc \
 			--amp_nih $AMPNIH_SNPEFF/AMP_NIH_noRelateds_${variants}_freqUpper${cutoff}.${test}.assoc \
+			--variant_group ${variants} \
+			--maf ${cutoff} \
+			--group meta_AMP_NIH_noRelateds_UKB_EXOM_ALL_PD_PHENOTYPES_CONTROL_2021 \
 			-o $WORK_DIR/AMP_NIH_UKB_ALL_PD_PHENO_META/SNPEFF_LOFTEE/meta_AMP_NIH_noRelateds_UKB_EXOM_ALL_PD_PHENOTYPES_CONTROL_2021_${variants}_freqUpper${cutoff}" >> AMP_NIH_UKB_ALL_PD_PHENO_META_loftee.swarm
     	done
     done
@@ -316,10 +335,13 @@ done
 
 swarm -f AMP_NIH_UKB_ALL_PD_PHENO_META_loftee.swarm --verbose 1 --sbatch "--mail-type=FAIL" --module python --bundle 4
 # 48 commands run in 12 subjobs, each command requiring 1.5 gb and 1 thread, running 4 processes serially per subjob, allocating 12 cores and 24 cpus
-# 22981369
+# 23000917
 
 ls $WORK_DIR/AMP_NIH_UKB_ALL_PD_PHENO_META/ANNOVAR/ | wc -l #48
 ls $WORK_DIR/AMP_NIH_UKB_ALL_PD_PHENO_META/SNPEFF_LOFTEE/ | wc -l #48
+
+## Quick clean-up
+mv swarm_* swarm_logs/
 
 ##########################################################################################################################################
 ##########################################################################################################################################
