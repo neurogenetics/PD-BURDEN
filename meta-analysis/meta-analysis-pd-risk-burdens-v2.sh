@@ -96,8 +96,10 @@ WORK_DIR="/data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis"
 	# AMPxNIH + UK PD case-control + UKB siblings + UKB parents
 	# Used AMPNIH_UKB_CASES_PROXIES_meta_analysis_numvar.py 
 
-# 48 files per subdirectory expected
-	# 2 tests * 6 variant groups * 4 MAFs = 48 files per annotation type (ANNOVAR or SnpEff/LOFTEE) and per numvariant cut-off 
+# 48 files per ANNOVAR subdirectory expected
+	# 2 tests * 6 variant groups * 4 MAFs = 48 files per numvariant cut-off 
+# 96 files per SnpEff/LOFTEE subdirectory expected
+	# 2 tests * 12 variant groups * 4 MAFs = 96 files per numvar cut-off 
 
 ##########################################################################################################################################
 ##########################################################################################################################################
@@ -182,9 +184,15 @@ annovar_variant_group=(
 	ALL_CADD_20_and_LOF)
 
 snpeff_variant_group=(
+	ALL_MODERATE_HIGH_IMPACT_SNPEFF
+	ALL_HIGH_IMPACT_SNPEFF
 	ALL_MISSENSE_and_LOF_SNPEFF
 	ALL_MISSENSE_and_ALL_LOF_HC_LOFTEE
 	ALL_MISSENSE_and_LOF_SNPEFF_and_HC_LOFTEE
+	ALL_MISSENSE_SNPEFF
+	ALL_LOF_SNPEFF
+	ALL_LOF_HC_LOFTEE
+	ALL_LOF_and_HC_LOFTEE
 	ALL_HIGH_IMPACT_and_LOF_SNPEFF
 	ALL_HIGH_IMPACT_and_ALL_LOF_HC_LOFTEE
 	ALL_HIGH_IMPACT_and_LOF_SNPEFF_and_HC_LOFTEE)
@@ -249,7 +257,8 @@ swarm -f $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META.annovar.swarm --verbose 1 --sba
 # 23478404
 
 ### SNPEFF/LOFTEE
-# 2 tests * 6 variant groups * 4 MAFs = 48 files per numvar directory
+# 2 tests * 12 variant groups * 4 MAFs = 96 files per numvar directory
+
 for test in "${test_type[@]}"
 do
     for variants in "${snpeff_variant_group[@]}"
@@ -273,8 +282,8 @@ do
 done
 
 swarm -f $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META.loftee.swarm --verbose 1 --sbatch "--mail-type=FAIL" --module python --bundle 8
-# 192 commands run in 24 subjobs, each command requiring 1.5 gb and 1 thread, running 8 processes serially per subjob, allocating 24 cores and 48 cpus
-# 23478407
+# 384 commands run in 48 subjobs, each command requiring 1.5 gb and 1 thread, running 8 processes serially per subjob, allocating 48 cores and 96 cpus
+# 23566179
 
 ## Checks 
 ls $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META/ANNOVAR/minimum_numvar_1 | wc -l #48
@@ -282,10 +291,10 @@ ls $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META/ANNOVAR/minimum_numvar_2 | wc -l #48
 ls $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META/ANNOVAR/minimum_numvar_3 | wc -l #48
 ls $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META/ANNOVAR/minimum_numvar_4 | wc -l #48
 
-ls $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META/SNPEFF_LOFTEE/minimum_numvar_1 | wc -l #48
-ls $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META/SNPEFF_LOFTEE/minimum_numvar_2 | wc -l #48
-ls $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META/SNPEFF_LOFTEE/minimum_numvar_3 | wc -l #48
-ls $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META/SNPEFF_LOFTEE/minimum_numvar_4 | wc -l #48
+ls $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META/SNPEFF_LOFTEE/minimum_numvar_1 | wc -l #96
+ls $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META/SNPEFF_LOFTEE/minimum_numvar_2 | wc -l #96
+ls $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META/SNPEFF_LOFTEE/minimum_numvar_3 | wc -l #96
+ls $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META/SNPEFF_LOFTEE/minimum_numvar_4 | wc -l #96 
 
 ##########################################################################################################################################
 ##########################################################################################################################################
@@ -341,7 +350,8 @@ swarm -f $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META.annovar.swarm --verbose 1 --sba
 # 23479243
 
 ### SNPEFF/LOFTEE
-# 2 tests * 6 variant groups * 4 MAFs = 48 files per numvar directory
+# 2 tests * 12 variant groups * 4 MAFs = 96 files per numvar directory
+
 for test in "${test_type[@]}"
 do
     for variants in "${snpeff_variant_group[@]}"
@@ -367,8 +377,8 @@ do
 done
 
 swarm -f $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META.loftee.swarm --verbose 1 --sbatch "--mail-type=FAIL" --module python --bundle 8
-# 192 commands run in 24 subjobs, each command requiring 1.5 gb and 1 thread, running 8 processes serially per subjob, allocating 24 cores and 48 cpus
-# 23479446
+# 384 commands run in 48 subjobs, each command requiring 1.5 gb and 1 thread, running 8 processes serially per subjob, allocating 48 cores and 96 cpus
+# 23566278
 
 ## Checks 
 ls $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/ANNOVAR/minimum_numvar_1 | wc -l #48
@@ -376,10 +386,10 @@ ls $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/ANNOVAR/minimum_numvar_2 | wc -l #48
 ls $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/ANNOVAR/minimum_numvar_3 | wc -l #48
 ls $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/ANNOVAR/minimum_numvar_4 | wc -l #48
 
-ls $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/SNPEFF_LOFTEE/minimum_numvar_1 | wc -l #48
-ls $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/SNPEFF_LOFTEE/minimum_numvar_2 | wc -l #48
-ls $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/SNPEFF_LOFTEE/minimum_numvar_3 | wc -l #48
-ls $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/SNPEFF_LOFTEE/minimum_numvar_4 | wc -l #48
+ls $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/SNPEFF_LOFTEE/minimum_numvar_1 | wc -l #96
+ls $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/SNPEFF_LOFTEE/minimum_numvar_2 | wc -l #96
+ls $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/SNPEFF_LOFTEE/minimum_numvar_3 | wc -l #96
+ls $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/SNPEFF_LOFTEE/minimum_numvar_4 | wc -l #96
 
 
 ##########################################################################################################################################
@@ -434,7 +444,8 @@ swarm -f $WORK_DIR/AMP_NIH_UKB_ALL_PD_PHENO_META_annovar.swarm --verbose 1 --sba
 # 23477432
 
 ### SNPEFF/LOFTEE
-# 2 tests * 6 variant groups * 4 MAFs = 48 files per numvar directory
+# 2 tests * 12 variant groups * 4 MAFs = 96 files per numvar directory
+
 for test in "${test_type[@]}"
 do
     for variants in "${snpeff_variant_group[@]}"
@@ -458,8 +469,8 @@ do
 done
 
 swarm -f $WORK_DIR/AMP_NIH_UKB_ALL_PD_PHENO_META_loftee.swarm --verbose 1 --sbatch "--mail-type=FAIL" --module python --bundle 8
-# 192 commands run in 24 subjobs, each command requiring 1.5 gb and 1 thread, running 8 processes serially per subjob, allocating 24 cores and 48 cpus
-# 23477443
+# 384 commands run in 48 subjobs, each command requiring 1.5 gb and 1 thread, running 8 processes serially per subjob, allocating 48 cores and 96 cpus
+# 23566348
 
 ## Checks 
 ls $WORK_DIR/AMP_NIH_UKB_ALL_PD_PHENO_META/ANNOVAR/minimum_numvar_1 | wc -l #48
@@ -467,156 +478,10 @@ ls $WORK_DIR/AMP_NIH_UKB_ALL_PD_PHENO_META/ANNOVAR/minimum_numvar_2 | wc -l #48
 ls $WORK_DIR/AMP_NIH_UKB_ALL_PD_PHENO_META/ANNOVAR/minimum_numvar_3 | wc -l #48
 ls $WORK_DIR/AMP_NIH_UKB_ALL_PD_PHENO_META/ANNOVAR/minimum_numvar_4 | wc -l #48
 
-ls $WORK_DIR/AMP_NIH_UKB_ALL_PD_PHENO_META/SNPEFF_LOFTEE/minimum_numvar_1 | wc -l #48
-ls $WORK_DIR/AMP_NIH_UKB_ALL_PD_PHENO_META/SNPEFF_LOFTEE/minimum_numvar_2 | wc -l #48
-ls $WORK_DIR/AMP_NIH_UKB_ALL_PD_PHENO_META/SNPEFF_LOFTEE/minimum_numvar_3 | wc -l #48
-ls $WORK_DIR/AMP_NIH_UKB_ALL_PD_PHENO_META/SNPEFF_LOFTEE/minimum_numvar_4 | wc -l #48
+ls $WORK_DIR/AMP_NIH_UKB_ALL_PD_PHENO_META/SNPEFF_LOFTEE/minimum_numvar_1 | wc -l #96
+ls $WORK_DIR/AMP_NIH_UKB_ALL_PD_PHENO_META/SNPEFF_LOFTEE/minimum_numvar_2 | wc -l #96
+ls $WORK_DIR/AMP_NIH_UKB_ALL_PD_PHENO_META/SNPEFF_LOFTEE/minimum_numvar_3 | wc -l #96
+ls $WORK_DIR/AMP_NIH_UKB_ALL_PD_PHENO_META/SNPEFF_LOFTEE/minimum_numvar_4 | wc -l #96 
 
 ## Quick clean-up
 mv swarm_* swarm_logs/
-
-##########################################################################################################################################
-##########################################################################################################################################
-##### 5. SUMMARY OF RESULTS ##############################################################################################################
-##########################################################################################################################################
-##########################################################################################################################################
-
-## Getting unique gene IDs and their smallest P-value from top 10 lines 
-
-# AMP_NIH_UKB_CASE_CONTROL_META/
-	# AMPxNIH (WGS) + UKB PD case-control meta-analysis
-	# Used AMPNIH_UKB_meta_analysis_numvar.py
-
-cd $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META/ANNOVAR/minimum_numvar_1
-for variants in "${annovar_variant_group[@]}"
-do
-	echo "Now looking at variant group ${variants}"
-	echo "${variants}" >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_CONTROL_META_minvar1.txt
-	cat *${variants}_freqUpper*  | head -1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_CONTROL_META_minvar1.txt
-	cat *${variants}_freqUpper*  | sort -k2 -nr | head -10 | sort -u -k1,1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_CONTROL_META_minvar1.txt
-	echo " " >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_CONTROL_META_minvar1.txt
-done
-
-cd $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META/SNPEFF_LOFTEE/minimum_numvar_1
-for variants in "${snpeff_variant_group[@]}"
-do
-	echo "Now looking at variant group ${variants}"
-	echo "${variants}" >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_CONTROL_META_minvar1.txt
-	cat *${variants}_freqUpper*  | head -1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_CONTROL_META_minvar1.txt
-	cat *${variants}_freqUpper*  | sort -k2 -nr | head -10 | sort -u -k1,1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_CONTROL_META_minvar1.txt
-	echo " " >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_CONTROL_META_minvar1.txt
-done
-
-
-## Min var 2
-cd $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META/ANNOVAR/minimum_numvar_2
-for variants in "${annovar_variant_group[@]}"
-do
-	echo "Now looking at variant group ${variants}"
-	echo "${variants}" >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_CONTROL_META_minvar2.txt
-	cat *${variants}_freqUpper*  | head -1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_CONTROL_META_minvar2.txt
-	cat *${variants}_freqUpper*  | sort -k2 -nr | head -10 | sort -u -k1,1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_CONTROL_META_minvar2.txt
-	echo " " >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_CONTROL_META_minvar2.txt
-done
-
-cd $WORK_DIR/AMP_NIH_UKB_CASE_CONTROL_META/SNPEFF_LOFTEE/minimum_numvar_2
-for variants in "${snpeff_variant_group[@]}"
-do
-	echo "Now looking at variant group ${variants}"
-	echo "${variants}" >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_CONTROL_META_minvar2.txt
-	cat *${variants}_freqUpper*  | head -1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_CONTROL_META_minvar2.txt
-	cat *${variants}_freqUpper*  | sort -k2 -nr | head -10 | sort -u -k1,1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_CONTROL_META_minvar2.txt
-	echo " " >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_CONTROL_META_minvar2.txt
-done
-
-
-# AMP_NIH_UKB_ALL_PD_PHENO_META/
-	# AMPxNIH (WGS) + UKB PD_ALL meta-analysis
-	# Used AMPNIH_UKB_ALL_meta_analysis_numvar.py
-
-cd $WORK_DIR/AMP_NIH_UKB_ALL_PD_PHENO_META/ANNOVAR/minimum_numvar_1
-for variants in "${annovar_variant_group[@]}"
-do
-	echo "Now looking at variant group ${variants}"
-	echo "${variants}" >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_ALL_PD_PHENO_META_minvar1.txt
-	cat *${variants}_freqUpper*  | head -1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_ALL_PD_PHENO_META_minvar1.txt
-	cat *${variants}_freqUpper*  | sort -k2 -nr | head -10 | sort -u -k1,1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_ALL_PD_PHENO_META_minvar1.txt
-	echo " " >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_ALL_PD_PHENO_META_minvar1.txt
-done
-
-cd $WORK_DIR/AMP_NIH_UKB_ALL_PD_PHENO_META/SNPEFF_LOFTEE/minimum_numvar_1
-for variants in "${snpeff_variant_group[@]}"
-do
-	echo "Now looking at variant group ${variants}"
-	echo "${variants}" >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_ALL_PD_PHENO_META_minvar1.txt
-	cat *${variants}_freqUpper*  | head -1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_ALL_PD_PHENO_META_minvar1.txt
-	cat *${variants}_freqUpper*  | sort -k2 -nr | head -10 | sort -u -k1,1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_ALL_PD_PHENO_META_minvar1.txt
-	echo " " >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_ALL_PD_PHENO_META_minvar1.txt
-done
-
-## min var 2
-cd $WORK_DIR/AMP_NIH_UKB_ALL_PD_PHENO_META/ANNOVAR/minimum_numvar_2
-for variants in "${annovar_variant_group[@]}"
-do
-	echo "Now looking at variant group ${variants}"
-	echo "${variants}" >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_ALL_PD_PHENO_META_minvar2.txt
-	cat *${variants}_freqUpper*  | head -1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_ALL_PD_PHENO_META_minvar2.txt
-	cat *${variants}_freqUpper*  | sort -k2 -nr | head -10 | sort -u -k1,1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_ALL_PD_PHENO_META_minvar2.txt
-	echo " " >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_ALL_PD_PHENO_META_minvar2.txt
-done
-
-cd $WORK_DIR/AMP_NIH_UKB_ALL_PD_PHENO_META/SNPEFF_LOFTEE/minimum_numvar_2
-for variants in "${snpeff_variant_group[@]}"
-do
-	echo "Now looking at variant group ${variants}"
-	echo "${variants}" >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_ALL_PD_PHENO_META_minvar2.txt
-	cat *${variants}_freqUpper*  | head -1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_ALL_PD_PHENO_META_minvar2.txt
-	cat *${variants}_freqUpper*  | sort -k2 -nr | head -10 | sort -u -k1,1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_ALL_PD_PHENO_META_minvar2.txt
-	echo " " >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_ALL_PD_PHENO_META_minvar2.txt
-done
-
-
-# AMP_NIH_UKB_CASE_PROXIES_META/
-	# AMPxNIH + UK PD case-control + UKB siblings + UKB parents
-	# Used AMPNIH_UKB_CASES_PROXIES_meta_analysis_numvar.py 
-
-cd $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/ANNOVAR/minimum_numvar_1
-for variants in "${annovar_variant_group[@]}"
-do
-	echo "Now looking at variant group ${variants}"
-	echo "${variants}" >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_PROXIES_META_minvar1.txt
-	cat *${variants}_freqUpper*  | head -1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_PROXIES_META_minvar1.txt
-	cat *${variants}_freqUpper*  | sort -k2 -nr | head -10 | sort -u -k1,1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_PROXIES_META_minvar1.txt
-	echo " " >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_PROXIES_META_minvar1.txt
-done
-
-cd $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/SNPEFF_LOFTEE/minimum_numvar_1
-for variants in "${snpeff_variant_group[@]}"
-do
-	echo "Now looking at variant group ${variants}"
-	echo "${variants}" >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_PROXIES_META_minvar1.txt
-	cat *${variants}_freqUpper*  | head -1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_PROXIES_META_minvar1.txt
-	cat *${variants}_freqUpper*  | sort -k2 -nr | head -10 | sort -u -k1,1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_PROXIES_META_minvar1.txt
-	echo " " >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_PROXIES_META_minvar1.txt
-done
-
-## min var 2
-cd $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/ANNOVAR/minimum_numvar_2
-for variants in "${annovar_variant_group[@]}"
-do
-	echo "Now looking at variant group ${variants}"
-	echo "${variants}" >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_PROXIES_META_minvar2.txt
-	cat *${variants}_freqUpper*  | head -1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_PROXIES_META_minvar2.txt
-	cat *${variants}_freqUpper*  | sort -k2 -nr | head -10 | sort -u -k1,1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_PROXIES_META_minvar2.txt
-	echo " " >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_PROXIES_META_minvar2.txt
-done
-
-cd $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/SNPEFF_LOFTEE/minimum_numvar_2
-for variants in "${snpeff_variant_group[@]}"
-do
-	echo "Now looking at variant group ${variants}"
-	echo "${variants}" >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_PROXIES_META_minvar2.txt
-	cat *${variants}_freqUpper*  | head -1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_PROXIES_META_minvar2.txt
-	cat *${variants}_freqUpper*  | sort -k2 -nr | head -10 | sort -u -k1,1 >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_PROXIES_META_minvar2.txt
-	echo " " >> $WORK_DIR/top_unique_genes_top_10_lines_AMP_NIH_UKB_CASE_PROXIES_META_minvar2.txt
-done
