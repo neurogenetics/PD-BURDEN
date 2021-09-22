@@ -347,7 +347,7 @@ done
 
 swarm -f $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META.annovar.swarm --verbose 1 --sbatch "--mail-type=FAIL" --module python --bundle 8
 # 192 commands run in 24 subjobs, each command requiring 1.5 gb and 1 thread, running 8 processes serially per subjob, allocating 24 cores and 48 cpus
-# 23479243
+# 23597855
 
 ### SNPEFF/LOFTEE
 # 2 tests * 12 variant groups * 4 MAFs = 96 files per numvar directory
@@ -378,7 +378,7 @@ done
 
 swarm -f $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META.loftee.swarm --verbose 1 --sbatch "--mail-type=FAIL" --module python --bundle 8
 # 384 commands run in 48 subjobs, each command requiring 1.5 gb and 1 thread, running 8 processes serially per subjob, allocating 48 cores and 96 cpus
-# 23566278
+# 23598043
 
 ## Checks 
 ls $WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/ANNOVAR/minimum_numvar_1 | wc -l #48
@@ -835,7 +835,7 @@ do
     	do
     		for numvar in "${number_variants[@]}"
     		do
-	    		echo "python $SCRIPTS/AMPNIH_UKB_CASES_PROXIES_meta_analysis_numvar.py \
+	    		python $SCRIPTS/AMPNIH_UKB_CASES_PROXIES_meta_analysis_numvar_conditional.py \
 	    		--test ${test} \
 	    		--numvar ${numvar} \
 				--ukb_cases $LRRK2_UKB_ANNOVAR/UKB_EXOM_PD_CASE_CONTROL_2021_${variants}.chr12_freqUpper${cutoff}_LRRK2.${test}.assoc \
@@ -845,15 +845,14 @@ do
 				--variant_group ${variants} \
 				--maf ${cutoff} \
 				--group meta_AMP_NIH_noRelateds_UKB_EXOM_PD_CASE_PROXIES_CONTROL_2021_LRRK2 \
-				-o $LRRK2_WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/ANNOVAR/minimum_numvar_${numvar}/meta_AMP_NIH_noRelateds_UKB_EXOM_PD_CASE_PROXIES_CONTROL_2021_${variants}_freqUpper${cutoff}_LRRK2" >> $LRRK2_WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META_LRRK2.annovar.swarm
+				-o $LRRK2_WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/ANNOVAR/minimum_numvar_${numvar}/meta_AMP_NIH_noRelateds_UKB_EXOM_PD_CASE_PROXIES_CONTROL_2021_${variants}_freqUpper${cutoff}_LRRK2
     		done
     	done
     done
 done
 
-swarm -f $LRRK2_WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META_LRRK2.annovar.swarm --verbose 1 --sbatch "--mail-type=FAIL" --module python --bundle 8
-# 192 commands run in 24 subjobs, each command requiring 1.5 gb and 1 thread, running 8 processes serially per subjob, allocating 24 cores and 48 cpus
-# 23576384
+# Ran interactively since it doesn't take long
+	# Note: This is a slightly different script since the number of variants don't matter too much here 
 
 ### SNPEFF/LOFTEE
 # 2 tests * 12 variant groups * 4 MAFs = 96 files per numvar directory
@@ -866,7 +865,7 @@ do
     	do
     		for numvar in "${number_variants[@]}"
     		do
-	    		echo "python $SCRIPTS/AMPNIH_UKB_CASES_PROXIES_meta_analysis_numvar.py \
+	    		python $SCRIPTS/AMPNIH_UKB_CASES_PROXIES_meta_analysis_numvar_conditional.py \
 	    		--test ${test} \
 	    		--numvar ${numvar} \
 				--ukb_cases $LRRK2_UKB_SNPEFF/UKB_EXOM_PD_CASE_CONTROL_2021_${variants}.chr12_freqUpper${cutoff}_LRRK2.${test}.assoc \
@@ -876,15 +875,14 @@ do
 				--variant_group ${variants} \
 				--maf ${cutoff} \
 				--group meta_AMP_NIH_noRelateds_UKB_EXOM_PD_CASE_PROXIES_CONTROL_2021_LRRK2 \
-				-o $LRRK2_WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/SNPEFF_LOFTEE/minimum_numvar_${numvar}/meta_AMP_NIH_noRelateds_UKB_EXOM_PD_CASE_PROXIES_CONTROL_2021_${variants}_freqUpper${cutoff}_LRRK2" >> $LRRK2_WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META_LRRK2.loftee.swarm
+				-o $LRRK2_WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/SNPEFF_LOFTEE/minimum_numvar_${numvar}/meta_AMP_NIH_noRelateds_UKB_EXOM_PD_CASE_PROXIES_CONTROL_2021_${variants}_freqUpper${cutoff}_LRRK2
     		done
     	done
     done
 done
 
-swarm -f $LRRK2_WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META_LRRK2.loftee.swarm --verbose 1 --sbatch "--mail-type=FAIL" --module python --bundle 8
-# 384 commands run in 48 subjobs, each command requiring 1.5 gb and 1 thread, running 8 processes serially per subjob, allocating 48 cores and 96 cpus
-# 23576798
+# Ran interactively since it doesn't take long
+	# Note: This is a slightly different script since the number of variants don't matter too much here 
 
 ## Checks 
 ls $LRRK2_WORK_DIR/AMP_NIH_UKB_CASE_PROXIES_META/ANNOVAR/minimum_numvar_1 | wc -l #48

@@ -159,7 +159,8 @@ sorted_output.head()
 print("Merging with original P-values...")
 sorted_output.GENE.astype(str)
 original_pval_df.GENE.astype(str)
-merge_pvals = sorted_output.merge(original_pval_df, how='outer', on=['GENE'])
+#merge_pvals = sorted_output.merge(original_pval_df, how='outer', on=['GENE'])
+merge_pvals = pd.concat([sorted_output, original_pval_df])
 
 # Merge with the NumVars 
 total_numvars = amp_nih_numvar.merge(ukb_numvar, on='GENE').merge(ukb_sib_numvar, on='GENE').merge(ukb_parent_numvar, on='GENE')
