@@ -80,9 +80,46 @@ WORK_DIR="/data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis"
 # │				├── minimum_numvar_2/
 # │				├── minimum_numvar_3/
 # │				└── minimum_numvar_4/
-# ├── *.swarm files 
+# ├── LRRK2_CONDITIONAL_META/
+# │			├── AMP_NIH_UKB_ALL_PD_PHENO_META/
+# │			│	├── ANNOVAR/
+# │			│	│	├── minimum_numvar_1/
+# │			│	│	├── minimum_numvar_2/
+# │			│	│	├── minimum_numvar_3/
+# │			│	│	└── minimum_numvar_4/
+# │			│	└── SNPEFF_LOFTEE/
+# │			│		├── minimum_numvar_1/
+# │			│		├── minimum_numvar_2/
+# │			│		├── minimum_numvar_3/
+# │			│		└── minimum_numvar_4/
+# │			├── AMP_NIH_UKB_CASE_CONTROL_META/
+# │			│	├── ANNOVAR/
+# │			│	│	├── minimum_numvar_1/
+# │			│	│	├── minimum_numvar_2/
+# │			│	│	├── minimum_numvar_3/
+# │			│	│	└── minimum_numvar_4/
+# │			│	└── SNPEFF_LOFTEE/
+# │			│		├── minimum_numvar_1/
+# │			│		├── minimum_numvar_2/
+# │			│		├── minimum_numvar_3/
+# │			│		└── minimum_numvar_4/
+# │			├── AMP_NIH_UKB_CASE_PROXIES_META/
+# │			│	├── ANNOVAR/
+# │			│	│	├── minimum_numvar_1/
+# │			│	│	├── minimum_numvar_2/
+# │			│	│	├── minimum_numvar_3/
+# │			│	│	└── minimum_numvar_4/
+# │			│	└── SNPEFF_LOFTEE/
+# │			│		├── minimum_numvar_1/
+# │			│		├── minimum_numvar_2/
+# │			│		├── minimum_numvar_3/
+# │			│		└── minimum_numvar_4/
+# │			├── swarm_logs/
+# │			└── [*.swarm files and *.txt file summaries]
+# ├── [*.swarm files and *.txt file summaries] 
 # ├── swarm_logs/
 # └── scripts/
+
 
 # AMP_NIH_UKB_ALL_PD_PHENO_META/
 	# AMPxNIH (WGS) + UKB PD_ALL meta-analysis
