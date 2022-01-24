@@ -1,8 +1,10 @@
-# README
-	# All results @ /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/
-		# Result summaries @ /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/SUMMARIES/
-			# Top 25 unique genes in each variant group regardless of SkatO/CMCWald or MAF (0.001 and 0.01) stratified by cohort and minimum number of variants (1-4)
-	
+# README by Mary Makarious; Last Updated 24-JAN-2022
+	# PD Burdens meta-analysis with AMPxNIH, Genentech, and UKB cohorts 
+
+	# Results broken by minimum number of variants 
+		# Combined p-values method (Fisher) for SkatO and CMC Wald: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/SUMMARIES/
+		# Weighted Z for CMC Wald: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS_WEIGHTEDZ_CMCWALD/SUMMARIES
+
 	# Cohorts
 		# GNE_AMP_NIH_UKB_ALL_PD_PHENO_META
 			# Genentech vs. AMPxNIH WGS vs. UKB PD case-control+proxies 
