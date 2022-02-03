@@ -21,7 +21,7 @@
 			# LAMBDAS/ directory included where lambda and lambda 1000 values were calculated 
 		# Summed Z for CMC Wald: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS_SUMMEDZ_CMCWALD/SUMMARIES
 			# LAMBDAS/ directory included where lambda and lambda 1000 values were calculated 
-		# Weighted Z for CMC Wald: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS_SUMMEDZ_CMCWALD/SUMMARIES
+		# Weighted Z for CMC Wald: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS_WEIGHTEDZ_CMCWALD/SUMMARIES
 			# LAMBDAS/ directory included where lambda and lambda 1000 values were calculated 
 
 	# Cohorts
