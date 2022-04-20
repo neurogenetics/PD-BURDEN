@@ -1,0 +1,74 @@
+---- COMMAND EXECUTED: ---------------------------------------------------------
+(   /data/makariousmb/conda/envs/py10/bin/python3 /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/scripts/meta-analysis.py                 --amp_nih /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/AMPxNIH/AMP_NIH_noRelateds_ALL_MISSENSE_SNPEFF_freqUpper0.001.SkatO.assoc                 --ukb_cases /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/UKB_EXOM_PD_CASE/UKB_EXOM_PD_CASE_CONTROL_2021_ALL_MISSENSE_SNPEFF.freqUpper0.001.SkatO.assoc                 --gne /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/GENENTECH/gne.ALL_MISSENSE_SNPEFF.freqUpper0.001.SkatO.assoc                 --ntotal 26434                 --variant_group ALL_MISSENSE_SNPEFF                 --maf 0.001                 --group META-GROUP2                 --test SkatO                 --numvar 2                 --output /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/META-GROUP2/minimum_numvar_2/META-GROUP2 )
+(   /data/makariousmb/conda/envs/py10/bin/python3 /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/scripts/meta-analysis.py                 --amp_nih /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/AMPxNIH/AMP_NIH_noRelateds_ALL_MISSENSE_SNPEFF_freqUpper0.001.SkatO.assoc                 --ukb_cases /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/UKB_EXOM_PD_CASE/UKB_EXOM_PD_CASE_CONTROL_2021_ALL_MISSENSE_SNPEFF.freqUpper0.001.SkatO.assoc                 --gne /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/GENENTECH/gne.ALL_MISSENSE_SNPEFF.freqUpper0.001.SkatO.assoc                 --ntotal 26434                 --variant_group ALL_MISSENSE_SNPEFF                 --maf 0.001                 --group META-GROUP2                 --test SkatO                 --numvar 3                 --output /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/META-GROUP2/minimum_numvar_3/META-GROUP2 )
+(   /data/makariousmb/conda/envs/py10/bin/python3 /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/scripts/meta-analysis.py                 --amp_nih /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/AMPxNIH/AMP_NIH_noRelateds_ALL_MISSENSE_SNPEFF_freqUpper0.001.SkatO.assoc                 --ukb_cases /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/UKB_EXOM_PD_CASE/UKB_EXOM_PD_CASE_CONTROL_2021_ALL_MISSENSE_SNPEFF.freqUpper0.001.SkatO.assoc                 --gne /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/GENENTECH/gne.ALL_MISSENSE_SNPEFF.freqUpper0.001.SkatO.assoc                 --ntotal 26434                 --variant_group ALL_MISSENSE_SNPEFF                 --maf 0.001                 --group META-GROUP2                 --test SkatO                 --numvar 4                 --output /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/META-GROUP2/minimum_numvar_4/META-GROUP2 )
+(   /data/makariousmb/conda/envs/py10/bin/python3 /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/scripts/meta-analysis.py                 --amp_nih /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/AMPxNIH/AMP_NIH_noRelateds_ALL_MISSENSE_SNPEFF_freqUpper0.01.SkatO.assoc                 --ukb_cases /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/UKB_EXOM_PD_CASE/UKB_EXOM_PD_CASE_CONTROL_2021_ALL_MISSENSE_SNPEFF.freqUpper0.01.SkatO.assoc                 --gne /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/GENENTECH/gne.ALL_MISSENSE_SNPEFF.freqUpper0.01.SkatO.assoc                 --ntotal 26434                 --variant_group ALL_MISSENSE_SNPEFF                 --maf 0.01                 --group META-GROUP2                 --test SkatO                 --numvar 2                 --output /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/META-GROUP2/minimum_numvar_2/META-GROUP2 )
+(   /data/makariousmb/conda/envs/py10/bin/python3 /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/scripts/meta-analysis.py                 --amp_nih /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/AMPxNIH/AMP_NIH_noRelateds_ALL_MISSENSE_SNPEFF_freqUpper0.01.SkatO.assoc                 --ukb_cases /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/UKB_EXOM_PD_CASE/UKB_EXOM_PD_CASE_CONTROL_2021_ALL_MISSENSE_SNPEFF.freqUpper0.01.SkatO.assoc                 --gne /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/GENENTECH/gne.ALL_MISSENSE_SNPEFF.freqUpper0.01.SkatO.assoc                 --ntotal 26434                 --variant_group ALL_MISSENSE_SNPEFF                 --maf 0.01                 --group META-GROUP2                 --test SkatO                 --numvar 3                 --output /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/META-GROUP2/minimum_numvar_3/META-GROUP2 )
+(   /data/makariousmb/conda/envs/py10/bin/python3 /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/scripts/meta-analysis.py                 --amp_nih /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/AMPxNIH/AMP_NIH_noRelateds_ALL_MISSENSE_SNPEFF_freqUpper0.01.SkatO.assoc                 --ukb_cases /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/UKB_EXOM_PD_CASE/UKB_EXOM_PD_CASE_CONTROL_2021_ALL_MISSENSE_SNPEFF.freqUpper0.01.SkatO.assoc                 --gne /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/GENENTECH/gne.ALL_MISSENSE_SNPEFF.freqUpper0.01.SkatO.assoc                 --ntotal 26434                 --variant_group ALL_MISSENSE_SNPEFF                 --maf 0.01                 --group META-GROUP2                 --test SkatO                 --numvar 4                 --output /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/META-GROUP2/minimum_numvar_4/META-GROUP2 )
+(   /data/makariousmb/conda/envs/py10/bin/python3 /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/scripts/meta-analysis.py                 --amp_nih /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/AMPxNIH/AMP_NIH_noRelateds_ALL_LOF_HC_LOFTEE_freqUpper0.001.SkatO.assoc                 --ukb_cases /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/UKB_EXOM_PD_CASE/UKB_EXOM_PD_CASE_CONTROL_2021_ALL_LOF_HC_LOFTEE.freqUpper0.001.SkatO.assoc                 --gne /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/GENENTECH/gne.ALL_LOF_HC_LOFTEE.freqUpper0.001.SkatO.assoc                 --ntotal 26434                 --variant_group ALL_LOF_HC_LOFTEE                 --maf 0.001                 --group META-GROUP2                 --test SkatO                 --numvar 2                 --output /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/META-GROUP2/minimum_numvar_2/META-GROUP2 )
+(   /data/makariousmb/conda/envs/py10/bin/python3 /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/scripts/meta-analysis.py                 --amp_nih /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/AMPxNIH/AMP_NIH_noRelateds_ALL_LOF_HC_LOFTEE_freqUpper0.001.SkatO.assoc                 --ukb_cases /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/UKB_EXOM_PD_CASE/UKB_EXOM_PD_CASE_CONTROL_2021_ALL_LOF_HC_LOFTEE.freqUpper0.001.SkatO.assoc                 --gne /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/GENENTECH/gne.ALL_LOF_HC_LOFTEE.freqUpper0.001.SkatO.assoc                 --ntotal 26434                 --variant_group ALL_LOF_HC_LOFTEE                 --maf 0.001                 --group META-GROUP2                 --test SkatO                 --numvar 3                 --output /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/META-GROUP2/minimum_numvar_3/META-GROUP2 )
+--------------------------------------------------------------------------------
+3.10.4 (main, Mar 31 2022, 08:41:55) [GCC 7.5.0]
+File either not found or not passed through for this analysis: ukb_all
+File either not found or not passed through for this analysis: ukb_sib
+File either not found or not passed through for this analysis: ukb_parent
+Analyzing SkatO input
+Using Fisher to combine p-values...
+Your final combined P meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/META-GROUP2/minimum_numvar_2/META-GROUP2.ALL_MISSENSE_SNPEFF.freqUpper0.001.numvar2.combined_Ps.SkatO.tab
+No genes were <1E-6
+3.10.4 (main, Mar 31 2022, 08:41:55) [GCC 7.5.0]
+File either not found or not passed through for this analysis: ukb_all
+File either not found or not passed through for this analysis: ukb_sib
+File either not found or not passed through for this analysis: ukb_parent
+Analyzing SkatO input
+Using Fisher to combine p-values...
+Your final combined P meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/META-GROUP2/minimum_numvar_3/META-GROUP2.ALL_MISSENSE_SNPEFF.freqUpper0.001.numvar3.combined_Ps.SkatO.tab
+No genes were <1E-6
+3.10.4 (main, Mar 31 2022, 08:41:55) [GCC 7.5.0]
+File either not found or not passed through for this analysis: ukb_all
+File either not found or not passed through for this analysis: ukb_sib
+File either not found or not passed through for this analysis: ukb_parent
+Analyzing SkatO input
+Using Fisher to combine p-values...
+Your final combined P meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/META-GROUP2/minimum_numvar_4/META-GROUP2.ALL_MISSENSE_SNPEFF.freqUpper0.001.numvar4.combined_Ps.SkatO.tab
+No genes were <1E-6
+3.10.4 (main, Mar 31 2022, 08:41:55) [GCC 7.5.0]
+File either not found or not passed through for this analysis: ukb_all
+File either not found or not passed through for this analysis: ukb_sib
+File either not found or not passed through for this analysis: ukb_parent
+Analyzing SkatO input
+Using Fisher to combine p-values...
+Your final combined P meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/META-GROUP2/minimum_numvar_2/META-GROUP2.ALL_MISSENSE_SNPEFF.freqUpper0.01.numvar2.combined_Ps.SkatO.tab
+You had 2 genes <1E-6, created a summary here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/META-GROUP2/minimum_numvar_2/META-GROUP2.ALL_MISSENSE_SNPEFF.freqUpper0.01.numvar2.combined_Ps.SkatO.1e-6.tab
+3.10.4 (main, Mar 31 2022, 08:41:55) [GCC 7.5.0]
+File either not found or not passed through for this analysis: ukb_all
+File either not found or not passed through for this analysis: ukb_sib
+File either not found or not passed through for this analysis: ukb_parent
+Analyzing SkatO input
+Using Fisher to combine p-values...
+Your final combined P meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/META-GROUP2/minimum_numvar_3/META-GROUP2.ALL_MISSENSE_SNPEFF.freqUpper0.01.numvar3.combined_Ps.SkatO.tab
+You had 2 genes <1E-6, created a summary here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/META-GROUP2/minimum_numvar_3/META-GROUP2.ALL_MISSENSE_SNPEFF.freqUpper0.01.numvar3.combined_Ps.SkatO.1e-6.tab
+3.10.4 (main, Mar 31 2022, 08:41:55) [GCC 7.5.0]
+File either not found or not passed through for this analysis: ukb_all
+File either not found or not passed through for this analysis: ukb_sib
+File either not found or not passed through for this analysis: ukb_parent
+Analyzing SkatO input
+Using Fisher to combine p-values...
+Your final combined P meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/META-GROUP2/minimum_numvar_4/META-GROUP2.ALL_MISSENSE_SNPEFF.freqUpper0.01.numvar4.combined_Ps.SkatO.tab
+You had 2 genes <1E-6, created a summary here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/META-GROUP2/minimum_numvar_4/META-GROUP2.ALL_MISSENSE_SNPEFF.freqUpper0.01.numvar4.combined_Ps.SkatO.1e-6.tab
+3.10.4 (main, Mar 31 2022, 08:41:55) [GCC 7.5.0]
+File either not found or not passed through for this analysis: ukb_all
+File either not found or not passed through for this analysis: ukb_sib
+File either not found or not passed through for this analysis: ukb_parent
+Analyzing SkatO input
+Using Fisher to combine p-values...
+Your final combined P meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/META-GROUP2/minimum_numvar_2/META-GROUP2.ALL_LOF_HC_LOFTEE.freqUpper0.001.numvar2.combined_Ps.SkatO.tab
+You had 3 genes <1E-6, created a summary here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/META-GROUP2/minimum_numvar_2/META-GROUP2.ALL_LOF_HC_LOFTEE.freqUpper0.001.numvar2.combined_Ps.SkatO.1e-6.tab
+3.10.4 (main, Mar 31 2022, 08:41:55) [GCC 7.5.0]
+File either not found or not passed through for this analysis: ukb_all
+File either not found or not passed through for this analysis: ukb_sib
+File either not found or not passed through for this analysis: ukb_parent
+Analyzing SkatO input
+Using Fisher to combine p-values...
+Your final combined P meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/META-GROUP2/minimum_numvar_3/META-GROUP2.ALL_LOF_HC_LOFTEE.freqUpper0.001.numvar3.combined_Ps.SkatO.tab
+You had 3 genes <1E-6, created a summary here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/META-GROUP2/minimum_numvar_3/META-GROUP2.ALL_LOF_HC_LOFTEE.freqUpper0.001.numvar3.combined_Ps.SkatO.1e-6.tab

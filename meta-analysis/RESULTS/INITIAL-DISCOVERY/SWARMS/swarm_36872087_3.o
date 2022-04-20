@@ -1,0 +1,106 @@
+---- COMMAND EXECUTED: ---------------------------------------------------------
+(   /data/makariousmb/conda/envs/py10/bin/python3 /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/scripts/meta-analysis.py                 --amp_nih /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/AMPxNIH/AMP_NIH_noRelateds_ALL_MISSENSE_SNPEFF_freqUpper0.001.CMCWald.assoc                 --ukb_all /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/UKB_EXOM_ALL_PD/UKB_EXOM_ALL_PD_PHENOTYPES_CONTROL_2021_ALL_MISSENSE_SNPEFF.freqUpper0.001.CMCWald.assoc                 --ntotal 53843                 --variant_group ALL_MISSENSE_SNPEFF                 --maf 0.001                 --group INITIAL-DISCOVERY                 --test CMCWald                 --numvar 2                 --output /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_2/INITIAL-DISCOVERY )
+(   /data/makariousmb/conda/envs/py10/bin/python3 /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/scripts/meta-analysis.py                 --amp_nih /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/AMPxNIH/AMP_NIH_noRelateds_ALL_MISSENSE_SNPEFF_freqUpper0.001.CMCWald.assoc                 --ukb_all /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/UKB_EXOM_ALL_PD/UKB_EXOM_ALL_PD_PHENOTYPES_CONTROL_2021_ALL_MISSENSE_SNPEFF.freqUpper0.001.CMCWald.assoc                 --ntotal 53843                 --variant_group ALL_MISSENSE_SNPEFF                 --maf 0.001                 --group INITIAL-DISCOVERY                 --test CMCWald                 --numvar 3                 --output /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_3/INITIAL-DISCOVERY )
+(   /data/makariousmb/conda/envs/py10/bin/python3 /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/scripts/meta-analysis.py                 --amp_nih /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/AMPxNIH/AMP_NIH_noRelateds_ALL_MISSENSE_SNPEFF_freqUpper0.001.CMCWald.assoc                 --ukb_all /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/UKB_EXOM_ALL_PD/UKB_EXOM_ALL_PD_PHENOTYPES_CONTROL_2021_ALL_MISSENSE_SNPEFF.freqUpper0.001.CMCWald.assoc                 --ntotal 53843                 --variant_group ALL_MISSENSE_SNPEFF                 --maf 0.001                 --group INITIAL-DISCOVERY                 --test CMCWald                 --numvar 4                 --output /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_4/INITIAL-DISCOVERY )
+(   /data/makariousmb/conda/envs/py10/bin/python3 /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/scripts/meta-analysis.py                 --amp_nih /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/AMPxNIH/AMP_NIH_noRelateds_ALL_MISSENSE_SNPEFF_freqUpper0.01.CMCWald.assoc                 --ukb_all /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/UKB_EXOM_ALL_PD/UKB_EXOM_ALL_PD_PHENOTYPES_CONTROL_2021_ALL_MISSENSE_SNPEFF.freqUpper0.01.CMCWald.assoc                 --ntotal 53843                 --variant_group ALL_MISSENSE_SNPEFF                 --maf 0.01                 --group INITIAL-DISCOVERY                 --test CMCWald                 --numvar 2                 --output /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_2/INITIAL-DISCOVERY )
+(   /data/makariousmb/conda/envs/py10/bin/python3 /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/scripts/meta-analysis.py                 --amp_nih /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/AMPxNIH/AMP_NIH_noRelateds_ALL_MISSENSE_SNPEFF_freqUpper0.01.CMCWald.assoc                 --ukb_all /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/UKB_EXOM_ALL_PD/UKB_EXOM_ALL_PD_PHENOTYPES_CONTROL_2021_ALL_MISSENSE_SNPEFF.freqUpper0.01.CMCWald.assoc                 --ntotal 53843                 --variant_group ALL_MISSENSE_SNPEFF                 --maf 0.01                 --group INITIAL-DISCOVERY                 --test CMCWald                 --numvar 3                 --output /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_3/INITIAL-DISCOVERY )
+(   /data/makariousmb/conda/envs/py10/bin/python3 /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/scripts/meta-analysis.py                 --amp_nih /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/AMPxNIH/AMP_NIH_noRelateds_ALL_MISSENSE_SNPEFF_freqUpper0.01.CMCWald.assoc                 --ukb_all /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/UKB_EXOM_ALL_PD/UKB_EXOM_ALL_PD_PHENOTYPES_CONTROL_2021_ALL_MISSENSE_SNPEFF.freqUpper0.01.CMCWald.assoc                 --ntotal 53843                 --variant_group ALL_MISSENSE_SNPEFF                 --maf 0.01                 --group INITIAL-DISCOVERY                 --test CMCWald                 --numvar 4                 --output /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_4/INITIAL-DISCOVERY )
+(   /data/makariousmb/conda/envs/py10/bin/python3 /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/scripts/meta-analysis.py                 --amp_nih /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/AMPxNIH/AMP_NIH_noRelateds_ALL_LOF_HC_LOFTEE_freqUpper0.001.CMCWald.assoc                 --ukb_all /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/UKB_EXOM_ALL_PD/UKB_EXOM_ALL_PD_PHENOTYPES_CONTROL_2021_ALL_LOF_HC_LOFTEE.freqUpper0.001.CMCWald.assoc                 --ntotal 53843                 --variant_group ALL_LOF_HC_LOFTEE                 --maf 0.001                 --group INITIAL-DISCOVERY                 --test CMCWald                 --numvar 2                 --output /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_2/INITIAL-DISCOVERY )
+(   /data/makariousmb/conda/envs/py10/bin/python3 /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/scripts/meta-analysis.py                 --amp_nih /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/AMPxNIH/AMP_NIH_noRelateds_ALL_LOF_HC_LOFTEE_freqUpper0.001.CMCWald.assoc                 --ukb_all /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/UKB_EXOM_ALL_PD/UKB_EXOM_ALL_PD_PHENOTYPES_CONTROL_2021_ALL_LOF_HC_LOFTEE.freqUpper0.001.CMCWald.assoc                 --ntotal 53843                 --variant_group ALL_LOF_HC_LOFTEE                 --maf 0.001                 --group INITIAL-DISCOVERY                 --test CMCWald                 --numvar 3                 --output /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_3/INITIAL-DISCOVERY )
+--------------------------------------------------------------------------------
+3.10.4 (main, Mar 31 2022, 08:41:55) [GCC 7.5.0]
+File either not found or not passed through for this analysis: ukb_cases
+File either not found or not passed through for this analysis: ukb_sib
+File either not found or not passed through for this analysis: ukb_parent
+File either not found or not passed through for this analysis: gne
+Analyzing CMCWald input
+Using Fisher to combine p-values...
+Using betas, se, and total n to make weighted Z score and p-values...
+Your final combined P meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_2/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.001.numvar2.combined_Ps.CMCWald.tab
+Your final weighted Z meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_2/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.001.numvar2.weightedZ.CMCWald.tab
+You had 1 gene(s) <1E-6, created a summary here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_2/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.001.numvar2.combined_Ps.CMCWald.1e-6.tab
+You had 1 gene(s) <1E-6, created a summary here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_2/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.001.numvar2.weightedZ.CMCWald.1e-6.tab
+3.10.4 (main, Mar 31 2022, 08:41:55) [GCC 7.5.0]
+File either not found or not passed through for this analysis: ukb_cases
+File either not found or not passed through for this analysis: ukb_sib
+File either not found or not passed through for this analysis: ukb_parent
+File either not found or not passed through for this analysis: gne
+Analyzing CMCWald input
+Using Fisher to combine p-values...
+Using betas, se, and total n to make weighted Z score and p-values...
+Your final combined P meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_3/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.001.numvar3.combined_Ps.CMCWald.tab
+Your final weighted Z meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_3/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.001.numvar3.weightedZ.CMCWald.tab
+You had 1 gene(s) <1E-6, created a summary here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_3/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.001.numvar3.combined_Ps.CMCWald.1e-6.tab
+You had 1 gene(s) <1E-6, created a summary here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_3/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.001.numvar3.weightedZ.CMCWald.1e-6.tab
+3.10.4 (main, Mar 31 2022, 08:41:55) [GCC 7.5.0]
+File either not found or not passed through for this analysis: ukb_cases
+File either not found or not passed through for this analysis: ukb_sib
+File either not found or not passed through for this analysis: ukb_parent
+File either not found or not passed through for this analysis: gne
+Analyzing CMCWald input
+Using Fisher to combine p-values...
+Using betas, se, and total n to make weighted Z score and p-values...
+Your final combined P meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_4/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.001.numvar4.combined_Ps.CMCWald.tab
+Your final weighted Z meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_4/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.001.numvar4.weightedZ.CMCWald.tab
+You had 1 gene(s) <1E-6, created a summary here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_4/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.001.numvar4.combined_Ps.CMCWald.1e-6.tab
+You had 1 gene(s) <1E-6, created a summary here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_4/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.001.numvar4.weightedZ.CMCWald.1e-6.tab
+3.10.4 (main, Mar 31 2022, 08:41:55) [GCC 7.5.0]
+File either not found or not passed through for this analysis: ukb_cases
+File either not found or not passed through for this analysis: ukb_sib
+File either not found or not passed through for this analysis: ukb_parent
+File either not found or not passed through for this analysis: gne
+Analyzing CMCWald input
+Using Fisher to combine p-values...
+Using betas, se, and total n to make weighted Z score and p-values...
+Your final combined P meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_2/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.01.numvar2.combined_Ps.CMCWald.tab
+Your final weighted Z meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_2/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.01.numvar2.weightedZ.CMCWald.tab
+You had 1 gene(s) <1E-6, created a summary here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_2/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.01.numvar2.combined_Ps.CMCWald.1e-6.tab
+You had 1 gene(s) <1E-6, created a summary here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_2/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.01.numvar2.weightedZ.CMCWald.1e-6.tab
+3.10.4 (main, Mar 31 2022, 08:41:55) [GCC 7.5.0]
+File either not found or not passed through for this analysis: ukb_cases
+File either not found or not passed through for this analysis: ukb_sib
+File either not found or not passed through for this analysis: ukb_parent
+File either not found or not passed through for this analysis: gne
+Analyzing CMCWald input
+Using Fisher to combine p-values...
+Using betas, se, and total n to make weighted Z score and p-values...
+Your final combined P meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_3/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.01.numvar3.combined_Ps.CMCWald.tab
+Your final weighted Z meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_3/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.01.numvar3.weightedZ.CMCWald.tab
+You had 1 gene(s) <1E-6, created a summary here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_3/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.01.numvar3.combined_Ps.CMCWald.1e-6.tab
+You had 1 gene(s) <1E-6, created a summary here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_3/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.01.numvar3.weightedZ.CMCWald.1e-6.tab
+3.10.4 (main, Mar 31 2022, 08:41:55) [GCC 7.5.0]
+File either not found or not passed through for this analysis: ukb_cases
+File either not found or not passed through for this analysis: ukb_sib
+File either not found or not passed through for this analysis: ukb_parent
+File either not found or not passed through for this analysis: gne
+Analyzing CMCWald input
+Using Fisher to combine p-values...
+Using betas, se, and total n to make weighted Z score and p-values...
+Your final combined P meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_4/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.01.numvar4.combined_Ps.CMCWald.tab
+Your final weighted Z meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_4/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.01.numvar4.weightedZ.CMCWald.tab
+You had 1 gene(s) <1E-6, created a summary here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_4/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.01.numvar4.combined_Ps.CMCWald.1e-6.tab
+You had 1 gene(s) <1E-6, created a summary here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_4/INITIAL-DISCOVERY.ALL_MISSENSE_SNPEFF.freqUpper0.01.numvar4.weightedZ.CMCWald.1e-6.tab
+3.10.4 (main, Mar 31 2022, 08:41:55) [GCC 7.5.0]
+File either not found or not passed through for this analysis: ukb_cases
+File either not found or not passed through for this analysis: ukb_sib
+File either not found or not passed through for this analysis: ukb_parent
+File either not found or not passed through for this analysis: gne
+Analyzing CMCWald input
+Using Fisher to combine p-values...
+Using betas, se, and total n to make weighted Z score and p-values...
+Your final combined P meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_2/INITIAL-DISCOVERY.ALL_LOF_HC_LOFTEE.freqUpper0.001.numvar2.combined_Ps.CMCWald.tab
+Your final weighted Z meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_2/INITIAL-DISCOVERY.ALL_LOF_HC_LOFTEE.freqUpper0.001.numvar2.weightedZ.CMCWald.tab
+No genes were <1E-6
+No genes were <1E-6
+3.10.4 (main, Mar 31 2022, 08:41:55) [GCC 7.5.0]
+File either not found or not passed through for this analysis: ukb_cases
+File either not found or not passed through for this analysis: ukb_sib
+File either not found or not passed through for this analysis: ukb_parent
+File either not found or not passed through for this analysis: gne
+Analyzing CMCWald input
+Using Fisher to combine p-values...
+Using betas, se, and total n to make weighted Z score and p-values...
+Your final combined P meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_3/INITIAL-DISCOVERY.ALL_LOF_HC_LOFTEE.freqUpper0.001.numvar3.combined_Ps.CMCWald.tab
+Your final weighted Z meta-analysis file was created here: /data/CARD/PD/AMP_NIH/no_relateds/meta_risk_analysis/geneburden_risk_wGenentech/RESULTS/INITIAL-DISCOVERY/minimum_numvar_3/INITIAL-DISCOVERY.ALL_LOF_HC_LOFTEE.freqUpper0.001.numvar3.weightedZ.CMCWald.tab
+No genes were <1E-6
+No genes were <1E-6
